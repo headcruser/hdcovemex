@@ -1,10 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "Covemex/HelpDesk",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Help Desk Covemex.",
     "keywords": [
         "framework",
-        "laravel"
+        "laravel",
+        "Covemex"
     ],
     "license": "MIT",
     "require": {
