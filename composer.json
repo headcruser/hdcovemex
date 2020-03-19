@@ -1,5 +1,5 @@
 {
-    "name": "Covemex/HelpDesk",
+    "name": "covemex/help-desk",
     "type": "project",
     "description": "Help Desk Covemex.",
     "keywords": [
@@ -17,6 +17,8 @@
         "laraveles/spanish": "^1.4"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.2",
+        "barryvdh/laravel-ide-helper": "^2.6",
         "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.4",
         "laravel/ui": "^1.1",
