@@ -18,4 +18,16 @@ class AddRelationshipFieldsToUsersTable extends Migration
             $table->foreign('departamento_id', 'departamento_fk')->references('id')->on('departamentos');
         });
     }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('usuarios', function (Blueprint $table) {
+            $table->dropForeign('departamento_fk');
+        });
+    }
 }

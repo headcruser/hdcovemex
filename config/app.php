@@ -13,7 +13,19 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name'          => env('APP_NAME', 'HDCovemex'),
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Descripcion
+    |--------------------------------------------------------------------------
+    |
+    | Describe Funcionality application
+    |
+    */
+
+    'description'   => env('APP_DESCRIPTION','Mesa de ayuda'),
 
     /*
     |--------------------------------------------------------------------------

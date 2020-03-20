@@ -20,4 +20,19 @@ class AddRelationshipFieldsToTicketsTable extends Migration
             $table->foreign('solicitud_id', 'sticket_fk')->references('id')->on('solicitudes');
         });
     }
+
+     /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('comentarios', function (Blueprint $table) {
+            $table->dropForeign('eticket_fk');
+            $table->dropForeign('pticket_fk');
+            $table->dropForeign('cticket_fk');
+            $table->dropForeign('sticket_fk');
+        });
+    }
 }

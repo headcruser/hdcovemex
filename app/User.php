@@ -45,20 +45,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /*///////////////////////////////////////////////////////////////////////////
+                        MUTADORES
+    /////////////////////////////////////////////////////////////////////////// */
+
     /**
      * Obtiene la imagen de perfil
      *
      * @return void
      */
-    public function getAvatarUrl()
+    public function getAvatarAttribute()
     {
-        $url = 'users'.DIRECTORY_SEPARATOR.$this->foto;
+        $url = 'users' . DIRECTORY_SEPARATOR . $this->foto;
 
-        if(!$this->foto){
+        if (!$this->foto) {
             return asset('img/theme/avatar.png');
         }
 
-        if (!Storage::disk('local')->exists('public'.DIRECTORY_SEPARATOR.$url) ) {
+        if (!Storage::disk('local')->exists('public' . DIRECTORY_SEPARATOR . $url)) {
             return asset('img/theme/avatar.png');
         }
 

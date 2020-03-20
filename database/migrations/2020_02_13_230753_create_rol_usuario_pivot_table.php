@@ -14,10 +14,10 @@ class CreateRolUsuarioPivotTable extends Migration
     public function up()
     {
         Schema::create('usuario_rol', function (Blueprint $table) {
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedInteger('role_id');
 
             $table->foreign('user_id', 'user_id_fk_ur')->references('id')->on('usuarios')->onDelete('cascade');
-            $table->unsignedInteger('role_id');
             $table->foreign('role_id', 'role_id_fk_ur')->references('id')->on('roles')->onDelete('cascade');
         });
     }

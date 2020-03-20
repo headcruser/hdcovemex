@@ -14,16 +14,16 @@ class CreateTicketsTable extends Migration
     public function up()
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('titulo');
             $table->string('contenido');
             $table->string('autor_nombre');
             $table->string('autor_email');
-            $table->unsignedInteger('asignado_a');
-            $table->unsignedInteger('estatus_id');
-            $table->unsignedInteger('prioridad_id');
-            $table->unsignedInteger('categoria_id');
-            $table->unsignedInteger('solicitud_id');
+            $table->unsignedBigInteger('asignado_a');
+            $table->unsignedSmallInteger('estatus_id');
+            $table->unsignedSmallInteger('prioridad_id');
+            $table->unsignedSmallInteger('categoria_id');
+            $table->unsignedBigInteger('solicitud_id');
             $table->timestamps();
             $table->softDeletes();
         });

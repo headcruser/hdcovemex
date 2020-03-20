@@ -14,13 +14,13 @@ class CreateSolicitudesTable extends Migration
     public function up()
     {
         Schema::create('solicitudes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->timestamp('fecha', 0)->nullable();
             $table->string('descripcion');
             $table->binary('adjunto');
             $table->string('tipo_adjunto');
             $table->string('nombre_adjunto');
-            $table->unsignedInteger('revisado_por');
+            $table->unsignedBigInteger('revisado_por');
             $table->timestamps();
             $table->softDeletes();
         });

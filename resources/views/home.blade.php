@@ -2,6 +2,12 @@
 
 @section('title','Dashboard')
 
+@section('breadcrumb')
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item active">Inicio</li>
+    </ol>
+@endsection
+
 @section('content')
 <div class="row">
     <div class="col-md-12 mb-4">

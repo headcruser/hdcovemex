@@ -18,8 +18,8 @@ class CreateComentariosTable extends Migration
             $table->string('autor_nombre');
             $table->string('autor_email');
             $table->string('comentario_texto');
-            $table->unsignedInteger('usuario_id');
-            $table->unsignedInteger('solicitud_id');
+            $table->unsignedBigInteger('usuario_id');
+            $table->unsignedBigInteger('solicitud_id');
             $table->timestamps();
             $table->softDeletes();
         });

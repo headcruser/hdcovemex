@@ -18,4 +18,17 @@ class AddRelationshipFieldsToComentariosTable extends Migration
             $table->foreign('usuario_id', 'ucomentario_fk')->references('id')->on('usuarios');
         });
     }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('comentarios', function (Blueprint $table) {
+            $table->dropForeign('scomentario_fk');
+            $table->dropForeign('ucomentario_fk');
+        });
+    }
 }
