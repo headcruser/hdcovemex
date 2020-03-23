@@ -1,15 +1,17 @@
 <?php
 
-namespace App;
+namespace HelpDesk\Entities\Admin;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use SoftDeletes, Notifiable;
 
     /**
      * The table associated with the model.
@@ -24,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'nombre', 'email', 'telefono', 'password', 'departamento_id',
     ];
 
     /**
@@ -44,6 +46,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /*///////////////////////////////////////////////////////////////////////////
+                        RELACIONES
+    /////////////////////////////////////////////////////////////////////////// */
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'usuario_rol', 'user_id', 'role_id');
+    }
+
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class, 'departamento_id')
+            ->withDefault([
+                'nombre' => 'Sin Depto.'
+            ]);
+    }
+
 
     /*///////////////////////////////////////////////////////////////////////////
                         MUTADORES
@@ -67,5 +87,12 @@ class User extends Authenticatable
         }
 
         return Storage::url($url);
+    }
+
+    public function setPasswordAttribute($input)
+    {
+        if ($input) {
+            $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
+        }
     }
 }

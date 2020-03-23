@@ -17,4 +17,15 @@ Route::get('/', 'HomeController@index')
 
 Auth::routes(['register' => false]);
 
-Route::get('/home', 'HomeController@index')->name('dashboard');
+Route::group([
+    'prefix'        => 'administracion',
+    'as'            => 'admin.',
+    'namespace'     => 'Admin',
+    'middleware'    => ['auth']],
+    function () {
+        # Users
+        Route::resource('usuarios', 'UsersController')->parameters([
+            'usuarios' => 'user'
+        ]);
+    }
+);

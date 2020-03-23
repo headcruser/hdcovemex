@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 6.18.2 on 2020-03-19 15:09:06.
+ * Generated for Laravel 6.18.2 on 2020-03-23 11:59:52.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1500,7 +1500,7 @@ namespace Illuminate\Support\Facades {
         public static function handle($input, $output = null)
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         return $instance->handle($input, $output);
         }
         
@@ -1515,7 +1515,7 @@ namespace Illuminate\Support\Facades {
         public static function terminate($input, $status)
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         $instance->terminate($input, $status);
         }
         
@@ -1530,7 +1530,7 @@ namespace Illuminate\Support\Facades {
         public static function command($signature, $callback)
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         return $instance->command($signature, $callback);
         }
         
@@ -1544,7 +1544,7 @@ namespace Illuminate\Support\Facades {
         public static function registerCommand($command)
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         $instance->registerCommand($command);
         }
         
@@ -1561,7 +1561,7 @@ namespace Illuminate\Support\Facades {
         public static function call($command, $parameters = [], $outputBuffer = null)
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         return $instance->call($command, $parameters, $outputBuffer);
         }
         
@@ -1576,7 +1576,7 @@ namespace Illuminate\Support\Facades {
         public static function queue($command, $parameters = [])
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         return $instance->queue($command, $parameters);
         }
         
@@ -1589,7 +1589,7 @@ namespace Illuminate\Support\Facades {
         public static function all()
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         return $instance->all();
         }
         
@@ -1602,7 +1602,7 @@ namespace Illuminate\Support\Facades {
         public static function output()
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         return $instance->output();
         }
         
@@ -1615,7 +1615,7 @@ namespace Illuminate\Support\Facades {
         public static function bootstrap()
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         $instance->bootstrap();
         }
         
@@ -1629,7 +1629,7 @@ namespace Illuminate\Support\Facades {
         public static function setArtisan($artisan)
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-                        /** @var \App\Console\Kernel $instance */
+                        /** @var \HelpDesk\Console\Kernel $instance */
                         $instance->setArtisan($artisan);
         }
          
@@ -1832,7 +1832,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the currently authenticated user.
          *
-         * @return \App\User|null 
+         * @return \HelpDesk\Entities\Admin\User|null 
          * @static 
          */ 
         public static function user()
@@ -1870,7 +1870,7 @@ namespace Illuminate\Support\Facades {
          * Log the given user ID into the application without sessions or cookies.
          *
          * @param mixed $id
-         * @return \App\User|false 
+         * @return \HelpDesk\Entities\Admin\User|false 
          * @static 
          */ 
         public static function onceUsingId($id)
@@ -1939,7 +1939,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param mixed $id
          * @param bool $remember
-         * @return \App\User|false 
+         * @return \HelpDesk\Entities\Admin\User|false 
          * @static 
          */ 
         public static function loginUsingId($id, $remember = false)
@@ -2018,7 +2018,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the last user we attempted to authenticate.
          *
-         * @return \App\User 
+         * @return \HelpDesk\Entities\Admin\User 
          * @static 
          */ 
         public static function getLastAttempted()
@@ -2129,7 +2129,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Return the currently cached user.
          *
-         * @return \App\User|null 
+         * @return \HelpDesk\Entities\Admin\User|null 
          * @static 
          */ 
         public static function getUser()
@@ -2179,7 +2179,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Determine if current user is authenticated. If not, throw an exception.
          *
-         * @return \App\User 
+         * @return \HelpDesk\Entities\Admin\User 
          * @throws \Illuminate\Auth\AuthenticationException
          * @static 
          */ 

@@ -32,8 +32,8 @@
                 <!-- ADMINISTRACION -->
                 <li class="nav-header">Administrativo</li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview {{ active('administracion/*', 'menu-open') }} ">
+                    <a href="#" class="nav-link {{ active('administracion/*') }}">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Administracion
@@ -41,8 +41,8 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                        <li class="nav-item ">
+                            <a href="{{ route('admin.usuarios.index') }}" class="nav-link {{ routeIs(['admin.usuarios.index','admin.usuarios.*']) }}">
                                 <i class="nav-icon fas fa-user-friends"></i>
                                 <p>Usuarios</p>
                             </a>

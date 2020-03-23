@@ -21,4 +21,19 @@ class CreateRolUsuarioPivotTable extends Migration
             $table->foreign('role_id', 'role_id_fk_ur')->references('id')->on('roles')->onDelete('cascade');
         });
     }
+
+     /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('usuario_rol', function (Blueprint $table) {
+            $table->dropForeign('user_id_fk_ur');
+            $table->dropForeign('role_id_fk_ur');
+        });
+
+        Schema::dropIfExists('usuario_rol');
+    }
 }

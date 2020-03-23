@@ -181,11 +181,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        HelpDesk\Providers\AppServiceProvider::class,
+        HelpDesk\Providers\AuthServiceProvider::class,
+        HelpDesk\Providers\EventServiceProvider::class,
+        HelpDesk\Providers\RouteServiceProvider::class,
+        HelpDesk\Providers\BladeServiceProvider::class
 
     ],
 

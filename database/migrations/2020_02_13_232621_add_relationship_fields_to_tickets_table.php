@@ -28,7 +28,7 @@ class AddRelationshipFieldsToTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::table('comentarios', function (Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->dropForeign('eticket_fk');
             $table->dropForeign('pticket_fk');
             $table->dropForeign('cticket_fk');
