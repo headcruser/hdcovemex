@@ -48,8 +48,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-lock"></i>
+                            <a href="{{ route('admin.roles.index') }}" class="nav-link {{ routeIs(['admin.roles.index','admin.roles.*']) }}">
+                                <i class="nav-icon fas fa-user-lock"></i>
                                 <p>Roles</p>
                             </a>
                         </li>

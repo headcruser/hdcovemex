@@ -27,5 +27,9 @@ Route::group([
         Route::resource('usuarios', 'UsersController')->parameters([
             'usuarios' => 'user'
         ]);
+
+        Route::resource('roles', 'RolesController')->parameters([
+            'roles' => 'rol'
+        ]);
     }
 );
