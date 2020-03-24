@@ -177,6 +177,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Zizaco\Entrust\EntrustServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e39a675405cdb425d0ccdfeef76d99e",
+    "content-hash": "bd443c515ad084f39401d4dc38f0772a",
     "packages": [
         {
             "name": "browner12/helpers",
@@ -398,6 +398,89 @@
             "time": "2020-02-22T01:51:47+00:00"
         },
         {
+            "name": "gghughunishvili/entrust",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gghughunishvili/entrust.git",
+                "reference": "6548bc0f088fb1ee72f0f95c3ec09777508a059e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gghughunishvili/entrust/zipball/6548bc0f088fb1ee72f0f95c3ec09777508a059e",
+                "reference": "6548bc0f088fb1ee72f0f95c3ec09777508a059e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/cache": "~6.0",
+                "illuminate/console": "~6.0",
+                "illuminate/support": "~6.0",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "illuminate/database": "~6.0",
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^8.0",
+                "sami/sami": "dev-master"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Zizaco\\Entrust\\EntrustServiceProvider"
+                    ],
+                    "aliases": {
+                        "Entrust": "Zizaco\\Entrust\\EntrustFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/commands"
+                ],
+                "psr-4": {
+                    "Zizaco\\Entrust\\": "src/Entrust/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zizaco Zizuini",
+                    "email": "zizaco@gmail.com"
+                },
+                {
+                    "name": "Andrew Elkins",
+                    "homepage": "http://andrewelkins.com"
+                },
+                {
+                    "name": "Ben Batschelet",
+                    "homepage": "http://github.com/bbatsche"
+                },
+                {
+                    "name": "Michele Angioni",
+                    "email": "michele.angioni@gmail.com"
+                },
+                {
+                    "name": "Giorgi Ghughunishvili",
+                    "email": "gghughunishvili@gmail.com"
+                }
+            ],
+            "description": "This package provides a flexible way to add Role-based Permissions to Laravel/Lumen 6",
+            "keywords": [
+                "acl",
+                "auth",
+                "illuminate",
+                "laravel",
+                "lumen",
+                "permission",
+                "roles"
+            ],
+            "time": "2020-01-16T17:46:04+00:00"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "v0.2",
             "source": {
@@ -487,16 +570,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v6.18.2",
+            "version": "v6.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "9425a2f410d05d5bba493f62cff03854a8b19559"
+                "reference": "4e48acfaba87f08320a2764d36c3b6a4a4112ccf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/9425a2f410d05d5bba493f62cff03854a8b19559",
-                "reference": "9425a2f410d05d5bba493f62cff03854a8b19559",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/4e48acfaba87f08320a2764d36c3b6a4a4112ccf",
+                "reference": "4e48acfaba87f08320a2764d36c3b6a4a4112ccf",
                 "shasum": ""
             },
             "require": {
@@ -629,7 +712,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-03-17T17:08:02+00:00"
+            "time": "2020-03-24T16:37:50+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -998,16 +1081,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.31.0",
+            "version": "2.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bbc0ab53f41a4c6f223c18efcdbd9bc725eb5d2d"
+                "reference": "7410a349613bf32d02d8aaed1c669698ddd2b718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bbc0ab53f41a4c6f223c18efcdbd9bc725eb5d2d",
-                "reference": "bbc0ab53f41a4c6f223c18efcdbd9bc725eb5d2d",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/7410a349613bf32d02d8aaed1c669698ddd2b718",
+                "reference": "7410a349613bf32d02d8aaed1c669698ddd2b718",
                 "shasum": ""
             },
             "require": {
@@ -1016,6 +1099,7 @@
                 "symfony/translation": "^3.4 || ^4.0 || ^5.0"
             },
             "require-dev": {
+                "doctrine/orm": "^2.7",
                 "friendsofphp/php-cs-fixer": "^2.14 || ^3.0",
                 "kylekatarnls/multi-tester": "^1.1",
                 "phpmd/phpmd": "^2.8",
@@ -1064,7 +1148,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2020-03-01T11:11:58+00:00"
+            "time": "2020-03-24T16:01:47+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1330,16 +1414,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
+                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
-                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/0f73288fd15629204f9d42b7055f72dacbe811fc",
+                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc",
                 "shasum": ""
             },
             "require": {
@@ -1373,7 +1457,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2019-11-01T11:05:21+00:00"
+            "time": "2020-03-23T09:12:05+00:00"
         },
         {
             "name": "psr/simple-cache",

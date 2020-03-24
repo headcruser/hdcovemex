@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use HelpDesk\Entities\Admin\Role;
 use HelpDesk\Entities\Admin\User;
 
 class RoleUserTableSeeder extends Seeder
@@ -12,7 +13,10 @@ class RoleUserTableSeeder extends Seeder
      */
     public function run()
     {
-        User::findOrFail(1)->roles()->sync(1);
-        User::findOrFail(2)->roles()->sync(2);
+        $roleAdmin = Role::findOrFail(1);
+        $roleSoporte = Role::findOrFail(2);
+
+        User::findOrFail(1)->attachRole($roleAdmin);
+        User::findOrFail(2)->attachRole($roleSoporte);
     }
 }

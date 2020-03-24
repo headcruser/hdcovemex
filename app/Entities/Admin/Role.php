@@ -2,10 +2,10 @@
 
 namespace HelpDesk\Entities\Admin;
 
-use Illuminate\Database\Eloquent\Model;
+use Zizaco\Entrust\EntrustRole;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Role extends Model
+class Role extends EntrustRole
 {
     use SoftDeletes;
 
@@ -18,19 +18,11 @@ class Role extends Model
     ];
 
     protected $fillable = [
-        'nombre',
+        'name',
+        'display_name',
+        'description',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class);
-    }
 }

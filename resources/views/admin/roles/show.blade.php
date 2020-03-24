@@ -32,7 +32,25 @@
                                 NOMBRE
                             </th>
                             <td>
-                                {{ $rol->nombre }}
+                                {{ $rol->name }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                ALIAS
+                            </th>
+                            <td>
+                                {{ $rol->display_name }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                DESCRIPCION
+                            </th>
+                            <td>
+                                {{ $rol->description }}
                             </td>
                         </tr>
                     </tbody>

@@ -14,11 +14,16 @@ class CreatePermisoRolPivotTable extends Migration
     public function up()
     {
         Schema::create('permiso_rol', function (Blueprint $table) {
-            $table->unsignedInteger('role_id');
-            $table->foreign('role_id', 'role_id_fk_pr')->references('id')->on('roles')->onDelete('cascade');
+            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('permission_id');
 
-            $table->unsignedInteger('permission_id');
-            $table->foreign('permission_id', 'permission_id_fk_pr')->references('id')->on('permisos')->onDelete('cascade');
+            $table->foreign('role_id', 'role_id_fk_pr')->references('id')->on('roles')
+                ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('permission_id', 'permission_id_fk_pr')->references('id')->on('permisos')
+                ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->primary(['permission_id', 'role_id']);
         });
     }
 

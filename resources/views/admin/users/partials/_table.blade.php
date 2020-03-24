@@ -29,7 +29,7 @@
                     </td>
                     <td>
                         @forelse($user->roles as $key => $item)
-                            <span class="badge badge-info">{{ $item->nombre }}</span>
+                            <span class="badge badge-info">{{ $item->name }}</span>
                         @empty
                             <span class="badge badge-warning"> Sin Roles</span>
                         @endforelse

@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.0",
         "browner12/helpers": "^3.0",
         "fideloper/proxy": "^4.0",
-        "laraveles/spanish": "^1.4"
+        "laraveles/spanish": "^1.4",
+        "gghughunishvili/entrust": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

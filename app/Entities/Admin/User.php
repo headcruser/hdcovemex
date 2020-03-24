@@ -5,13 +5,13 @@ namespace HelpDesk\Entities\Admin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, Notifiable;
+    use Notifiable , EntrustUserTrait;
 
     /**
      * The table associated with the model.
@@ -51,11 +51,6 @@ class User extends Authenticatable
                         RELACIONES
     /////////////////////////////////////////////////////////////////////////// */
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'usuario_rol', 'user_id', 'role_id');
-    }
-
     public function departamento()
     {
         return $this->belongsTo(Departamento::class, 'departamento_id')
@@ -64,8 +59,7 @@ class User extends Authenticatable
             ]);
     }
 
-
-    /*///////////////////////////////////////////////////////////////////////////
+     /*///////////////////////////////////////////////////////////////////////////
                         MUTADORES
     /////////////////////////////////////////////////////////////////////////// */
 
