@@ -10,17 +10,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Symfony\Component\HttpFoundation\Response;
+use Entrust;
 
 class UsersController extends Controller
 {
     public function index()
     {
+        abort_unless(Entrust::can('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $users = User::with(['departamento', 'roles'])->paginate();
         return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
+        abort_unless(Entrust::can('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $roles = Role::all()->pluck('name', 'id');
         $departamentos = Departamento::all()->pluck('nombre', 'id')->prepend('Selecciona un departamento', '');
         $user = new User();
@@ -53,6 +58,8 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
+        abort_unless(Entrust::can('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->load('roles');
         $roles = Role::all()->pluck('name', 'id');
         $departamentos = Departamento::all()->pluck('nombre', 'id')->prepend('Selecciona un departamento', '');
@@ -81,6 +88,8 @@ class UsersController extends Controller
 
     public function show(User $user)
     {
+        abort_unless(Entrust::can('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->load(['roles', 'departamento']);
 
         return view('admin.users.show', compact('user'));
@@ -88,6 +97,8 @@ class UsersController extends Controller
 
     public function destroy(User $user)
     {
+        abort_unless(Entrust::can('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->delete();
         return back();
     }

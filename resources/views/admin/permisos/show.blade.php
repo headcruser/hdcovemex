@@ -5,8 +5,8 @@
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item">Administracion</li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Permisos</a></li>
-        <li class="breadcrumb-item active">Rol #{{ $permiso->id }}</li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.permisos.index') }}">Permisos</a></li>
+        <li class="breadcrumb-item active">Permiso #{{ $permiso->id }}</li>
     </ol>
 @endsection
 
@@ -24,7 +24,7 @@
                                 ID
                             </th>
                             <td>
-                                {{ $rol->id }}
+                                {{ $permiso->id }}
                             </td>
                         </tr>
                         <tr>
@@ -32,7 +32,7 @@
                                 NOMBRE
                             </th>
                             <td>
-                                {{ $rol->name }}
+                                {{ $permiso->name }}
                             </td>
                         </tr>
 
@@ -41,7 +41,7 @@
                                 ALIAS
                             </th>
                             <td>
-                                {{ $rol->display_name }}
+                                {{ $permiso->display_name }}
                             </td>
                         </tr>
 
@@ -50,7 +50,7 @@
                                 DESCRIPCION
                             </th>
                             <td>
-                                {{ $rol->description }}
+                                {{ $permiso->description }}
                             </td>
                         </tr>
                     </tbody>
@@ -67,4 +67,3 @@
 
 @section('scripts')
 @endsection
-

@@ -30,37 +30,47 @@
                 <li class="nav-header">Navegación</li>
 
                 <!-- ADMINISTRACION -->
-                <li class="nav-header">Administrativo</li>
+                @permission('user_management_access')
+                    <li class="nav-header">Administrativo</li>
 
-                <li class="nav-item has-treeview {{ active('administracion/*', 'menu-open') }} ">
-                    <a href="#" class="nav-link {{ active('administracion/*') }}">
-                        <i class="nav-icon fas fa-users-cog"></i>
-                        <p>
-                            Administracion
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item ">
-                            <a href="{{ route('admin.usuarios.index') }}" class="nav-link {{ routeIs(['admin.usuarios.index','admin.usuarios.*']) }}">
-                                <i class="nav-icon fas fa-user-friends"></i>
-                                <p>Usuarios</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.roles.index') }}" class="nav-link {{ routeIs(['admin.roles.index','admin.roles.*']) }}">
-                                <i class="nav-icon fas fa-user-lock"></i>
-                                <p>Roles</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }} class="nav-link">
-                                <i class="nav-icon fas fa-key"></i>
-                                <p>Permisos</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li class="nav-item has-treeview {{ active('administracion/*', 'menu-open') }} ">
+                        <a href="#" class="nav-link {{ active('administracion/*') }}">
+                            <i class="nav-icon fas fa-users-cog"></i>
+                            <p>
+                                Administracion
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('user_access')
+                                <li class="nav-item ">
+                                    <a href="{{ route('admin.usuarios.index') }}" class="nav-link {{ routeIs(['admin.usuarios.index','admin.usuarios.*']) }}">
+                                        <i class="nav-icon fas fa-user-friends"></i>
+                                        <p>Usuarios</p>
+                                    </a>
+                                </li>
+                            @endpermission
+
+                            @permission('role_access')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.roles.index') }}" class="nav-link {{ routeIs(['admin.roles.index','admin.roles.*']) }}">
+                                    <i class="nav-icon fas fa-user-lock"></i>
+                                    <p>Roles</p>
+                                </a>
+                            </li>
+                            @endpermission
+
+                            @permission('permission_access')
+                            <li class="nav-item">
+                                <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }} class="nav-link">
+                                    <i class="nav-icon fas fa-key"></i>
+                                    <p>Permisos</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                @endpermission
 
                 <!-- GESTION -->
                 <li class="nav-header">Gestión</li>
