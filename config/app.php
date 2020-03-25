@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'description'   => env('APP_DESCRIPTION','Mesa de ayuda'),
+    'description'   => env('APP_DESCRIPTION', 'Mesa de ayuda'),
 
     /*
     |--------------------------------------------------------------------------
@@ -238,7 +238,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Entrust' => Zizaco\Entrust\EntrustFacade::class,
     ],
 
 ];

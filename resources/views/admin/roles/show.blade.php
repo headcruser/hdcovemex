@@ -53,6 +53,18 @@
                                 {{ $rol->description }}
                             </td>
                         </tr>
+                        <tr>
+                            <th>
+                                PERMISOS
+                            </th>
+                            <td>
+                                @forelse($rol->perms as $permission)
+                                    <span class="badge badge-info">{{ $permission->display_name }}</span>
+                                @empty
+                                    <span class="badge badge-warning">Sin Permisos</span>
+                                @endforelse
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <a style="margin-top:20px;" class="btn btn-default" href="{{ route('admin.roles.index') }}">

@@ -23,17 +23,19 @@ Route::group([
     'namespace'     => 'Admin',
     'middleware'    => ['auth']],
     function () {
-        # Users
+        # USUARIOS
         Route::resource('usuarios', 'UsersController')->parameters([
             'usuarios' => 'user'
         ]);
 
+        # ROLES
         Route::resource('roles', 'RolesController')->parameters([
             'roles' => 'rol'
         ]);
 
+        # PERMISOS
         Route::resource('permisos', 'PermisosController')->parameters([
-            'roles' => 'rol'
+            'permisos' => 'permiso'
         ]);
     }
 );

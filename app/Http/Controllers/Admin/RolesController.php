@@ -2,58 +2,65 @@
 
 namespace HelpDesk\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use HelpDesk\Entities\Admin\Role;
-use Illuminate\Support\Facades\DB;
+use Entrust;
+use HelpDesk\Entities\Admin\{Role, Permission};
 use HelpDesk\Http\Controllers\Controller;
+use HelpDesk\Http\Requests\Admin\Role\{CreateRoleRequest, UpdateRoleRequest};
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use Symfony\Component\HttpFoundation\Response;
-use HelpDesk\Http\Requests\Admin\Role\CreateRoleRequest;
-use HelpDesk\Http\Requests\Admin\Role\UpdateRoleRequest;
 
 class RolesController extends Controller
 {
     public function index()
     {
-        // abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $roles = Role::paginate();
         return view('admin.roles.index', compact('roles'));
     }
 
     public function create()
     {
-        #abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $rol = new Role();
-        return view('admin.roles.create', compact('rol'));
+        $permisos = Permission::all()->pluck('display_name', 'id');
+
+        return view('admin.roles.create', compact('rol', 'permisos'));
     }
 
     public function store(CreateRoleRequest $request)
     {
         DB::beginTransaction();
         try {
-            $role = Role::create($request->all());
+            $rol = Role::create($request->all());
+            $rol->perms()->sync($request->input('permisos', []));
+
             DB::commit();
 
             return redirect()->route('admin.roles.index')
-            ->with([
-                'message' => 'Rol Creado Correctamente'
-            ]);
-
+                ->with([
+                    'message' => 'Rol Creado Correctamente'
+                ]);
         } catch (\Exception $e) {
             DB::rollback();
 
             return redirect()->back()
-            ->with([
-                'error' => 'Error Servidor; ' . $e->getMessage(),
-            ])->withInput();
+                ->with([
+                    'error' => 'Error Servidor; ' . $e->getMessage(),
+                ])->withInput();
         }
     }
 
     public function edit(Role $rol)
     {
-        #abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.roles.edit', compact('rol'));
+        $permisos = Permission::all()->pluck('display_name', 'id');
+        return view('admin.roles.edit', compact('rol', 'permisos'));
     }
 
     public function update(UpdateRoleRequest $request, Role $rol)
@@ -62,31 +69,30 @@ class RolesController extends Controller
         try {
 
             $rol->update($request->all());
+            $rol->perms()->sync($request->input('permisos', []));
             DB::commit();
 
             return  redirect()->route('admin.roles.index');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
 
             return  redirect()->back()
-            ->with([
-                'error' => 'Error Servidor; ' . $e->getMessage(),
-            ])->withInput();
+                ->with([
+                    'error' => 'Error Servidor; ' . $e->getMessage(),
+                ])->withInput();
         }
-
     }
 
     public function show(Role $rol)
     {
-        // abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        abort_unless(Entrust::can('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('admin.roles.show', compact('rol'));
     }
 
     public function destroy(Role $rol)
     {
-        #abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $rol->delete();
 

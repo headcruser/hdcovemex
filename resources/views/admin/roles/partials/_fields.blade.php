@@ -21,6 +21,23 @@
     </div>
 </div>
 
+<div class="form-group @error('permisos') has-error @enderror">
+    <label for="select-permisos">Permisos*
+        <span class="btn btn-info btn-xs select-all">Seleccionar Todos</span>
+        <span class="btn btn-info btn-xs deselect-all">Quitar Todos</span>
+    </label>
+    <select name="permisos[]" id="select-permisos" class="form-control select2" multiple="multiple" title="Selecciona un permisos" required>
+        @foreach($permisos as $id => $permiso)
+            <option value="{{ $id }}" {{ (in_array($id, old('permisos', [])) || $rol->perms->contains($id)) ? 'selected' : '' }}>{{ $permiso }}</option>
+        @endforeach
+    </select>
+
+    <div class="help-block with-errors">
+        @error('')
+        <span>{{ $errors->first('display_name') }}</span>
+        @enderror
+    </div>
+</div>
 
 <div class="form-group @error('description') has-error @enderror">
     <label for="input-description">Descripción</label>

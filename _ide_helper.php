@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 6.18.2 on 2020-03-23 11:59:52.
+ * Generated for Laravel 6.18.3 on 2020-03-25 15:28:38.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -14968,6 +14968,132 @@ namespace Illuminate\Support {
  
 }
 
+namespace Zizaco\Entrust { 
+
+    /**
+     * This file is part of Entrust,
+     * a role & permission management solution for Laravel.
+     *
+     * @license MIT
+     * @package Zizaco\Entrust
+     */ 
+    class EntrustFacade {
+        
+        /**
+         * Checks if the current user has a role by its name
+         *
+         * @param string $name Role name.
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasRole($role, $requireAll = false)
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        return $instance->hasRole($role, $requireAll);
+        }
+        
+        /**
+         * Check if the current user has a permission by its name
+         *
+         * @param string $permission Permission string.
+         * @return bool 
+         * @static 
+         */ 
+        public static function can($permission, $requireAll = false)
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        return $instance->can($permission, $requireAll);
+        }
+        
+        /**
+         * Check if the current user has a role or permission by its name
+         *
+         * @param array|string $roles The role(s) needed.
+         * @param array|string $permissions The permission(s) needed.
+         * @param array $options The Options.
+         * @return bool 
+         * @static 
+         */ 
+        public static function ability($roles, $permissions, $options = [])
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        return $instance->ability($roles, $permissions, $options);
+        }
+        
+        /**
+         * Get the currently authenticated user or null.
+         *
+         * @return \Zizaco\Entrust\Illuminate\Auth\UserInterface|null 
+         * @static 
+         */ 
+        public static function user()
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        return $instance->user();
+        }
+        
+        /**
+         * Filters a route for a role or set of roles.
+         * 
+         * If the third parameter is null then abort with status code 403.
+         * Otherwise the $result is returned.
+         *
+         * @param string $route Route pattern. i.e: "admin/*"
+         * @param array|string $roles The role(s) needed
+         * @param mixed $result i.e: Redirect::to('/')
+         * @param bool $requireAll User must have all roles
+         * @return mixed 
+         * @static 
+         */ 
+        public static function routeNeedsRole($route, $roles, $result = null, $requireAll = true)
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        return $instance->routeNeedsRole($route, $roles, $result, $requireAll);
+        }
+        
+        /**
+         * Filters a route for a permission or set of permissions.
+         * 
+         * If the third parameter is null then abort with status code 403.
+         * Otherwise the $result is returned.
+         *
+         * @param string $route Route pattern. i.e: "admin/*"
+         * @param array|string $permissions The permission(s) needed
+         * @param mixed $result i.e: Redirect::to('/')
+         * @param bool $requireAll User must have all permissions
+         * @return mixed 
+         * @static 
+         */ 
+        public static function routeNeedsPermission($route, $permissions, $result = null, $requireAll = true)
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        return $instance->routeNeedsPermission($route, $permissions, $result, $requireAll);
+        }
+        
+        /**
+         * Filters a route for role(s) and/or permission(s).
+         * 
+         * If the third parameter is null then abort with status code 403.
+         * Otherwise the $result is returned.
+         *
+         * @param string $route Route pattern. i.e: "admin/*"
+         * @param array|string $roles The role(s) needed
+         * @param array|string $permissions The permission(s) needed
+         * @param mixed $result i.e: Redirect::to('/')
+         * @param bool $requireAll User must have all roles and permissions
+         * @return void 
+         * @static 
+         */ 
+        public static function routeNeedsRoleOrPermission($route, $roles, $permissions, $result = null, $requireAll = false)
+        {
+                        /** @var \Zizaco\Entrust\Entrust $instance */
+                        $instance->routeNeedsRoleOrPermission($route, $roles, $permissions, $result, $requireAll);
+        }
+         
+    }
+ 
+}
+
 namespace Barryvdh\Debugbar { 
 
     /**
@@ -18732,6 +18858,8 @@ namespace  {
     class Validator extends \Illuminate\Support\Facades\Validator {}
 
     class View extends \Illuminate\Support\Facades\View {}
+
+    class Entrust extends \Zizaco\Entrust\EntrustFacade {}
 
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
 
