@@ -18,7 +18,9 @@ class Permission extends EntrustPermission
     ];
 
     protected $fillable = [
-        'nombre',
+        'name',
+        'display_name',
+        'description',
         'created_at',
         'updated_at',
         'deleted_at',

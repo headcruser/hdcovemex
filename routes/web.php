@@ -31,5 +31,9 @@ Route::group([
         Route::resource('roles', 'RolesController')->parameters([
             'roles' => 'rol'
         ]);
+
+        Route::resource('permisos', 'PermisosController')->parameters([
+            'roles' => 'rol'
+        ]);
     }
 );

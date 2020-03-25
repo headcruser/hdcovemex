@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }} class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>Permisos</p>
                             </a>
