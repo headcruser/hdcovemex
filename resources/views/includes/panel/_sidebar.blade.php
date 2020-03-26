@@ -62,7 +62,7 @@
 
                             @permission('permission_access')
                             <li class="nav-item">
-                                <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }} class="nav-link">
+                                <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }}>
                                     <i class="nav-icon fas fa-key"></i>
                                     <p>Permisos</p>
                                 </a>
@@ -80,27 +80,25 @@
                         <p>Tickets</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tasks"></i>
-                        <p>Asignación</p>
+                        <p>Solicitudes</p>
                     </a>
                 </li>
 
                 <!-- CONFIGURACION-->
                 <li class="nav-header">Configuracion</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>Tipos</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-bell"></i>
-                        <p>Prioridades</p>
-                    </a>
-                </li>
+
+                @permission('attribute_access')
+                    <li class="nav-item" >
+                        <a href="{{ route('config.atributos.index') }}" class="nav-link {{ routeIs(['config.atributos.index','config.atributos.*'],'active') }}">
+                            <i class="nav-icon fas fa-check-square"></i>
+                            <p>Atributos</p>
+                        </a>
+                    </li>
+                @endpermission
 
                 <!-- REPORTES -->
                 <li class="nav-header">Reportes</li>

@@ -17,14 +17,21 @@ class UsersTableSeeder extends Seeder
             [
                 'nombre'         => 'Admin',
                 'email'          => 'admin@admin.com',
-                'telefono'       => '',
+                'telefono'       => null,
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],
             [
                 'nombre'         => 'Jose Malagon',
-                'email'          => 'soporteti@covemex.com',
+                'email'          => 'soporte@covemex.com',
                 'telefono'       => '130',
+                'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
+                'remember_token' => null,
+            ],
+            [
+                'nombre'         => 'User Empleado',
+                'email'          => 'empleado@covemex.com',
+                'telefono'       => null,
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],

@@ -15,8 +15,10 @@ class RoleUserTableSeeder extends Seeder
     {
         $roleAdmin = Role::findOrFail(1);
         $roleSoporte = Role::findOrFail(2);
+        $roleEmpleado = Role::findOrFail(3);
 
         User::findOrFail(1)->attachRole($roleAdmin);
         User::findOrFail(2)->attachRole($roleSoporte);
+        User::findOrFail(3)->attachRole($roleEmpleado);
     }
 }

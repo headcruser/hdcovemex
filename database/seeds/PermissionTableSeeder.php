@@ -111,6 +111,80 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a usuarios',
                 'description'   => 'Permite el acceso a la vista de usuarios'
             ],
+            [
+                'id'            => 17,
+                'name'          => 'user_config_access',
+                'display_name'  => 'Acceso administracion',
+                'description'   => 'Permite el acceso a la seccion de configuración'
+            ],
+
+            [
+                'id'            => 18,
+                'name'          => 'attribute_create',
+                'display_name'  => 'Crear Atributo',
+                'description'   => 'Permite Crear un atributo'
+            ],
+            [
+                'id'            => 19,
+                'name'          => 'attribute_edit',
+                'display_name'  => 'Editar Atributo',
+                'description'   => 'Permite Editar un atributo'
+            ],
+            [
+                'id'            => 20,
+                'name'          => 'attribute_show',
+                'display_name'  => 'Ver Atributo',
+                'description'   => 'Permite ver el detalle de un atributo'
+            ],
+            [
+                'id'            => 21,
+                'name'          => 'attribute_delete',
+                'display_name'  => 'Eliminar atributo',
+                'description'   => 'Permite Eliminar un atributo'
+            ],
+            [
+                'id'            => 22,
+                'name'          => 'attribute_access',
+                'display_name'  => 'Acceso atributos',
+                'description'   => 'Permite el acceso a la vista de atributos'
+            ],
+            [
+                'id'            => 23,
+                'name'          => 'user_manager_access',
+                'display_name'  => 'Acceso Gestión',
+                'description'   => 'Permite el acceso a la gestion de recursos'
+            ],
+
+            [
+                'id'            => 24,
+                'name'          => 'solicitude_create',
+                'display_name'  => 'Crear Solicitud',
+                'description'   => 'Permite Crear una solicitud'
+            ],
+            [
+                'id'            => 25,
+                'name'          => 'solicitude_edit',
+                'display_name'  => 'Editar Solicitud',
+                'description'   => 'Permite Editar una solicitud'
+            ],
+            [
+                'id'            => 26,
+                'name'          => 'solicitude_show',
+                'display_name'  => 'Ver Solicitud',
+                'description'   => 'Permite ver el detalle de la solicitud'
+            ],
+            [
+                'id'            => 27,
+                'name'          => 'solicitude_delete',
+                'display_name'  => 'Eliminar Solicitud',
+                'description'   => 'Permite Eliminar un usuario'
+            ],
+            [
+                'id'            => 28,
+                'name'          => 'solicitude_access',
+                'display_name'  => 'Acceso a solicitudes',
+                'description'   => 'Permite el acceso a la vista de solicitudes'
+            ],
         ];
 
         Permission::insert($permissions);

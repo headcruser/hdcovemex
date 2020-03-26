@@ -15,5 +15,11 @@ class PermissionRoleTableSeeder extends Seeder
     {
         $admin_permissions = Permission::all();
         Role::findOrFail(1)->perms()->sync($admin_permissions->pluck('id'));
+
+        $empleado_permissions = $admin_permissions->filter(function($permission){
+            return \Str::contains($permission->name,'solicitude_') && $permission->name != 'solicitude_delete' && $permission->name != 'solicitude_edit';
+        });
+
+        Role::findOrFail(3)->perms()->sync($empleado_permissions);
     }
 }

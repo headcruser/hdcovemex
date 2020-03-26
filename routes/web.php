@@ -39,3 +39,16 @@ Route::group([
         ]);
     }
 );
+
+Route::group([
+    'prefix'        => 'configuracion',
+    'as'            => 'config.',
+    'namespace'     => 'Config',
+    'middleware'    => ['auth']],
+    function () {
+        # ATRIBUTOS
+        Route::resource('atributos', 'AttributesController')->parameters([
+            'atributos' => 'model'
+        ]);
+    }
+);

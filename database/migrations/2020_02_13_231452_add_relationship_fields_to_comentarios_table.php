@@ -14,8 +14,13 @@ class AddRelationshipFieldsToComentariosTable extends Migration
     public function up()
     {
         Schema::table('comentarios', function (Blueprint $table) {
-            $table->foreign('solicitud_id', 'scomentario_fk')->references('id')->on('solicitudes');
-            $table->foreign('usuario_id', 'ucomentario_fk')->references('id')->on('usuarios');
+            $table->foreign('solicitud_id', 'comentario-solicitud_fk')
+                ->references('id')
+                ->on('solicitudes');
+
+            $table->foreign('usuario_id', 'comentario-usuario_fk')
+                ->references('id')
+                ->on('usuarios');
         });
     }
 
@@ -27,8 +32,8 @@ class AddRelationshipFieldsToComentariosTable extends Migration
     public function down()
     {
         Schema::table('comentarios', function (Blueprint $table) {
-            $table->dropForeign('scomentario_fk');
-            $table->dropForeign('ucomentario_fk');
+            $table->dropForeign('comentario-solicitud_fk');
+            $table->dropForeign('comentario-usuario_fk');
         });
     }
 }
