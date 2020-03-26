@@ -4,7 +4,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item">Administracion</li>
+        <li class="breadcrumb-item">Administración</li>
         <li class="breadcrumb-item active">Permisos</li>
     </ol>
 @endsection
@@ -29,7 +29,7 @@
             </div>
 
             <div class="card-footer clearfix">
-               {{ $permisos->render() }}
+               {{ $collection->render() }}
             </div>
         </div>
     </div>

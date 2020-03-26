@@ -18,7 +18,7 @@
                 <h3 class="card-title">Información del usuario</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route("admin.usuarios.update", $user) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route("admin.usuarios.update", $model) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 

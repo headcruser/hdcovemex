@@ -62,7 +62,7 @@
 
                             @permission('permission_access')
                             <li class="nav-item">
-                                <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }}>
+                                <a  href="{{ route('admin.permisos.index') }}" class="nav-link {{ routeIs(['admin.permisos.index','admin.permisos.*']) }}">
                                     <i class="nav-icon fas fa-key"></i>
                                     <p>Permisos</p>
                                 </a>

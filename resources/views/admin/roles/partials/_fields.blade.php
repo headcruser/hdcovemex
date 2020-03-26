@@ -1,6 +1,6 @@
 <div class="form-group @error('name') has-error @enderror">
     <label for="input-name">Nombre*</label>
-    <input type="text" id="input-name" name="name" class="form-control" value="{{ old('name', $rol->name) }}"
+    <input type="text" id="input-name" name="name" class="form-control" value="{{ old('name', $model->name) }}"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('name')
@@ -12,7 +12,7 @@
 
 <div class="form-group @error('display_name') has-error @enderror">
     <label for="input-display_name">Alias*</label>
-    <input type="text" id="input-display_name" name="display_name" class="form-control" value="{{ old('display_name', $rol->display_name) }}"
+    <input type="text" id="input-display_name" name="display_name" class="form-control" value="{{ old('display_name', $model->display_name) }}"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('display_name')
@@ -28,7 +28,7 @@
     </label>
     <select name="permisos[]" id="select-permisos" class="form-control select2" multiple="multiple" title="Selecciona un permisos" required>
         @foreach($permisos as $id => $permiso)
-            <option value="{{ $id }}" {{ (in_array($id, old('permisos', [])) || $rol->perms->contains($id)) ? 'selected' : '' }}>{{ $permiso }}</option>
+            <option value="{{ $id }}" {{ (in_array($id, old('permisos', [])) || $model->perms->contains($id)) ? 'selected' : '' }}>{{ $permiso }}</option>
         @endforeach
     </select>
 
@@ -41,7 +41,7 @@
 
 <div class="form-group @error('description') has-error @enderror">
     <label for="input-description">Descripción</label>
-    <textarea class="form-control" id="input-description" name="description" cols="30" rows="5" autocomplete="off">{{ old('description', $rol->description) }}</textarea>
+    <textarea class="form-control" id="input-description" name="description" cols="30" rows="5" autocomplete="off">{{ old('description', $model->description) }}</textarea>
 
     <div class="help-block with-errors">
         @error('description')

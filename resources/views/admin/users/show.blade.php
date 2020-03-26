@@ -6,7 +6,7 @@
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item">Administracion</li>
         <li class="breadcrumb-item"><a href="{{ route('admin.usuarios.index') }}">Usuarios</a></li>
-        <li class="breadcrumb-item active">Usuario #{{ $user->id }}</li>
+        <li class="breadcrumb-item active">Usuario #{{ $model->id }}</li>
     </ol>
 @endsection
 
@@ -24,7 +24,7 @@
                                 ID
                             </th>
                             <td>
-                                {{ $user->id }}
+                                {{ $model->id }}
                             </td>
                         </tr>
                         <tr>
@@ -32,7 +32,7 @@
                                 NOMBRE
                             </th>
                             <td>
-                                {{ $user->nombre }}
+                                {{ $model->nombre }}
                             </td>
                         </tr>
                         <tr>
@@ -40,7 +40,7 @@
                                 EMAIL
                             </th>
                             <td>
-                                {{ $user->email }}
+                                {{ $model->email }}
                             </td>
                         </tr>
                         <tr>
@@ -48,7 +48,7 @@
                                 DEPARTAMENTO
                             </th>
                             <td>
-                                {{ $user->departamento->nombre }}
+                                {{ $model->departamento->nombre }}
                             </td>
                         </tr>
                         <tr>
@@ -56,7 +56,7 @@
                                 Roles
                             </th>
                             <td>
-                                @forelse($user->roles as $id => $roles)
+                                @forelse($model->roles as $id => $roles)
                                     <span class="label label-info label-many">{{ $roles->nombre }}</span>
                                 @empty
                                     <span class="label label-warning label-many">Sin Roles</span>

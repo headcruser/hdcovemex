@@ -29,7 +29,7 @@
             </div>
 
             <div class="card-footer clearfix">
-               {{ $users->render() }}
+               {{ $collection->render() }}
             </div>
         </div>
     </div>

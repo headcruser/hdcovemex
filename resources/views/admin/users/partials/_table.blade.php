@@ -12,50 +12,50 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $key => $user)
-                <tr data-entry-id="{{ $user->id }}">
+            @foreach($collection as $key => $element)
+                <tr data-entry-id="{{ $element->id }}">
                     <td></td>
                     <td>
-                        {{ $user->id }}
+                        {{ $element->id }}
                     </td>
                     <td>
-                        {{ $user->nombre }}
+                        {{ $element->nombre }}
                     </td>
                     <td>
-                        {{ $user->email }}
+                        {{ $element->email }}
                     </td>
                     <td>
-                        {{ $user->departamento->nombre }}
+                        {{ $element->departamento->nombre }}
                     </td>
                     <td>
-                        @forelse($user->roles as $key => $item)
+                        @forelse($element->roles as $key => $item)
                             <span class="badge badge-info">{{ $item->name }}</span>
                         @empty
                             <span class="badge badge-warning"> Sin Roles</span>
                         @endforelse
                     </td>
                     <td>
-                        {{-- @can('user_show') --}}
-                            <a class="btn btn-xs btn-primary" href="{{ route('admin.usuarios.show', $user->id) }}" title="Ver">
+                        @permission('user_show')
+                            <a class="btn btn-xs btn-primary" href="{{ route('admin.usuarios.show', $element->id) }}" title="Ver">
                                 <i class="far fa-eye"></i>
                                 {{-- {{ trans('global.view') }} --}}
                             </a>
-                        {{-- @endcan --}}
+                        @endpermission
 
-                        {{-- @can('user_edit') --}}
-                            <a class="btn btn-xs btn-info" href="{{ route('admin.usuarios.edit', $user->id) }}" title="Editar">
+                        @permission('user_edit')
+                            <a class="btn btn-xs btn-info" href="{{ route('admin.usuarios.edit', $element->id) }}" title="Editar">
                                 {{-- {{ trans('global.edit') }} --}}
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                        {{-- @endcan --}}
+                        @endpermission
 
-                        {{-- @can('user_delete') --}}
-                            <form action="{{ route('admin.usuarios.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Deseas eliminar el registro');" style="display: inline-block;">
+                        @permission('user_delete')
+                            <form action="{{ route('admin.usuarios.destroy', $element->id) }}" method="POST" onsubmit="return confirm('Deseas eliminar el registro');" style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="btn btn-xs btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                             </form>
-                        {{-- @endcan --}}
+                        @endpermission
 
                     </td>
 

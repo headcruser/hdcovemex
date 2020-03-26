@@ -6,7 +6,7 @@
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item">Administracion</li>
         <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Roles</a></li>
-        <li class="breadcrumb-item active">Rol #{{ $rol->id }}</li>
+        <li class="breadcrumb-item active">Rol #{{ $model->id }}</li>
     </ol>
 @endsection
 
@@ -24,7 +24,7 @@
                                 ID
                             </th>
                             <td>
-                                {{ $rol->id }}
+                                {{ $model->id }}
                             </td>
                         </tr>
                         <tr>
@@ -32,7 +32,7 @@
                                 NOMBRE
                             </th>
                             <td>
-                                {{ $rol->name }}
+                                {{ $model->name }}
                             </td>
                         </tr>
 
@@ -41,7 +41,7 @@
                                 ALIAS
                             </th>
                             <td>
-                                {{ $rol->display_name }}
+                                {{ $model->display_name }}
                             </td>
                         </tr>
 
@@ -50,7 +50,7 @@
                                 DESCRIPCION
                             </th>
                             <td>
-                                {{ $rol->description }}
+                                {{ $model->description }}
                             </td>
                         </tr>
                         <tr>
@@ -58,7 +58,7 @@
                                 PERMISOS
                             </th>
                             <td>
-                                @forelse($rol->perms as $permission)
+                                @forelse($model->perms as $permission)
                                     <span class="badge badge-info">{{ $permission->display_name }}</span>
                                 @empty
                                     <span class="badge badge-warning">Sin Permisos</span>

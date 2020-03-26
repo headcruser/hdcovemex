@@ -1,6 +1,6 @@
 <div class="form-group @error('nombre') has-error @enderror">
     <label for="input-nombre">Nombre*</label>
-    <input type="text" id="input-nombre" name="nombre" class="form-control" value="{{ old('nombre', $user->nombre) }}"
+    <input type="text" id="input-nombre" name="nombre" class="form-control" value="{{ old('nombre', $model->nombre) }}"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('nombre')
@@ -11,7 +11,7 @@
 
 <div class="form-group @error('email') has-error @enderror">
     <label for="input-email">Correo electronico*</label>
-    <input type="email" id="input-email" name="email" class="form-control" value="{{ old('email', $user->email) }}"
+    <input type="email" id="input-email" name="email" class="form-control" value="{{ old('email', $model->email) }}"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('email')
@@ -40,7 +40,7 @@
     <select name="roles[]" id="input-roles" class="form-control select2" multiple="multiple">
         @foreach($roles as $id => $roles)
             <option value="{{ $id }}"
-                {{ (in_array($id, old('roles', [])) || $user->roles->contains($id)) ? 'selected' : '' }}>{{ $roles }}
+                {{ (in_array($id, old('roles', [])) || $model->roles->contains($id)) ? 'selected' : '' }}>{{ $roles }}
             </option>
         @endforeach
     </select>
@@ -55,7 +55,7 @@
     <label for="input-departamento_id">Departamento*</label>
     <select name="departamento_id" id="input-departamento_id" class="form-control select2" required>
         @foreach($departamentos as $id => $departamento)
-            <option value="{{ $id }}" {{ ( $user->departamento ? $user->departamento->id : old('departamento_id')) == $id ? 'selected' : '' }}>{{ $departamento }}</option>
+            <option value="{{ $id }}" {{ ( $model->departamento ? $model->departamento->id : old('departamento_id')) == $id ? 'selected' : '' }}>{{ $departamento }}</option>
         @endforeach
     </select>
     <div class="help-block with-errors">

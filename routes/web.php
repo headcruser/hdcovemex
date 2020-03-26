@@ -25,17 +25,17 @@ Route::group([
     function () {
         # USUARIOS
         Route::resource('usuarios', 'UsersController')->parameters([
-            'usuarios' => 'user'
+            'usuarios'  => 'model'
         ]);
 
         # ROLES
         Route::resource('roles', 'RolesController')->parameters([
-            'roles' => 'rol'
+            'roles' => 'model'
         ]);
 
         # PERMISOS
         Route::resource('permisos', 'PermisosController')->parameters([
-            'permisos' => 'permiso'
+            'permisos' => 'model'
         ]);
     }
 );

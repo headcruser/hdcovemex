@@ -18,18 +18,17 @@ class RolesController extends Controller
     {
         abort_unless(Entrust::can('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $roles = Role::paginate();
-        return view('admin.roles.index', compact('roles'));
+        return view('admin.roles.index', ['collection' => Role::paginate()]);
     }
 
     public function create()
     {
         abort_unless(Entrust::can('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $rol = new Role();
-        $permisos = Permission::all()->pluck('display_name', 'id');
-
-        return view('admin.roles.create', compact('rol', 'permisos'));
+        return view('admin.roles.create', [
+            'model'     => new Role(),
+            'permisos'  => Permission::all()->pluck('display_name', 'id')
+        ]);
     }
 
     public function store(CreateRoleRequest $request)
@@ -41,10 +40,9 @@ class RolesController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.roles.index')
-                ->with([
-                    'message' => 'Rol Creado Correctamente'
-                ]);
+            return redirect()
+                ->route('admin.roles.index')
+                ->with(['message' => 'Rol Creado Correctamente']);
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -55,24 +53,30 @@ class RolesController extends Controller
         }
     }
 
-    public function edit(Role $rol)
+    public function edit(Role $model)
     {
         abort_unless(Entrust::can('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $permisos = Permission::all()->pluck('display_name', 'id');
-        return view('admin.roles.edit', compact('rol', 'permisos'));
+        return view('admin.roles.edit', [
+            'model'     => $model,
+            'permisos'  => Permission::all()->pluck('display_name', 'id'),
+        ]);
     }
 
-    public function update(UpdateRoleRequest $request, Role $rol)
+    public function update(UpdateRoleRequest $request, Role $model)
     {
         DB::beginTransaction();
         try {
 
-            $rol->update($request->all());
-            $rol->perms()->sync($request->input('permisos', []));
+            $model->update($request->all());
+            $model->perms()->sync($request->input('permisos', []));
+
             DB::commit();
 
-            return  redirect()->route('admin.roles.index');
+            return  redirect()
+                ->route('admin.roles.index')
+                ->with(['message' => 'Rol actualizado correctamento']);
+
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -83,18 +87,18 @@ class RolesController extends Controller
         }
     }
 
-    public function show(Role $rol)
+    public function show(Role $model)
     {
         abort_unless(Entrust::can('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.roles.show', compact('rol'));
+        return view('admin.roles.show',['model' => $model]);
     }
 
-    public function destroy(Role $rol)
+    public function destroy(Role $model)
     {
         abort_unless(Entrust::can('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $rol->delete();
+        $model->delete();
 
         return back();
     }

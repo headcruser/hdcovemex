@@ -18,7 +18,7 @@
                 <h3 class="card-title">Información del permiso</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route("admin.permisos.update", $permiso) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route("admin.permisos.update", $model) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 

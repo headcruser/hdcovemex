@@ -4,7 +4,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item">Administracion</li>
+        <li class="breadcrumb-item">Administración</li>
         <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Roles</a></li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
