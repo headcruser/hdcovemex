@@ -15,15 +15,20 @@ class AddRelationshipFieldsToSolicitudTable extends Migration
     {
         Schema::table('solicitudes', function (Blueprint $table) {
             $table->foreign('empleado_id', 'solicitud-empleado_fk')
-                ->references('id')
-                ->on('usuarios')
-                ->onUpdate('cascade');
+                    ->references('id')
+                    ->on('usuarios')
+                    ->onUpdate('cascade');
 
-                $table->foreign('revisado_por', 'solicitud-revision-usuario_fk')
+            $table->foreign('revisado_por', 'solicitud-revision-usuario_fk')
                 ->references('id')
                 ->on('usuarios')
                 ->onUpdate('cascade')
                 ->onDelete('set null');
+
+            $table->foreign('estatus_id', 'solicitud-estatus_fk')
+                ->references('id')
+                ->on('statuses')
+                ->onUpdate('cascade');
         });
     }
 
@@ -37,6 +42,7 @@ class AddRelationshipFieldsToSolicitudTable extends Migration
         Schema::table('solicitudes', function (Blueprint $table) {
             $table->dropForeign('solicitud-empleado_fk');
             $table->dropForeign('solicitud-revision-usuario_fk');
+            $table->dropForeign('solicitud-estatus_fk');
         });
     }
 }

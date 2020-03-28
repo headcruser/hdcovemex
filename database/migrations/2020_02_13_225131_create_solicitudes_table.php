@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateSolicitudesTable extends Migration
 {
@@ -17,14 +18,18 @@ class CreateSolicitudesTable extends Migration
             $table->bigIncrements('id');
             $table->timestamp('fecha')->nullable();
             $table->unsignedBigInteger('empleado_id');
+            $table->string('titulo');
             $table->string('incidente');
-            $table->binary('adjunto');
-            $table->string('tipo_adjunto');
-            $table->string('nombre_adjunto');
+            $table->binary('adjunto')->nullable();
+            $table->string('tipo_adjunto')->nullable();
+            $table->string('nombre_adjunto')->nullable();
             $table->unsignedBigInteger('revisado_por')->nullable();
+            $table->unsignedSmallInteger('estatus_id');
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement("ALTER TABLE solicitudes MODIFY adjunto MEDIUMBLOB"); # MYSQL
     }
 
     /**

@@ -29,6 +29,8 @@ class CreateTicketsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement("ALTER TABLE tickets MODIFY adjunto MEDIUMBLOB"); # MYSQL
     }
 
     /**

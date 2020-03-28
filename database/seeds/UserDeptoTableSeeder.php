@@ -13,6 +13,7 @@ class UserDeptoTableSeeder extends Seeder
     public function run()
     {
         $deptoSistemas = Departamento::findOrFail(5);
+        $deptoRH = Departamento::findOrFail(4);
 
         $administrador = User::findOrFail(1);
         $administrador->departamento()->associate($deptoSistemas);
@@ -20,6 +21,10 @@ class UserDeptoTableSeeder extends Seeder
 
         $soporte = User::findOrFail(2);
         $soporte->departamento()->associate($deptoSistemas);
+        $soporte->save();
+
+        $soporte = User::findOrFail(3);
+        $soporte->departamento()->associate($deptoRH);
         $soporte->save();
 
     }

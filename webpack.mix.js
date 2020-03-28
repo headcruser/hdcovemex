@@ -12,7 +12,9 @@ const mix = require('laravel-mix');
 
 mix.styles([
     'resources/vendor/fontawesome-free-5.12.1-web/css/all.min.css',
-    'resources/css/adminlte.css'
+    'resources/vendor/sweetalert2/sweetalert2.css',
+    'resources/css/adminlte.css',
+    'resources/css/app.css'
 ],'public/css/app.css')
 
 .js('resources/js/app.js', 'public/js')
@@ -20,6 +22,7 @@ mix.styles([
 .scripts([
     'resources/vendor/jquery/jquery.min.js',
     'resources/vendor/bootstrap/js/bootstrap.bundle.min.js',
+    'resources/vendor/sweetalert2/sweetalert2.js',
 ], 'public/js/vendor.js')
 
 .copy('resources/vendor/fontawesome-free-5.12.1-web/webfonts','public/webfonts')

@@ -3883,6 +3883,10 @@ input[type="button"].btn-block {
   content: "Browse";
 }
 
+.custom-file-input:lang(es) ~ .custom-file-label::after {
+    content: "Buscar";
+}
+
 .custom-file-input ~ .custom-file-label[data-browse]::after {
   content: attr(data-browse);
 }
@@ -30011,3 +30015,200 @@ a.text-muted:hover {
   color: #ffffff;
 }
 /*# sourceMappingURL=adminlte.css.map */
+
+* FILE MANAGER */
+/*======================================*/
+.file-sidebar .list-group-items {
+  padding: 10px 10px;
+}
+.file-list {
+  list-style: none;
+  padding: 20px 0;
+}
+.file-list > li {
+  position: relative;
+  padding: 12px;
+  border-radius: 1px;
+}
+.file-list > li:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.file-list > li:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+.file-list > li:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.file-list > li.selected {
+  background-color: #f2f0c2;
+}
+.file-list .file-control {
+  float: left;
+  width: 50px;
+  line-height: 3em;
+}
+.file-list .media {
+  overflow: hidden;
+  margin: 0 20px 0 0;
+}
+.file-list .media-block > .media-left {
+  font-size: 2.5em;
+  line-height: 1.2em;
+}
+.file-list .media-block .media-body {
+  vertical-align: middle;
+}
+.file-list .file-details {
+  display: block;
+  overflow: hidden;
+  margin-right: 50px;
+}
+.file-list .file-name {
+  color: #4d627b;
+  margin-bottom: 0;
+  font-weight: 700;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-list .file-name.single-line {
+  line-height: 2.5em;
+}
+.file-list .file-settings {
+  float: right;
+  font-size: 85%;
+  text-align: right;
+}
+.file-list .file-settings a,
+.file-list .file-settings button {
+  padding: 10px 5px;
+  display: inline-block;
+}
+.file-panel {
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  margin-top: 20px;
+}
+.file-toolbar {
+  padding: 5px 0;
+  text-align: center;
+}
+.file-toolbar > .btn-file-toolbar {
+  padding: 0;
+  display: inline-block;
+  float: none !important;
+}
+.file-toolbar > .btn-file-toolbar .btn {
+  padding: 6px;
+}
+@media (min-width: 768px) {
+  .file-panel {
+    border-top: 0;
+    margin-top: 0;
+  }
+  .file-manager .file-sidebar {
+    padding-right: 15px;
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
+  }
+  .file-toolbar {
+    padding: 5px 0;
+    text-align: left;
+  }
+  .file-toolbar > .btn-file-toolbar {
+    padding: 0 10px;
+    display: inline-block;
+  }
+  .file-toolbar > .btn-file-toolbar.pull-right {
+    float: right !important;
+  }
+  .file-toolbar > .btn-file-toolbar:not(:first-child) {
+    border-left: 1px solid rgba(0, 0, 0, 0.07);
+  }
+  .file-toolbar > .btn-file-toolbar:first-child {
+    padding-left: 0;
+  }
+}
+
+/* MEDIA */
+/*======================================*/
+.media-block .media-left {
+    display: block;
+    float: left;
+  }
+  .media-block .media-right {
+    float: right;
+  }
+  .media-block .media-body {
+    display: block;
+    overflow: hidden;
+    width: auto;
+  }
+  .media-block:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  .middle .media-left,
+  .middle .media-right,
+  .middle .media-body {
+    vertical-align: middle;
+  }
+
+  /* CONTENT MARGIN */
+/*======================================*/
+.mar-no {
+    margin: 0 !important;
+  }
+  .mar-all {
+    margin: 15px;
+  }
+  .mar-top {
+    margin-top: 15px;
+  }
+  .mar-btm {
+    margin-bottom: 15px;
+  }
+  .mar-lft {
+    margin-left: 15px;
+  }
+  .mar-rgt {
+    margin-right: 15px;
+  }
+  .mar-hor {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .mar-ver {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  /* CONTENT PADDING */
+  /*======================================*/
+  .pad-no {
+    padding: 0 !important;
+  }
+  .pad-all {
+    padding: 15px;
+  }
+  .pad-top {
+    padding-top: 15px;
+  }
+  .pad-btm {
+    padding-bottom: 15px;
+  }
+  .pad-lft {
+    padding-left: 15px;
+  }
+  .pad-rgt {
+    padding-right: 15px;
+  }
+  .pad-hor {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .pad-ver {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }

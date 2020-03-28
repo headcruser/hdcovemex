@@ -14,17 +14,13 @@
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-bell"></i>
-                <span class="badge badge-info navbar-badge">1</span>
+                <span class="badge badge-info navbar-badge">{{ auth()->user()->unreadNotifications->count() }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">1 Notificación</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 1 Nuevo Mensaje
-                    <span class="float-right text-muted text-sm">3 mins</span>
+                <a href="{{ route('notificaciones') }}" class="dropdown-item">
+                    <i class="fas fa-bell mr-2"></i> Notificaciones
+                    <span class="float-right text-muted text-sm">{{ auth()->user()->unreadNotifications->count() }}</span>
                 </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">Ver Todas las notificaciones</a>
             </div>
         </li>
 
@@ -38,7 +34,7 @@
 
                 <a href="{{ route('logout') }}" class="dropdown-item"
                     onclick="event.preventDefault(); document.getElementById('form-logout').submit();">
-                    <i class="ni ni-user-run"></i>
+                    <i class="fas fa-door-closed"></i>
                     <span>Cerrar sesión</span>
                 </a>
                 <form action="{{ route('logout') }}" method="POST" style="display: none;" id="form-logout">

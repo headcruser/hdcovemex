@@ -82,7 +82,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('solicitudes.index') }}" class="nav-link {{ routeIs(['solicitudes.index','solicitudes.*'],'active') }}">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>Solicitudes</p>
                     </a>

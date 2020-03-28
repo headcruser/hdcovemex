@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'nombre'         => 'Admin',
+                'nombre'         => 'Juan Carlos Aguilar Patiño',
                 'email'          => 'admin@admin.com',
                 'telefono'       => null,
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
@@ -24,14 +24,14 @@ class UsersTableSeeder extends Seeder
             [
                 'nombre'         => 'Jose Malagon',
                 'email'          => 'soporte@covemex.com',
-                'telefono'       => '130',
+                'telefono'       => '113',
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],
             [
-                'nombre'         => 'User Empleado',
+                'nombre'         => 'Mayra Martinez Tovar',
                 'email'          => 'empleado@covemex.com',
-                'telefono'       => null,
+                'telefono'       => '135',
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],

@@ -60,6 +60,35 @@
         @include('includes.panel._footer')
         <script src="{{ mix('js/vendor.js') }}"></script>
         <script src="{{ mix('js/app.js') }}"></script>
+        <script>
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000
+            });
+
+            @if(Session::has('error'))
+                Toast.fire({
+                    type: 'error',
+                    title: "{{ Session::get('error') }}"
+                })
+            @endif
+
+            @if(Session::has('message'))
+                Toast.fire({
+                    type: 'success',
+                    title: "{{ Session::get('message') }}"
+                })
+            @endif
+
+            @if(Session::has('status'))
+                Toast.fire({
+                    type: 'success',
+                    title: "{{ Session::get('status') }}"
+                })
+            @endif
+        </script>
 
         @yield('scripts')
 </body>

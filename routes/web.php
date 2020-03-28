@@ -15,6 +15,19 @@ Route::get('/', 'HomeController@index')
     ->middleware('auth')
     ->name('home');
 
+Route::get('notificaciones', [
+    'as'            => 'notificaciones',
+    'middleware'    =>['auth'],
+    'uses'          => 'HomeController@notificaciones'
+]);
+
+Route::post('notificaciones', [
+    'as'            => 'notificaciones.delete',
+    'middleware'    =>['auth'],
+    'uses'          => 'HomeController@deleteNotifications'
+]);
+
+
 Auth::routes(['register' => false]);
 
 Route::group([
@@ -52,3 +65,12 @@ Route::group([
         ]);
     }
 );
+
+# SOLICITUDES
+Route::resource('solicitudes', 'SolicitudesController')->parameters([
+    'solicitudes' => 'model'
+]);
+
+
+Route::get('solicitudes/{model}/archivo/', 'SolicitudesController@archivo')->name('solicitudes.archivo');
+
