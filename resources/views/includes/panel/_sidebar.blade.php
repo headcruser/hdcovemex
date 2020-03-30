@@ -16,12 +16,13 @@
         <!-- SIDEBAR USER-->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{  auth()->user()->avatar }}" class="img-circle elevation-2" alt="User Image">
+                <img id="avatar-image" src="{{  auth()->user()->avatar }}" class="img-circle elevation-2" alt="User Image" style="width:35px;height:35px;">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ auth()->user()->nombre }}</a>
+                <a href="{{ route('perfil') }}" class="d-block">{{ auth()->user()->nombre }}</a>
             </div>
         </div>
+
 
         <!-- SIDEBAR MENU  -->
         <nav class="mt-2">

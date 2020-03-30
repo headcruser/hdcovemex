@@ -15,9 +15,22 @@ Route::get('/', 'HomeController@index')
     ->middleware('auth')
     ->name('home');
 
+Route::get('perfil',[
+    'as'            => 'perfil',
+    'middleware'    =>['auth'],
+    'uses'          => 'ProfileController@edit'
+]);
+
+Route::post('perfil',[
+    'as'            => 'perfil.store',
+    'middleware'    =>['auth'],
+    'uses'          => 'ProfileController@store'
+]);
+
+
 Route::get('notificaciones', [
     'as'            => 'notificaciones',
-    'middleware'    =>['auth'],
+    'middleware'    => ['auth'],
     'uses'          => 'HomeController@notificaciones'
 ]);
 

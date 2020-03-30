@@ -27,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre', 'email', 'telefono', 'password', 'departamento_id',
+        'nombre', 'email', 'telefono', 'password', 'departamento_id','login','foto','tipo_foto','nombre_foto',
     ];
 
     /**
@@ -71,17 +71,11 @@ class User extends Authenticatable
      */
     public function getAvatarAttribute()
     {
-        $url = 'users' . DIRECTORY_SEPARATOR . $this->foto;
-
         if (!$this->foto) {
             return asset('img/theme/avatar.png');
         }
 
-        if (!Storage::disk('local')->exists('public' . DIRECTORY_SEPARATOR . $url)) {
-            return asset('img/theme/avatar.png');
-        }
-
-        return Storage::url($url);
+        return "data:image;base64,{$this->foto}";
     }
 
     public function setPasswordAttribute($input)
