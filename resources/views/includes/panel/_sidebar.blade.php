@@ -83,7 +83,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('solicitudes.index') }}" class="nav-link {{ routeIs(['solicitudes.index','solicitudes.*'],'active') }}">
+                    <a href="{{ route('solicitudes.index') }}" class="nav-link {{ routeIs(['solicitudes.index','solicitudes.*']) }}">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>Solicitudes</p>
                     </a>
@@ -94,7 +94,7 @@
 
                 @permission('attribute_access')
                     <li class="nav-item" >
-                        <a href="{{ route('config.atributos.index') }}" class="nav-link {{ routeIs(['config.atributos.index','config.atributos.*'],'active') }}">
+                        <a href="{{ route('config.atributos.index') }}" class="nav-link {{ routeIs(['config.atributos.index','config.atributos.*']) }}">
                             <i class="nav-icon fas fa-check-square"></i>
                             <p>Atributos</p>
                         </a>

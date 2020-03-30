@@ -11,7 +11,7 @@ if (!function_exists('routeIs')) {
      * @return string Regresa el nombre de la clase
      * @see Illuminate\Routing\Router::is
      */
-    function routeIs($route, string $class = 'active text-info'): string
+    function routeIs($route, string $class = 'active'): string
     {
         return !Route::is($route) ?: $class;
     }
