@@ -22,6 +22,13 @@ class Solicitude extends Model
     protected $table = 'solicitudes';
 
     /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -40,14 +47,6 @@ class Solicitude extends Model
     ];
 
     protected $dates = ['fecha'];
-
-    /**
-     * The number of models to return for pagination.
-     *
-     * @var int
-     */
-    protected $perPage = 10;
-
 
     public static function boot()
     {

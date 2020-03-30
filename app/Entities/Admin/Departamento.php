@@ -9,7 +9,19 @@ class Departamento extends Model
 {
     use SoftDeletes;
 
-    public $table = 'departamentos';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'departamentos';
+
+    /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
 
     protected $dates = [
         'created_at',

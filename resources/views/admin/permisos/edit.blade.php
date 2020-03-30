@@ -3,11 +3,16 @@
 @section('title','Editar permiso')
 
 @section('breadcrumb')
-    <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item">Administracion</li>
-        <li class="breadcrumb-item">Permisos</li>
-        <li class="breadcrumb-item active">Editar</li>
-    </ol>
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+        <i class="fas fa-home"></i> Inicio </a>
+    </li>
+    <li class="breadcrumb-item"> Administración </li>
+    <li class="breadcrumb-item">
+        <a href="{{ route('admin.permisos.index') }}">Permisos</a>
+    </li>
+    <li class="breadcrumb-item active">Editar</li>
+</ol>
 @endsection
 
 @section('content')

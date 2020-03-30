@@ -9,7 +9,19 @@ class Permission extends EntrustPermission
 {
     use SoftDeletes;
 
-    public $table = 'permisos';
+    /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'permisos';
 
     protected $dates = [
         'created_at',

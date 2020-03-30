@@ -17,12 +17,19 @@ class Status extends Model
     protected $table = 'statuses';
 
     /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name','color'
+        'name', 'display_name', 'color'
     ];
 
     /**
@@ -33,11 +40,4 @@ class Status extends Model
     protected $hidden = [
         'created_at', 'updated_at', 'deleted_at'
     ];
-
-    /**
-     * The number of models to return for pagination.
-     *
-     * @var int
-     */
-    protected $perPage = 10;
 }

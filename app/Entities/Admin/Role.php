@@ -9,7 +9,20 @@ class Role extends EntrustRole
 {
     use SoftDeletes;
 
-    public $table = 'roles';
+     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'roles';
+
+
+    /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
 
     protected $dates = [
         'created_at',

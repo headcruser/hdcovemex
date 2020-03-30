@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable , EntrustUserTrait;
+    use Notifiable, EntrustUserTrait;
 
     /**
      * The table associated with the model.
@@ -22,12 +22,19 @@ class User extends Authenticatable
     protected $table = 'usuarios';
 
     /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'nombre', 'email', 'telefono', 'password', 'departamento_id','login','foto','tipo_foto','nombre_foto',
+        'nombre', 'email', 'telefono', 'password', 'departamento_id', 'login', 'foto', 'tipo_foto', 'nombre_foto',
     ];
 
     /**
@@ -60,7 +67,7 @@ class User extends Authenticatable
             ]);
     }
 
-     /*///////////////////////////////////////////////////////////////////////////
+    /*///////////////////////////////////////////////////////////////////////////
                         MUTADORES
     /////////////////////////////////////////////////////////////////////////// */
 

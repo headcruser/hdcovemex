@@ -18,6 +18,13 @@ class Attribute extends Model
     protected $table = 'attributes';
 
     /**
+     * The number of models to return for pagination.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -35,12 +42,7 @@ class Attribute extends Model
         'created_at', 'updated_at', 'deleted_At'
     ];
 
-    /**
-     * The number of models to return for pagination.
-     *
-     * @var int
-     */
-    protected $perPage = 10;
+
 
     /**
      *
