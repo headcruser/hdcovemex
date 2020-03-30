@@ -4,7 +4,9 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"></li>
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
         <li class="breadcrumb-item active">Notificaciones</li>
     </ol>
 @endsection

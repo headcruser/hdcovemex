@@ -14,7 +14,9 @@
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-bell"></i>
-                <span class="badge badge-info navbar-badge">{{ auth()->user()->unreadNotifications->count() }}</span>
+                @if(auth()->user()->unreadNotifications->count())
+                    <span class="badge badge-info navbar-badge">{{ auth()->user()->unreadNotifications->count() }}</span>
+                @endif
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <a href="{{ route('notificaciones') }}" class="dropdown-item">
@@ -30,6 +32,11 @@
                 <i class="fas fa-th-large"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <a href="{{ route('perfil') }}" class="dropdown-item">
+                    <i class="far fa-address-card"></i>
+                    <span>Perfil</span>
+                </a>
+
                 <div class="dropdown-divider"></div>
 
                 <a href="{{ route('logout') }}" class="dropdown-item"
