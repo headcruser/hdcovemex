@@ -185,6 +185,37 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a solicitudes',
                 'description'   => 'Permite el acceso a la vista de solicitudes'
             ],
+
+            [
+                'id'            => 29,
+                'name'          => 'status_create',
+                'display_name'  => 'Crear estatus',
+                'description'   => 'Permite Crear estatus'
+            ],
+            [
+                'id'            => 30,
+                'name'          => 'status_edit',
+                'display_name'  => 'Editar estatus',
+                'description'   => 'Permite Editar estatus'
+            ],
+            [
+                'id'            => 31,
+                'name'          => 'status_show',
+                'display_name'  => 'Ver estatus',
+                'description'   => 'Permite ver el detalle del estatus'
+            ],
+            [
+                'id'            => 32,
+                'name'          => 'status_delete',
+                'display_name'  => 'Eliminar estatus',
+                'description'   => 'Permite Eliminar un usuario'
+            ],
+            [
+                'id'            => 33,
+                'name'          => 'status_access',
+                'display_name'  => 'Acceso a estatus',
+                'description'   => 'Permite el acceso a la vista de estatuses'
+            ],
         ];
 
         Permission::insert($permissions);

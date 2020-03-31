@@ -110,6 +110,15 @@
                     </li>
                 @endpermission
 
+                @permission('status_access')
+                    <li class="nav-item" >
+                        <a href="{{ route('config.estatus.index') }}" class="nav-link {{ routeIs(['config.estatus.index','config.estatus.*']) }}">
+                            <i class="nav-icon fas fa-info-circle"></i>
+                            <p>Estatus</p>
+                        </a>
+                    </li>
+                @endpermission
+
                 <!-- REPORTES -->
                 <li class="nav-header">Reportes</li>
 

@@ -87,6 +87,11 @@ Route::group([
         Route::resource('atributos', 'AttributesController')->parameters([
             'atributos' => 'model'
         ]);
+
+        # ESTATUS
+        Route::resource('estatus', 'StatusesController')->parameters([
+            'estatus' => 'model'
+        ]);
     }
 );
 
