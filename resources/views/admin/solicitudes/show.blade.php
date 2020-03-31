@@ -1,12 +1,13 @@
 @extends('layouts.panel')
 
-@section('title','Ver Permiso')
+@section('title','Ver Solicitud')
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
             <i class="fas fa-home"></i> Inicio </a>
         </li>
+        <li class="breadcrumb-item">Administración</li>
         <li class="breadcrumb-item">
             <a href="{{ route('solicitudes.index') }}">Solicitudes</a>
         </li>
@@ -89,40 +90,41 @@
                                             <p>{{ $comentario->comentario_texto }}</p>
                                         </div>
                                     </div>
-                                    @if(!$loop->last)
-                                        <hr />
-                                    @endif
+                                    <hr />
                                 @empty
                                     <div class="row">
                                         <div class="col">
                                             <p>No hay comentarios.</p>
                                         </div>
                                     </div>
+                                    <hr />
                                 @endforelse
+
+                                <form class="mt-3" action="{{ route('admin.solicitudes.storeComentario', $model->id) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="ta-comentario_texto">Deja un comentario</label>
+                                        <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
+
+                                        <div id="login-help" class="error invalid-feedback">
+                                            @error('comentario_texto') {{ $message }} @enderror
+                                        </div>
+                                    </div>
+                                    <div class="float-right">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                    </div>
+                                </form>
                             </td>
                         </tr>
 
                     </tbody>
                 </table>
 
-                <form class="mt-3" action="{{ route('solicitudes.storeComentario', $model->id) }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="ta-comentario_texto">Deja un comentario</label>
-                        <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
 
-                        <div id="login-help" class="error invalid-feedback">
-                            @error('comentario_texto') {{ $message }} @enderror
-                        </div>
-                    </div>
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
-                    </div>
-                </form>
             </div>
 
             <div class="card-footer">
-                <a class="btn btn-default" href="{{ route('solicitudes.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.solicitudes.index') }}">
                     <i class="fas fa-arrow-left"></i> Regresar
                 </a>
             </div>

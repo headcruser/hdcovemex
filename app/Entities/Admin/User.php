@@ -3,6 +3,8 @@
 namespace HelpDesk\Entities\Admin;
 
 
+use HelpDesk\Entities\Comment;
+use HelpDesk\Entities\Solicitude;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
@@ -65,6 +67,16 @@ class User extends Authenticatable
             ->withDefault([
                 'nombre' => 'Sin Depto.'
             ]);
+    }
+
+    public function solicitudes()
+    {
+        return $this->hasMany(Solicitude::class, 'empleado_id', 'id');
+    }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Comment::class, 'usuario_id', 'id');
     }
 
     /*///////////////////////////////////////////////////////////////////////////

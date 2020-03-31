@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use Entrust;
 
-class SolicitudesController extends Controller
+/**
+ * Genera una solicitud por parte de los empleados
+ */
+class SolicitudController extends Controller
 {
     /**
      * List Resource
@@ -22,6 +25,21 @@ class SolicitudesController extends Controller
         abort_unless(Entrust::can('solicitude_access'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('solicitudes.index', ['collection' => Solicitude::auth()->with(['status', 'empleado', 'empleado.departamento'])->paginate()]);
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Solicitude $model)
+    {
+        abort_unless(Entrust::can('solicitude_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $model->load('status');
+
+        return view('solicitudes.show', compact('model'));
     }
 
     /**
@@ -74,77 +92,47 @@ class SolicitudesController extends Controller
             return redirect()
                 ->route('solicitudes.show', $solicitud)
                 ->withStatus("Tu solicitud ha sido enviada. Te atenderemos a la brevedad posible");
-
         } catch (\Exception $e) {
             DB::rollback();
-            #dd($e->getMessage());
+
             return redirect()
                 ->back()
                 ->with(['error' => "Error Servidor: {$e->getMessage()} ",])->withInput();
         }
     }
 
-    public function edit(Solicitude $model)
+    public function storeComment(Request $request, Solicitude $model)
     {
-        abort_unless(Entrust::can('solicitude_edit'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('solicitudes.edit', [
-            'model'     => $model,
-            'statuses'  => Status::all()->pluck('display_name', 'id')->toArray()
+        $request->validate([
+            'comentario_texto' => 'required'
         ]);
-    }
 
-    public function update(Request $request, Solicitude $model)
-    {
+        $comment = null;
+
         DB::beginTransaction();
-
         try {
 
-            $model->update($request->all());
+            $comment = $model->comentarios()->create([
+                'autor_nombre'     => $model->empleado->nombre,
+                'autor_email'      => $model->empleado->email,
+                'comentario_texto' => $request->input('comentario_texto'),
+            ]);
 
             DB::commit();
-
-            return  redirect()
-                ->route('admin.roles.index')
-                ->with(['message' => 'Solicitud actualizada correctamente']);
-        } catch (\Exception $e) {
+        } catch (\Exception $ex) {
             DB::rollback();
 
-            return  redirect()->back()
-                ->with([
-                    'error' => 'Error Servidor; ' . $e->getMessage(),
-                ])->withInput();
+            return redirect()
+                ->back()
+                ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
         }
+
+        $model->sendCommentNotification($comment);
+
+        return redirect()
+            ->back()
+            ->with(['message' => 'Comentario agregado correctamente']);
     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Solicitude $model)
-    {
-        abort_unless(Entrust::can('solicitude_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $model->load('status');
-
-        return view('solicitudes.show', compact('model'));
-    }
-
-    public function destroy(Solicitude $model)
-    {
-        abort_unless(Entrust::can('solicitude_delete'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $model->estatus_id = optional(Status::where('name', 'CAN')->first())->id;
-        $model->save();
-
-        $model->delete();
-
-        return back();
-    }
-
 
     public function archivo(Solicitude $model)
     {
@@ -152,21 +140,4 @@ class SolicitudesController extends Controller
             'Content-Type' => $model->tipo_adjunto
         ]);
     }
-
-    // public function storeComment(Request $request, Ticket $ticket)
-    // {
-    //     $request->validate([
-    //         'comment_text' => 'required'
-    //     ]);
-
-    //     $comment = $ticket->comments()->create([
-    //         'author_name'   => $ticket->author_name,
-    //         'author_email'  => $ticket->author_email,
-    //         'comment_text'  => $request->comment_text
-    //     ]);
-
-    //     $ticket->sendCommentNotification($comment);
-
-    //     return redirect()->back()->withStatus('Your comment added successfully');
-    // }
 }

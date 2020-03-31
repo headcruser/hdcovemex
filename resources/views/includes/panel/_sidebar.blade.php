@@ -69,6 +69,15 @@
                                 </a>
                             </li>
                             @endpermission
+
+                            @permission('solicitude_access')
+                            <li class="nav-item">
+                                <a  href="{{ route('admin.solicitudes.index') }}" class="nav-link {{ routeIs(['admin.solicitudes.index','admin.solicitudes.*']) }}">
+                                    <i class="nav-icon fas fa-tasks"></i>
+                                    <p>Solicitudes</p>
+                                </a>
+                            </li>
+                            @endpermission
                         </ul>
                     </li>
                 @endpermission
@@ -90,7 +99,7 @@
                 </li>
 
                 <!-- CONFIGURACION-->
-                <li class="nav-header">Configuracion</li>
+                <li class="nav-header">Configuración</li>
 
                 @permission('attribute_access')
                     <li class="nav-item" >

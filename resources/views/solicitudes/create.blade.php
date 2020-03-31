@@ -26,26 +26,33 @@
                     <div class="card-header">Motivo de la solicitud</div>
 
                     <div class="card-body">
-
                             <div class="form-group">
-                                <label for="titulo">Titulo</label>
-                                <input id="input-titulo" type="text" class="form-control @error('titulo') is-invalid @enderror" name="titulo" title="Titulo"value="{{ old('titulo') }}" required autocomplete="off">
-                                @error('titulo')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <label for="input-titulo">Titulo</label>
+                                <input id="input-titulo"
+                                    name="titulo"
+                                    type="text"
+                                    class="form-control @error('titulo') is-invalid @enderror"
+                                    title="Titulo"
+                                    aria-describedby="titulo-help"
+                                    value="{{ old('titulo') }}" autocomplete="off" required >
+
+                                <div id="titulo-help" class="error invalid-feedback">
+                                    @error('titulo') {{ $message }} @enderror
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="incidente">Detalle</label>
 
-                                <textarea class="form-control @error('incidente') is-invalid @enderror" id="ta-incidente" name="incidente" rows="5"  required>{{ old('incidente') }}</textarea>
-                                @error('incidente')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <textarea class="form-control @error('incidente') is-invalid @enderror"
+                                    id="ta-incidente"
+                                    name="incidente"
+                                    aria-describedby="incidente-help"
+                                    rows="5"  required>{{ old('incidente') }}</textarea>
+
+                                <div id="incidente-help" class="error invalid-feedback">
+                                    @error('incidente') {{ $message }} @enderror
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -57,8 +64,8 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input input__file" id="customFile" name="archivo">
-                                            <label class="custom-file-label" for="customFile">Elije el archivo</label>
+                                            <input type="file" class="custom-file-input input__file" id="input-file-archivo" name="archivo">
+                                            <label class="custom-file-label" for="input-file-archivo">Elije el archivo</label>
                                         </div>
 
                                         <div class="row">
@@ -70,11 +77,10 @@
                                     <!--===================================================-->
                                     <!--END UPLOAD BOOSTRAP THEME-->
                                 </div>
-                                @error('attachments')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+
+                                <div id="archivo-help" class="error invalid-feedback">
+                                    @error('archivo') {{ $message }} @enderror
+                                </div>
                             </div>
 
                     </div>
@@ -99,13 +105,15 @@
 @section('scripts')
     <script>
 
-        var uploadFile = (function(){
+        const uploadFile = (function(){
 
-            var container = document.getElementById('file_preview'),
+            const container = document.getElementById('file_preview'),
                 form = document.getElementById('form-solicitud')
-                remove_file = document.getElementById('remove_file');
+                removeFile = document.getElementById('remove_file'),
+                inputFile = document.getElementById('input-file-archivo');
 
-            $(form).find('input[type=file].input__file').change(function(e){
+
+            $(inputFile).change(function(e){
                 var firstFile = this.files[0],
                     template = previewTemplate(firstFile);
 
@@ -117,7 +125,7 @@
                clearContainerFile()
             });
 
-            $(remove_file).on('click',function(e){
+            $(removeFile).on('click',function(e){
                 clearContainerFile()
             })
 

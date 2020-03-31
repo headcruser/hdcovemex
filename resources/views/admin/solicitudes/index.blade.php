@@ -7,24 +7,17 @@
     <li class="breadcrumb-item"> <a href="{{ route('home') }}">
         <i class="fas fa-home"></i> Inicio </a>
     </li>
+    <li class="breadcrumb-item">Administración</li>
     <li class="breadcrumb-item active">Solicitudes</li>
 </ol>
 @endsection
 
 @section('content')
-
 <div class="row">
     <div class="col-md-12 mb-4">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Mis Solicitudes</h3>
-                <div class="card-tools">
-                    <a href="{{ route('solicitudes.create') }}"
-                        class="btn btn-success btn-sm"
-                        title="Crear">
-                        Crear <i class="fas fa-plus-circle"></i>
-                    </a>
-                </div>
+                <h3 class="card-title">Administrar solicitudes</h3>
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped table-hover ajaxTable datatable datatable-Ticket">
@@ -33,10 +26,17 @@
                             <th width="10">
                             </th>
                             <th>
+                                TITULO
+                            </th>
+                            <th>
                                 FECHA
                             </th>
                             <th>
-                                TITULO
+                               AUTOR
+                            </th>
+
+                            <th>
+                                DEPARTAMENTO
                             </th>
 
                             <th>
@@ -52,18 +52,34 @@
                         @forelse ($collection as $element)
                             <tr>
                                 <td>{{ $element->id }}</td>
-                                <td>{{ $element->fecha }}</td>
                                 <td>{{ $element->titulo }}</td>
-                                <td class="text-center">
-                                    <span class="badge badge-primary text-sm"  style="background-color:{{ $element->status->color }}">
+                                <td>{{ $element->fecha }}</td>
+                                <td>{{ $element->empleado->nombre }}</td>
+                                <td>{{ $element->empleado->departamento->nombre }}</td>
+                                <td>
+                                    <span class="badge badge-primary"  style="background-color:{{ $element->status->color }}">
                                         {{ $element->status->display_name }}
                                     </span>
                                 </td>
                                 <td>
                                     @permission('solicitude_show')
-                                        <a class="btn btn-sm btn-primary" href="{{ route('solicitudes.show', $element->id) }}" title="Ver">
+                                        <a class="btn btn-sm btn-primary" href="{{ route('admin.solicitudes.show', $element->id) }}" title="Ver">
                                             <i class="far fa-eye"></i>
                                         </a>
+                                    @endpermission
+
+                                    @permission('solicitude_edit')
+                                        <a class="btn btn-sm btn-info" href="{{ route('admin.solicitudes.edit', $element->id) }}" title="Editar">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                    @endpermission
+
+                                    @permission('solicitude_delete')
+                                        <form action="{{ route('admin.solicitudes.destroy', $element->id) }}" method="POST" onsubmit="return confirm('Deseas eliminar el registro');" style="display: inline-block;">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
+                                        </form>
                                     @endpermission
                                 </td>
                             </tr>

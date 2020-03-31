@@ -3,10 +3,13 @@
 namespace HelpDesk\Entities;
 
 use HelpDesk\Builder\SolicitudeQuery;
-use HelpDesk\Entities\Admin\Departamento;
 use HelpDesk\Entities\Admin\User;
 use HelpDesk\Entities\Config\Status;
+
+use HelpDesk\Notifications\CommentSolicitudeNotification;
 use HelpDesk\Observers\SolicitudeActionObserver;
+
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,7 +22,7 @@ class Solicitude extends Model
      *
      * @var string
      */
-    protected $table = 'solicitudes';
+    public $table = 'solicitudes';
 
     /**
      * The number of models to return for pagination.
@@ -34,7 +37,15 @@ class Solicitude extends Model
      * @var array
      */
     protected $fillable = [
-        'fecha', 'titulo', 'nombre_adjunto', 'empleado_id', 'incidente', 'adjunto', 'tipo_adjunto', 'revisado_por', 'estatus_id'
+        'fecha',
+        'titulo',
+        'nombre_adjunto',
+        'empleado_id',
+        'incidente',
+        'adjunto',
+        'tipo_adjunto',
+        'revisado_por',
+        'estatus_id'
     ];
 
     /**
@@ -70,7 +81,6 @@ class Solicitude extends Model
         return new SolicitudeQuery($query);
     }
 
-
     public function status()
     {
         return $this->belongsTo(Status::class, 'estatus_id')->withDefault([
@@ -82,13 +92,51 @@ class Solicitude extends Model
     public function empleado()
     {
         return $this->belongsTo(User::class, 'empleado_id')->withDefault([
-            'name'          => 'SE',
-            'display_name'  => 'Sin Estatus'
+            'nombre'    => 'S/N',
+            'email'     => 'S/E',
+            'telefono'  => 'S/T',
         ]);
     }
 
     public function revisadoPor()
     {
         return $this->belongsTo(User::class, 'revisado_por')->withDefault();
+    }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Comment::class, 'solicitud_id', 'id');
+    }
+
+    public function sendCommentNotification($comment)
+    {
+        $jefesDepartamento = User::where(function ($q) {
+            $q->whereHas('roles', function ($q) {
+                return $q->where('name', 'soporte');
+            })
+            ->where(function ($q) {
+                $q->whereHas('comentarios', function ($q) {
+                    return $q->where('solicitud_id', $this->id);
+                })
+                ->orWhereHas('solicitudes', function ($q) {
+                    return $q->where('id',$this->id);
+                });
+            });
+        })
+        ->when(!$comment->usuario_id, function ($q) {
+            $q->orWhereHas('roles', function ($q) {
+                return $q->where('display_name', 'Administrador');
+            });
+        })
+        ->when($comment->user, function ($q) use ($comment) {
+            $q->where('id', '!=', $comment->usuario_id);
+        })
+        ->get();
+
+        $notification = new CommentSolicitudeNotification($comment);
+
+        Notification::send($jefesDepartamento, $notification);
+
+        return $jefesDepartamento;
     }
 }

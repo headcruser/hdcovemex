@@ -63,6 +63,17 @@ Route::group([
         Route::resource('permisos', 'PermisosController')->parameters([
             'permisos' => 'model'
         ]);
+
+        # SOLICITUDES
+        Route::resource('solicitudes', 'SolicitudesController')->parameters([
+            'solicitudes' => 'model'
+        ]);
+
+        Route::post('solicitudes/comentarios/{model}',[
+            'as'            => 'solicitudes.storeComentario',
+            'middleware'    => ['auth'],
+            'uses'          => 'SolicitudesController@storeComment'
+        ]);
     }
 );
 
@@ -80,10 +91,18 @@ Route::group([
 );
 
 # SOLICITUDES
-Route::resource('solicitudes', 'SolicitudesController')->parameters([
+Route::resource('solicitudes', 'SolicitudController')->parameters([
     'solicitudes' => 'model'
+])->except(['edit','update','destroy']);
+
+Route::get('solicitudes/{model}/archivo', [
+    'as'            => 'solicitudes.archivo',
+    'middleware'    => ['auth'],
+    'uses'          => 'SolicitudController@archivo'
 ]);
 
-
-Route::get('solicitudes/{model}/archivo/', 'SolicitudesController@archivo')->name('solicitudes.archivo');
-
+Route::post('solicitudes/{model}/comentario', [
+    'as'            => 'solicitudes.storeComentario',
+    'middleware'    => ['auth'],
+    'uses'          => 'SolicitudController@storeComment'
+]);
