@@ -35,11 +35,11 @@ class DepartamentoTableSeeder extends Seeder
             ],
             [
                 'id'        => 6,
-                'nombre'    => 'Embarques y Logística',
+                'nombre'    => 'Administración Embolsado',
             ],
             [
                 'id'        => 7,
-                'nombre'    => 'Administración Embolsado',
+                'nombre'    => 'Embarques y Logística',
             ],
             [
                 'id'        => 8,
@@ -47,7 +47,7 @@ class DepartamentoTableSeeder extends Seeder
             ],
             [
                 'id'        => 9,
-                'nombre'    => 'Vigilancia',
+                'nombre'    => 'TGAB',
             ],
         ];
 

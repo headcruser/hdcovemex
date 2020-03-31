@@ -78,6 +78,16 @@
                                 </a>
                             </li>
                             @endpermission
+
+                            @permission('departament_access')
+                            <li class="nav-item">
+                                <a  href="{{ route('admin.departamentos.index') }}" class="nav-link {{ routeIs(['admin.departamentos.index','admin.departamentos.*']) }}">
+                                    <i class="nav-icon fas fa-hotel"></i>
+                                    <p>Departamentos</p>
+                                </a>
+                            </li>
+                            @endpermission
+
                         </ul>
                     </li>
                 @endpermission

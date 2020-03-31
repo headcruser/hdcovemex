@@ -64,6 +64,11 @@ Route::group([
             'permisos' => 'model'
         ]);
 
+        # USUARIOS
+        Route::resource('departamentos', 'DepartamentsController')->parameters([
+            'departamentos'  => 'model'
+        ]);
+
         # SOLICITUDES
         Route::resource('solicitudes', 'SolicitudesController')->parameters([
             'solicitudes' => 'model'

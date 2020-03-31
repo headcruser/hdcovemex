@@ -216,6 +216,36 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a estatus',
                 'description'   => 'Permite el acceso a la vista de estatuses'
             ],
+            [
+                'id'            => 34,
+                'name'          => 'departament_create',
+                'display_name'  => 'Crear departamentos',
+                'description'   => 'Permite crear departamentos'
+            ],
+            [
+                'id'            => 35,
+                'name'          => 'departament_edit',
+                'display_name'  => 'Editar departamentos',
+                'description'   => 'Permite editar departamentos'
+            ],
+            [
+                'id'            => 36,
+                'name'          => 'departament_show',
+                'display_name'  => 'Ver departamentos',
+                'description'   => 'Permite ver el detalle del departamentos'
+            ],
+            [
+                'id'            => 37,
+                'name'          => 'departament_delete',
+                'display_name'  => 'Eliminar departamentos',
+                'description'   => 'Permite eliminar un departamento'
+            ],
+            [
+                'id'            => 38,
+                'name'          => 'departament_access',
+                'display_name'  => 'Acceso a departamentos',
+                'description'   => 'Permite el acceso a la vista de departamentos'
+            ],
         ];
 
         Permission::insert($permissions);
