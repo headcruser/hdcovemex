@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Ver Permiso')
+@section('title','Ver Solicitud')
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
@@ -82,11 +82,11 @@
                                 Comentarios
                             </th>
                             <td>
-                                @forelse ($model->comentarios as $comentario)
+                                @forelse ($model->ticket->sigoTicket as $comentario)
                                     <div class="row">
                                         <div class="col">
-                                            <p class="font-weight-bold"><a href="mailto:{{ $comentario->autor_email }}">{{ $comentario->autor_nombre }}</a> ({{ $comentario->created_at }})</p>
-                                            <p>{{ $comentario->comentario_texto }}</p>
+                                            <p class="font-weight-bold"><a href="mailto:  ">{{ $comentario->autor }}</a> ({{ $comentario->fecha }})</p>
+                                            <p>{{ $comentario->comentario }}</p>
                                         </div>
                                     </div>
                                     @if(!$loop->last)

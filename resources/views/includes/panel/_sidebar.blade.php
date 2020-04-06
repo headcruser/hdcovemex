@@ -23,7 +23,6 @@
             </div>
         </div>
 
-
         <!-- SIDEBAR MENU  -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -94,56 +93,67 @@
 
                 <!-- GESTION -->
                 <li class="nav-header">Gestión</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-sticky-note"></i>
-                        <p>Tickets</p>
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('solicitudes.index') }}" class="nav-link {{ routeIs(['solicitudes.index','solicitudes.*']) }}">
-                        <i class="nav-icon fas fa-tasks"></i>
-                        <p>Solicitudes</p>
-                    </a>
-                </li>
-
-                <!-- CONFIGURACION-->
-                <li class="nav-header">Configuración</li>
-
-                @permission('attribute_access')
-                    <li class="nav-item" >
-                        <a href="{{ route('config.atributos.index') }}" class="nav-link {{ routeIs(['config.atributos.index','config.atributos.*']) }}">
-                            <i class="nav-icon fas fa-check-square"></i>
-                            <p>Atributos</p>
+                @ability('admin,soporte,ti', 'ticket_access')
+                    <li class="nav-item">
+                        <a href="{{ route('tickets.index') }}" class="nav-link {{ routeIs(['tickets.index','tickets.*']) }} ">
+                            <i class="nav-icon fas fa-sticky-note"></i>
+                            <p>Tickets</p>
                         </a>
                     </li>
                 @endpermission
 
-                @permission('status_access')
-                    <li class="nav-item" >
-                        <a href="{{ route('config.estatus.index') }}" class="nav-link {{ routeIs(['config.estatus.index','config.estatus.*']) }}">
-                            <i class="nav-icon fas fa-info-circle"></i>
-                            <p>Estatus</p>
+                @role('empleado')
+                    @permission('solicitude_access')
+                    <li class="nav-item">
+                        <a href="{{ route('solicitudes.index') }}" class="nav-link {{ routeIs(['solicitudes.index','solicitudes.*']) }}">
+                            <i class="nav-icon fas fa-tasks"></i>
+                            <p>Solicitudes</p>
                         </a>
                     </li>
+                    @endpermission
+                @endrole
+
+                <!-- CONFIGURACION-->
+                @permission('user_config_access')
+                    <li class="nav-header">Configuración</li>
+
+                    @permission('attribute_access')
+                        <li class="nav-item" >
+                            <a href="{{ route('config.atributos.index') }}" class="nav-link {{ routeIs(['config.atributos.index','config.atributos.*']) }}">
+                                <i class="nav-icon fas fa-check-square"></i>
+                                <p>Atributos</p>
+                            </a>
+                        </li>
+                    @endpermission
+
+                    @permission('status_access')
+                        <li class="nav-item" >
+                            <a href="{{ route('config.estatus.index') }}" class="nav-link {{ routeIs(['config.estatus.index','config.estatus.*']) }}">
+                                <i class="nav-icon fas fa-info-circle"></i>
+                                <p>Estatus</p>
+                            </a>
+                        </li>
+                    @endpermission
                 @endpermission
 
                 <!-- REPORTES -->
-                <li class="nav-header">Reportes</li>
+                @ability('admin,ti', 'report_access')
+                    <li class="nav-header">Reportes</li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-plus-circle"></i>
-                        <p>Creados</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-clock nav-icon"></i>
-                        <p>Pendientes</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-plus-circle"></i>
+                            <p>Creados</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-clock nav-icon"></i>
+                            <p>Pendientes</p>
+                        </a>
+                    </li>
+                @endability
             </ul>
         </nav>
         <!-- END SIDEBAR MENU -->

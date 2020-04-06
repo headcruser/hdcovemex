@@ -14,6 +14,7 @@ mix.styles([
     'resources/vendor/fontawesome-free-5.12.1-web/css/all.min.css',
     'resources/vendor/sweetalert2/sweetalert2.css',
     'resources/css/adminlte.css',
+    'resources/vendor/icheck-bootstrap/icheck-bootstrap.css',
     'resources/css/app.css'
 ],'public/css/app.css')
 

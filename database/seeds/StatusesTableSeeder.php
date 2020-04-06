@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use HelpDesk\Entities\Config\Status;
+use Illuminate\Support\Facades\Config;
 
 class StatusesTableSeeder extends Seeder
 {
@@ -12,21 +13,8 @@ class StatusesTableSeeder extends Seeder
      */
     public function run()
     {
-        #$faker = Faker\Factory::create();
-
-        $statuses = [
-            'PEN'   => 'Pendiente',
-            'PAS'   => 'En proceso',
-            'END'   => 'Finalizada',
-            'CAN'   => 'Cancelada',
-        ];
-
-        $colors = [
-            'PEN' => '#ffc107',
-            'PAS' => '#6c757d',
-            'END' => '#28a745',
-            'CAN' => '#dc3545',
-        ];
+        $statuses = Config::get('helpdesk.solicitud.statuses.values', []);
+        $colors = Config::get('helpdesk.solicitud.statuses.colors', []);
 
         foreach ($statuses as $name => $display_name) {
             Status::create([

@@ -15,23 +15,50 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'nombre'         => 'Juan Carlos Aguilar Patiño',
+                'nombre'         => 'Administrador',
                 'email'          => 'admin@admin.com',
                 'telefono'       => null,
+                'usuario'        => 'admin',
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],
             [
-                'nombre'         => 'Jose Malagon',
+                'nombre'         => 'Juan Carlos Aguilar Patiño',
+                'email'          => 'ti@covemex.com',
+                'telefono'       => '128',
+                'usuario'        => '000165',
+                'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
+                'remember_token' => null,
+            ],
+            [
+                'nombre'         => 'Jose Malagon Martinez Lopez',
                 'email'          => 'soporte@covemex.com',
                 'telefono'       => '113',
+                'usuario'        => '007078',
+                'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
+                'remember_token' => null,
+            ],
+            [
+                'nombre'         => 'Daniel Martinez Sierra',
+                'email'          => 'programacion@covemex.com',
+                'telefono'       => null,
+                'usuario'        => '008097',
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],
             [
                 'nombre'         => 'Mayra Martinez Tovar',
-                'email'          => 'empleado@covemex.com',
+                'email'          => 'capacitacion.rh@covemex.com',
                 'telefono'       => '135',
+                'usuario'        => '006768',
+                'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
+                'remember_token' => null,
+            ],
+            [
+                'nombre'         => 'Mariela Elizabeth Gomez Martinez',
+                'email'          => 'produccion.supervision@covemex.com',
+                'telefono'       => null,
+                'usuario'        => '007368',
                 'password'       => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
                 'remember_token' => null,
             ],

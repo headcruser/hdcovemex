@@ -17,14 +17,11 @@ class CreateSolicitudesTable extends Migration
         Schema::create('solicitudes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamp('fecha')->nullable();
-            $table->unsignedBigInteger('empleado_id');
-            $table->string('titulo');
-            $table->string('incidente');
+            $table->string('titulo',50);
+            $table->text('incidente');
             $table->binary('adjunto')->nullable();
             $table->string('tipo_adjunto')->nullable();
             $table->string('nombre_adjunto')->nullable();
-            $table->unsignedBigInteger('revisado_por')->nullable();
-            $table->unsignedSmallInteger('estatus_id');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -14,8 +14,8 @@ class AddFieldsToUsers extends Migration
     public function up()
     {
         Schema::table('usuarios', function (Blueprint $table) {
-            $table->string('login', 20)->after('password')->nullable();
-            $table->binary('foto')->after('login')->nullable();
+            $table->string('usuario', 20)->unique()->after('password')->nullable();
+            $table->binary('foto')->after('usuario')->nullable();
             $table->string('tipo_foto')->after('foto')->nullable();
             $table->string('nombre_foto')->after('tipo_foto')->nullable();
         });
@@ -31,7 +31,7 @@ class AddFieldsToUsers extends Migration
     public function down()
     {
         Schema::table('usuarios', function (Blueprint $table) {
-            $table->dropColumn('login');
+            $table->dropColumn('usuario');
             $table->dropColumn('foto');
             $table->dropColumn('tipo_foto');
             $table->dropColumn('nombre_foto');

@@ -61,18 +61,18 @@
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label for="input-login">Usuario</label>
-                                        <input type="text" class="form-control  @error('login') is-invalid @enderror"
-                                            name="login"
-                                            id="input-login"
+                                        <input type="text" class="form-control  @error('usuario') is-invalid @enderror"
+                                            name="usuario"
+                                            id="input-usuario"
                                             placeholder="Ejemplo: Usuario09"
                                             title="Usuario"
                                             autocomplete="off"
-                                            aria-describedby="login-help"
-                                            value="{{ old('login', $user->login) }}"
+                                            aria-describedby="usuario-help"
+                                            value="{{ old('usuario', $user->usuario) }}"
                                             required>
 
-                                            <div id="login-help" class="error invalid-feedback">
-                                                @error('login') {{ $message }} @enderror
+                                            <div id="usuario-help" class="error invalid-feedback">
+                                                @error('usuario') {{ $message }} @enderror
                                             </div>
                                     </div>
                                 </div>
@@ -93,6 +93,9 @@
                                         <div id="password-help" class="error invalid-feedback">
                                             @error('password') {{ $message }} @enderror
                                         </div>
+                                        <small class="form-text text-muted">
+                                            Dejar el campo en blanco en caso de no cambiar la contraseña
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">

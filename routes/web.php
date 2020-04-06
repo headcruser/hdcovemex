@@ -41,7 +41,9 @@ Route::post('notificaciones', [
 ]);
 
 
-Auth::routes(['register' => false]);
+Auth::routes([
+    'register' => false
+]);
 
 Route::group([
     'prefix'        => 'administracion',
@@ -74,11 +76,6 @@ Route::group([
             'solicitudes' => 'model'
         ]);
 
-        Route::post('solicitudes/comentarios/{model}',[
-            'as'            => 'solicitudes.storeComentario',
-            'middleware'    => ['auth'],
-            'uses'          => 'SolicitudesController@storeComment'
-        ]);
     }
 );
 
@@ -115,4 +112,16 @@ Route::post('solicitudes/{model}/comentario', [
     'as'            => 'solicitudes.storeComentario',
     'middleware'    => ['auth'],
     'uses'          => 'SolicitudController@storeComment'
+]);
+
+
+# TICKETS
+Route::resource('tickets', 'TicketController')->parameters([
+    'tickets' => 'model'
+]);
+
+Route::post('tickets/comentarios/{model}',[
+    'as'            => 'tickets.storeComentario',
+    'middleware'    => ['auth'],
+    'uses'          => 'TicketController@storeComment'
 ]);

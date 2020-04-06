@@ -24,7 +24,7 @@ class SolicitudController extends Controller
     {
         abort_unless(Entrust::can('solicitude_access'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('solicitudes.index', ['collection' => Solicitude::auth()->with(['status', 'empleado', 'empleado.departamento'])->paginate()]);
+        return view('solicitudes.index', ['collection' => Solicitude::auth()->with([])->paginate()]);
     }
 
      /**
@@ -37,7 +37,7 @@ class SolicitudController extends Controller
     {
         abort_unless(Entrust::can('solicitude_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $model->load('status');
+        $model->load('status','ticket','ticket.sigoTicket','ticket.sigoTicket.operador','ticket.sigoTicket.usuario');
 
         return view('solicitudes.show', compact('model'));
     }
@@ -69,7 +69,7 @@ class SolicitudController extends Controller
 
         $request->request->add([
             'fecha'         => now(),
-            'empleado_id'   => auth()->id(),
+            'usuario_id'   => auth()->id(),
             'estatus_id'    => optional(Status::where('name', 'PEN')->first())->id
         ]);
 
@@ -112,10 +112,11 @@ class SolicitudController extends Controller
         DB::beginTransaction();
         try {
 
-            $comment = $model->comentarios()->create([
-                'autor_nombre'     => $model->empleado->nombre,
-                'autor_email'      => $model->empleado->email,
-                'comentario_texto' => $request->input('comentario_texto'),
+            $comment = $model->ticket->sigoTicket()->create([
+                'usuario_id'    => auth()->id(),
+                'fecha'         => now(),
+                'comentario'    => $request->input('comentario_texto'),
+                'visible'       => 'S',
             ]);
 
             DB::commit();
@@ -127,7 +128,7 @@ class SolicitudController extends Controller
                 ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
         }
 
-        $model->sendCommentNotification($comment);
+        # $model->sendCommentNotification($comment);
 
         return redirect()
             ->back()

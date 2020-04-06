@@ -7,7 +7,7 @@
   <meta name="description" content="{{ config('app.description') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>{{ config('app.name') }} - @yield('title','default section')</title>
+  <title>{{  config('helpdesk.global.alias') }} | @yield('title','default section')</title>
 
   <link href="{{ asset('img/brand/favicon.png') }}" rel="icon" type="image/png">
   <link rel="stylesheet" href="{{ mix('css/app.css') }}">

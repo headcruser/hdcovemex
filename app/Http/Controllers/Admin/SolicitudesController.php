@@ -3,13 +3,14 @@
 namespace HelpDesk\Http\Controllers\Admin;
 
 use Entrust;
-use Illuminate\Http\Request;
 
 use HelpDesk\Entities\Solicitude;
-use Illuminate\Support\Facades\DB;
-
 use HelpDesk\Entities\Config\Status;
 use HelpDesk\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class SolicitudesController extends Controller
@@ -45,6 +46,7 @@ class SolicitudesController extends Controller
 
             $model->update($request->all());
 
+
             DB::commit();
 
             return  redirect()
@@ -62,46 +64,46 @@ class SolicitudesController extends Controller
 
     public function show(Solicitude $model)
     {
-        // abort_if(Gate::denies('ticket_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('ticket_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $model->load('comentarios');
+        #$model->load('comentarios');
 
         return view('admin.solicitudes.show', compact('model'));
     }
 
-    public function storeComment(Request $request, Solicitude $model)
-    {
-        $request->validate([
-            'comentario_texto' => 'required'
-        ]);
+    // public function storeComment(Request $request, Solicitude $model)
+    // {
+    //     $request->validate([
+    //         'comentario_texto' => 'required'
+    //     ]);
 
-        $user = auth()->user();
-        $comentario = null;
+    //     $user = auth()->user();
+    //     $comentario = null;
 
-        DB::beginTransaction();
-        try {
-            $comentario = $model->comentarios()->create([
-                'autor_nombre'     => $user->nombre,
-                'autor_email'      => $user->email,
-                'usuario_id'       => $user->id,
-                'comentario_texto' => $request->input('comentario_texto'),
-            ]);
+    //     DB::beginTransaction();
+    //     try {
+    //         $comentario = $model->comentarios()->create([
+    //             'autor_nombre'     => $user->nombre,
+    //             'autor_email'      => $user->email,
+    //             'usuario_id'       => $user->id,
+    //             'comentario_texto' => $request->input('comentario_texto'),
+    //         ]);
 
-            DB::commit();
-        } catch (\Exception $ex) {
-            DB::rollback();
+    //         DB::commit();
+    //     } catch (\Exception $ex) {
+    //         DB::rollback();
 
-            return redirect()
-                ->back()
-                ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
-        }
+    //         return redirect()
+    //             ->back()
+    //             ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
+    //     }
 
-        $model->sendCommentNotification($comentario);
+    //     $model->sendCommentNotification($comentario);
 
-        return redirect()
-            ->back()
-            ->with(['message' => 'Comentario agregado correctamente']);
-    }
+    //     return redirect()
+    //         ->back()
+    //         ->with(['message' => 'Comentario agregado correctamente']);
+    // }
 
     public function destroy(Solicitude $model)
     {

@@ -14,39 +14,25 @@ class AddRelationshipFieldsToTicketsTable extends Migration
     public function up()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->foreign('solicitud_id', 'tiket-solicitud_fk')
-                ->references('id')
-                ->on('solicitudes')
-                ->onUpdate('cascade');
+            $table->unsignedBigInteger('operador_id')->nullable()->after('privado');
+            $table->unsignedBigInteger('usuario_id')->nullable()->after('operador_id');
+            $table->unsignedBigInteger('asignado_a')->nullable('usuario_id');
 
-            $table->foreign('prioridad_id', 'tiket-attibutes_fk')
+            $table->foreign('usuario_id', 'tiket-usuario_fk')
                 ->references('id')
-                ->on('attributes')
-                ->onUpdate('cascade');
+                ->on('usuarios');
 
-            $table->foreign('estatus_id', 'tiket-estatus_fk')
+            $table->foreign('asignado_a', 'tiket-usuario-asignado_fk')
                 ->references('id')
-                ->on('attributes')
-                ->onUpdate('cascade');
+                ->on('usuarios');
 
-            $table->foreign('proceso_id', 'proceso-attributes_fk')
+            $table->foreign('operador_id', 'tiket-usuario-operador_fk')
                 ->references('id')
-                ->on('attributes')
-                ->onUpdate('cascade');
-
-            $table->foreign('tipo_id', 'tipo-attributes_fk')
-                ->references('id')
-                ->on('attributes')
-                ->onUpdate('cascade');
-
-            $table->foreign('asignado_a', 'tiket-usuario-soporte_fk')
-                ->references('id')
-                ->on('solicitudes')
-                ->onUpdate('cascade');
+                ->on('usuarios');
         });
     }
 
-     /**
+    /**
      * Reverse the migrations.
      *
      * @return void
@@ -54,12 +40,9 @@ class AddRelationshipFieldsToTicketsTable extends Migration
     public function down()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->dropForeign('tiket-solicitud_fk');
-            $table->dropForeign('tiket-attibutes_fk');
-            $table->dropForeign('tiket-estatus_fk');
-            $table->dropForeign('proceso-attributes_fk');
-            $table->dropForeign('tipo-attributes_fk');
-            $table->dropForeign('tiket-usuario-soporte_fk');
+            $table->dropForeign('tiket-usuario_fk');
+            $table->dropForeign('tiket-usuario-asignado_fk');
+            $table->dropForeign('tiket-usuario-operador_fk');
         });
     }
 }

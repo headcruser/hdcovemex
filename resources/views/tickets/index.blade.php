@@ -1,14 +1,13 @@
 @extends('layouts.panel')
 
-@section('title','Solicitudes')
+@section('title','Tickets')
 
 @section('breadcrumb')
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"> <a href="{{ route('home') }}">
         <i class="fas fa-home"></i> Inicio </a>
     </li>
-    <li class="breadcrumb-item">Administración</li>
-    <li class="breadcrumb-item active">Solicitudes</li>
+    <li class="breadcrumb-item active">Tickets</li>
 </ol>
 @endsection
 
@@ -17,7 +16,7 @@
     <div class="col-md-12 mb-4">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Administrar solicitudes</h3>
+                <h3 class="card-title">Administrar Tickets</h3>
             </div>
             <div class="card-body table-responsive p-0">
                 <table class="table table-bordered table-striped table-hover">
@@ -26,17 +25,28 @@
                             <th width="10">
                             </th>
                             <th>
-                                TITULO
+                                TICKET
                             </th>
                             <th>
-                                FECHA
+                                PRIORIDAD
                             </th>
                             <th>
-                               AUTOR
+                               FECHA
+                            </th>
+
+                            <th>
+                                USUARIO
+                            </th>
+                            <th>
+                                NOMBRE
                             </th>
 
                             <th>
                                 DEPARTAMENTO
+                            </th>
+
+                            <th>
+                                TITULO
                             </th>
 
                             <th>
@@ -51,41 +61,46 @@
                     <tbody>
                         @forelse ($collection as $element)
                             <tr>
+                                <td></td>
                                 <td>{{ $element->id }}</td>
+                                <td style="background-color:{{ $element->colorPrioridad }}">
+                                    <strong>{{ $element->nombrePrioridad }}</strong>
+                                </td>
+                                <td>{{ $element->fecha->format('d/m/Y H:i') }}</td>
+                                <td>{{ $element->usuario->usuario }}</td>
+                                <td>{{ $element->usuario->nombre }}</td>
+                                <td>{{ $element->usuario->departamento->nombre }}</td>
                                 <td>{{ $element->titulo }}</td>
-                                <td>{{ $element->fecha }}</td>
-                                <td>{{ $element->empleado->nombre }}</td>
-                                <td>{{ $element->empleado->departamento->nombre }}</td>
                                 <td class="text-center">
-                                    <span class="badge badge-primary text-sm"  style="background-color:{{ $element->status->color }}">
-                                        {{ $element->status->display_name }}
+                                    <span class="badge badge-primary text-sm">
+                                        {{ $element->estado }}
                                     </span>
                                 </td>
                                 <td>
-                                    @permission('solicitude_show')
-                                        <a class="btn btn-sm btn-primary" href="{{ route('admin.solicitudes.show', $element->id) }}" title="Ver">
+                                    @permission('ticket_show')
+                                        <a class="btn btn-sm btn-primary" href="{{ route('tickets.show', $element->id) }}" title="Ver">
                                             <i class="far fa-eye"></i>
                                         </a>
                                     @endpermission
 
-                                    @permission('solicitude_edit')
-                                        <a class="btn btn-sm btn-info" href="{{ route('admin.solicitudes.edit', $element->id) }}" title="Editar">
+                                    @permission('ticket_edit')
+                                        <a class="btn btn-sm btn-info" href="{{ route('tickets.edit', $element->id) }}" title="Editar">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                     @endpermission
 
-                                    @permission('solicitude_delete')
-                                        <form action="{{ route('admin.solicitudes.destroy', $element->id) }}" method="POST" onsubmit="return confirm('Deseas eliminar el registro');" style="display: inline-block;">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    @permission('ticket_delete')
+                                        <form action="{{ route('tickets.destroy', $element->id) }}" method="POST" onsubmit="return confirm('Deseas eliminar el registro');" style="display: inline-block;">
+                                            @method('DELETE')
+                                            @csrf
                                             <button type="submit" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     @endpermission
                                 </td>
                             </tr>
                         @empty
-                            <tr >
-                                <td colspan="7" class="text-center">No hay solicitudes</td>
+                            <tr>
+                                <td colspan="9" class="text-center">No hay registros</td>
                             </tr>
                         @endforelse
                     </tbody>

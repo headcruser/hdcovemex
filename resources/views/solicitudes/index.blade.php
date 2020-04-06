@@ -26,7 +26,7 @@
                     </a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body table-responsive p-0">
                 <table class="table table-bordered table-striped table-hover ajaxTable datatable datatable-Ticket">
                     <thead>
                         <tr>
@@ -37,6 +37,9 @@
                             </th>
                             <th>
                                 TITULO
+                            </th>
+                            <th>
+                                INCIDENTE
                             </th>
 
                             <th>
@@ -54,6 +57,7 @@
                                 <td>{{ $element->id }}</td>
                                 <td>{{ $element->fecha }}</td>
                                 <td>{{ $element->titulo }}</td>
+                                <td>{{ $element->incidente }}</td>
                                 <td class="text-center">
                                     <span class="badge badge-primary text-sm"  style="background-color:{{ $element->status->color }}">
                                         {{ $element->status->display_name }}

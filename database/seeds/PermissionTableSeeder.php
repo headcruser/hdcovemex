@@ -246,6 +246,42 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a departamentos',
                 'description'   => 'Permite el acceso a la vista de departamentos'
             ],
+            [
+                'id'            => 39,
+                'name'          => 'ticket_create',
+                'display_name'  => 'Crear tickets',
+                'description'   => 'Permite crear tickets'
+            ],
+            [
+                'id'            => 40,
+                'name'          => 'ticket_edit',
+                'display_name'  => 'Editar tickets',
+                'description'   => 'Permite editar tickets'
+            ],
+            [
+                'id'            => 41,
+                'name'          => 'ticket_show',
+                'display_name'  => 'Ver tickets',
+                'description'   => 'Permite ver el detalle del tickets'
+            ],
+            [
+                'id'            => 42,
+                'name'          => 'ticket_delete',
+                'display_name'  => 'Eliminar tickets',
+                'description'   => 'Permite eliminar un departamento'
+            ],
+            [
+                'id'            => 43,
+                'name'          => 'ticket_access',
+                'display_name'  => 'Acceso a tickets',
+                'description'   => 'Permite el acceso a la vista de tickets'
+            ],
+            [
+                'id'            => 44,
+                'name'          => 'report_access',
+                'display_name'  => 'Acceso a reportes',
+                'description'   => 'Permite visualizar la seccion de reportes'
+            ],
         ];
 
         Permission::insert($permissions);

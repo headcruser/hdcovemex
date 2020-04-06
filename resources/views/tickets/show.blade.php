@@ -1,17 +1,16 @@
 @extends('layouts.panel')
 
-@section('title','Ver Solicitud')
+@section('title','Ver ticket')
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
             <i class="fas fa-home"></i> Inicio </a>
         </li>
-        <li class="breadcrumb-item">Administración</li>
         <li class="breadcrumb-item">
-            <a href="{{ route('solicitudes.index') }}">Solicitudes</a>
+            <a href="{{ route('tickets.index') }}">Tickets</a>
         </li>
-        <li class="breadcrumb-item active">Solicitud #{{ $model->id }}</li>
+        <li class="breadcrumb-item active">Ticket #{{ $model->id }}</li>
     </ol>
 @endsection
 
@@ -22,7 +21,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-tag"></i>
-                    Detalle solicitud
+                    Detalle Ticket
                   </h3>
             </div>
 
@@ -39,13 +38,46 @@
                         </tr>
                         <tr>
                             <th>
+                                PRIORIDAD
+                            </th>
+                            <td style="background-color:{{ $model->colorPrioridad }}">
+                                <strong>{{ $model->nombrePrioridad }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                FECHA
+                            </th>
+                            <td>
+                                {{ $model->fecha->format('d/m/Y H:i') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                USUARIO
+                            </th>
+
+                            <td>
+                               ({{ $model->usuario->usuario }}) {{ $model->usuario->nombre }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th>
+                                DEPARTAMENTO
+                            </th>
+                            <td>
+                                {{ $model->usuario->departamento->nombre }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
                                 TITULO
                             </th>
                             <td>
                                 {{ $model->titulo }}
                             </td>
                         </tr>
-
                         <tr>
                             <th>
                                 INCIDENTE
@@ -54,49 +86,28 @@
                                 {{ $model->incidente }}
                             </td>
                         </tr>
-
                         <tr>
                             <th>
-                                ESTATUS
+                                ESTADO
                             </th>
                             <td>
-                                <span class="badge badge-primary">
-                                    {{ $model->status->display_name }}
+                                <span class="badge badge-primary text-sm">
+                                    {{ $model->estado }}
                                 </span>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                EMPLEADO
-                            </th>
-                            <td>
-                                <p class="text-muted">{{ $model->empleado->nombre }}</p>
-                            </td>
-                        </tr>
-
-
-                        @isset($model->adjunto)
-                            <tr>
-                                <th>
-                                    INCIDENTE
-                                </th>
-                                <td>
-                                    <a class="linked" href="{{ route('solicitudes.archivo',$model) }}" target="_blank">{{ $model->nombre_adjunto }}</a>
-                                </td>
-                            </tr>
-                        @endisset
-
-                        {{-- <tr>
-                            <th>
                                 COMENTARIOS
                             </th>
                             <td>
-                                @forelse ($model->comentarios as $comentario)
+
+                                @forelse ($model->sigoTicket as $comentario)
                                     <div class="row">
                                         <div class="col">
-                                            <p class="font-weight-bold"><a href="mailto:{{ $comentario->autor_email }}">{{ $comentario->autor_nombre }}</a> ({{ $comentario->created_at }})</p>
-                                            <p>{{ $comentario->comentario_texto }}</p>
+                                            <p class="font-weight-bold"><a href="mailto:  ">{{ $comentario->autor }}</a> ({{ $comentario->fecha }})</p>
+                                            <p>{{ $comentario->comentario }}</p>
                                         </div>
                                     </div>
                                     <hr />
@@ -109,7 +120,7 @@
                                     <hr />
                                 @endforelse
 
-                                <form class="mt-3" action="{{ route('admin.solicitudes.storeComentario', $model->id) }}" method="POST">
+                                <form class="mt-3" action="{{ route('tickets.storeComentario', $model->id) }}" method="POST">
                                     @csrf
                                     <div class="form-group">
                                         <label for="ta-comentario_texto">Deja un comentario</label>
@@ -124,7 +135,7 @@
                                     </div>
                                 </form>
                             </td>
-                        </tr> --}}
+                        </tr>
 
                     </tbody>
                 </table>
@@ -133,7 +144,7 @@
             </div>
 
             <div class="card-footer">
-                <a class="btn btn-default" href="{{ route('admin.solicitudes.index') }}">
+                <a class="btn btn-default" href="{{ route('tickets.index') }}">
                     <i class="fas fa-arrow-left"></i> Regresar
                 </a>
             </div>

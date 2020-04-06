@@ -38,14 +38,14 @@ class Solicitude extends Model
      */
     protected $fillable = [
         'fecha',
+        'usuario_id',
+        'ticket_id',
+        'estatus_id',
         'titulo',
-        'nombre_adjunto',
-        'empleado_id',
         'incidente',
         'adjunto',
         'tipo_adjunto',
-        'revisado_por',
-        'estatus_id'
+        'nombre_adjunto',
     ];
 
     /**
@@ -63,7 +63,7 @@ class Solicitude extends Model
     {
         parent::boot();
 
-        Solicitude::observe(new SolicitudeActionObserver);
+        //Solicitude::observe(new SolicitudeActionObserver);
     }
 
     /**
@@ -91,7 +91,7 @@ class Solicitude extends Model
 
     public function empleado()
     {
-        return $this->belongsTo(User::class, 'empleado_id')->withDefault([
+        return $this->belongsTo(User::class, 'usuario_id')->withDefault([
             'nombre'    => 'S/N',
             'email'     => 'S/E',
             'telefono'  => 'S/T',
@@ -103,9 +103,8 @@ class Solicitude extends Model
         return $this->belongsTo(User::class, 'revisado_por')->withDefault();
     }
 
-    public function comentarios()
-    {
-        return $this->hasMany(Comment::class, 'solicitud_id', 'id');
+    public function ticket(){
+        return $this->belongsTo(Ticket::class,'ticket_id','id');
     }
 
     public function sendCommentNotification($comment)

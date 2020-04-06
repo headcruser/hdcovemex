@@ -3,7 +3,7 @@
 namespace HelpDesk\Entities\Admin;
 
 
-use HelpDesk\Entities\Comment;
+
 use HelpDesk\Entities\Solicitude;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -36,7 +36,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre', 'email', 'telefono', 'password', 'departamento_id', 'login', 'foto', 'tipo_foto', 'nombre_foto',
+        'nombre', 'email', 'telefono', 'password', 'departamento_id', 'usuario', 'foto', 'tipo_foto', 'nombre_foto',
     ];
 
     /**
@@ -71,12 +71,7 @@ class User extends Authenticatable
 
     public function solicitudes()
     {
-        return $this->hasMany(Solicitude::class, 'empleado_id', 'id');
-    }
-
-    public function comentarios()
-    {
-        return $this->hasMany(Comment::class, 'usuario_id', 'id');
+        return $this->hasMany(Solicitude::class, 'usuario_id', 'id');
     }
 
     /*///////////////////////////////////////////////////////////////////////////

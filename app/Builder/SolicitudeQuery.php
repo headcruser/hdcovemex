@@ -9,6 +9,6 @@ class SolicitudeQuery extends Builder
 {
     function auth()
     {
-        return $this->where('empleado_id', Auth::user()->id);
+        return $this->where('usuario_id', Auth::user()->id);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Entities\Config;
 
+use HelpDesk\Builder\Config\StatusQuery;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,4 +41,19 @@ class Status extends Model
     protected $hidden = [
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+    /**
+     *
+     * Crea una nueva instancia de el constructor de consultas Eloquent
+     * para el modelo.
+     *
+     * Este método separa los filtros a un nueva clase.
+     *
+     * @param  $query
+     * @return ChoferQuery|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new StatusQuery($query);
+    }
 }

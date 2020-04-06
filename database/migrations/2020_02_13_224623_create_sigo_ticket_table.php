@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTicketsTable extends Migration
+class CreateSigoTicketTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,16 @@ class CreateTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('sigo_ticket', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamp('fecha')->nullable();
-            $table->enum('privado', ['S', 'N'])->default('S');
 
-            $table->string('contacto',20);
-            $table->smallInteger('prioridad');
-            $table->string('titulo',50);
-            $table->text('incidente');
+            $table->string('campo_cambiado',30)->nullable();
+            $table->string('valor_anterior',60)->nullable();
+            $table->string('valor_actual',60)->nullable();
 
-            $table->string('proceso',20);
-            $table->string('tipo',20);
-            $table->string('sub_tipo',20);
-            $table->string('estado',20);
+            $table->text('comentario');
+            $table->enum('privado', ['S', 'N'])->default('N');
 
             # ARCHIVO ADJUNTO
             $table->binary('adjunto')->nullable();
@@ -37,7 +33,7 @@ class CreateTicketsTable extends Migration
             $table->softDeletes();
         });
 
-        DB::statement("ALTER TABLE tickets MODIFY adjunto MEDIUMBLOB"); # MYSQL
+        DB::statement("ALTER TABLE sigo_ticket MODIFY adjunto MEDIUMBLOB"); # MYSQL
     }
 
     /**
@@ -47,6 +43,6 @@ class CreateTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('sigo_ticket');
     }
 }

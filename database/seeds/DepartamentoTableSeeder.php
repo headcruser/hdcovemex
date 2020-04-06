@@ -31,7 +31,7 @@ class DepartamentoTableSeeder extends Seeder
             ],
             [
                 'id'        => 5,
-                'nombre'    => 'Tecnológicas de la Información',
+                'nombre'    => 'Tecnólogias de la Información',
             ],
             [
                 'id'        => 6,

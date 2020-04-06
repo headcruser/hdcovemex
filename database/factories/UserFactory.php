@@ -3,8 +3,9 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use Illuminate\Support\Str;
-use HelpDesk\Entities\Admin\User;
 use Faker\Generator as Faker;
+use HelpDesk\Entities\Admin\Departamento;
+use HelpDesk\Entities\Admin\{Role, User};
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +20,22 @@ use Faker\Generator as Faker;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
+        'nombre'            => $faker->name,
+        'email'             => preg_replace('/@example\..*/', '@covemex.com', $faker->unique()->safeEmail),
         'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'telefono'          => null,
+        'usuario'           => $faker->username,
+        'password'          => '$2y$10$UnLIBQB1uZZC1r5msFWTPuZCZsMBUpZINpJ48G5FmMxz6yVGP83rO', # password
+        'remember_token'    => Str::random(10),
     ];
+});
+
+$factory->afterCreating(User::class, function ($user, $faker) {
+    $roleEmpleado = Role::findOrFail(3);
+    $user->attachRole($roleEmpleado);
+
+
+    $depto = Departamento::where('nombre','!=','Tecnólogias de la Información')->get()->random();
+    $user->departamento()->associate($depto);
+    $user->save();
 });
