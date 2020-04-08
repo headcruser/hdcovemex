@@ -79,9 +79,10 @@ return [
             ]
         ]
     ],
+
     'solicitud' => [
         'statuses'    => [
-            'values' => [
+            'names' => [
                 'PEN'   => 'Pendiente',
                 'PAS'   => 'En proceso',
                 'END'   => 'Finalizada',
@@ -92,6 +93,12 @@ return [
                 'PAS' => '#6c757d',
                 'END' => '#28a745',
                 'CAN' => '#dc3545',
+            ],
+            'values' => [
+                'PEN'   => 1,
+                'PAS'   => 2,
+                'END'   => 3,
+                'CAN'   => 4,
             ]
         ]
     ],
@@ -111,5 +118,9 @@ return [
         'company'           => 'Covemex',
         'name'              => 'Help Desk Covemex',
         'alias'             => 'hdcovemex'
+    ],
+
+    'mail' => [
+        'request_subject' => 'Aviso: se ingresó la solicitud de soporte #%1%'
     ]
 ];

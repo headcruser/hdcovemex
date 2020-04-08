@@ -4,13 +4,15 @@ namespace HelpDesk\Entities\Admin;
 
 
 
+use HelpDesk\Builder\Admin\UserQuery;
 use HelpDesk\Entities\Solicitude;
+
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
@@ -56,6 +58,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     *
+     * Crea una nueva instancia de el constructor de consultas Eloquent
+     * para el modelo.
+     *
+     * Este método separa los filtros a un nueva clase.
+     *
+     * @param  $query
+     * @return UserQuery|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new UserQuery($query);
+    }
 
     /*///////////////////////////////////////////////////////////////////////////
                         RELACIONES

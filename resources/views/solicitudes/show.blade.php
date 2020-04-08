@@ -77,6 +77,7 @@
                             </tr>
                         @endisset
 
+                        @if( $model->ticket()->exists() )
                         <tr>
                             <th>
                                 Comentarios
@@ -101,10 +102,12 @@
                                 @endforelse
                             </td>
                         </tr>
+                        @endif
 
                     </tbody>
                 </table>
 
+                @if( $model->ticket()->exists() )
                 <form class="mt-3" action="{{ route('solicitudes.storeComentario', $model->id) }}" method="POST">
                     @csrf
                     <div class="form-group">
@@ -119,6 +122,8 @@
                         <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
                     </div>
                 </form>
+                @endif
+
             </div>
 
             <div class="card-footer">

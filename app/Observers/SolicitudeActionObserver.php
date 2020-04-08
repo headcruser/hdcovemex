@@ -11,7 +11,7 @@ class SolicitudeActionObserver
 {
     public function created(Solicitude $model)
     {
-        $users = User::withRole('admin')->get();
+        $users = User::withRoles('soporte','jefatura','admin')->get();
         Notification::send($users, new CreatedSolicitudeNotification($model));
     }
 }

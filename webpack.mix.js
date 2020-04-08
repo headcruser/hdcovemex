@@ -15,6 +15,7 @@ mix.styles([
     'resources/vendor/sweetalert2/sweetalert2.css',
     'resources/css/adminlte.css',
     'resources/vendor/icheck-bootstrap/icheck-bootstrap.css',
+    'resources/vendor/daterangepicker/daterangepicker.css',
     'resources/css/app.css'
 ],'public/css/app.css')
 
@@ -24,6 +25,8 @@ mix.styles([
     'resources/vendor/jquery/jquery.min.js',
     'resources/vendor/bootstrap/js/bootstrap.bundle.min.js',
     'resources/vendor/sweetalert2/sweetalert2.js',
+    'resources/vendor/daterangepicker/moment.min.js',
+    'resources/vendor/daterangepicker/daterangepicker.js',
 ], 'public/js/vendor.js')
 
 .copy('resources/vendor/fontawesome-free-5.12.1-web/webfonts','public/webfonts')

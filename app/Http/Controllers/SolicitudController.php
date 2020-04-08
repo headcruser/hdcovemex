@@ -2,13 +2,16 @@
 
 namespace HelpDesk\Http\Controllers;
 
-use Illuminate\Http\Request;
-use HelpDesk\Entities\Solicitude;
-use Illuminate\Support\Facades\DB;
-use HelpDesk\Entities\Config\Status;
-use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use Entrust;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+
+use HelpDesk\Entities\Solicitude;
+use HelpDesk\Entities\Config\Status;
+
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 /**
  * Genera una solicitud por parte de los empleados
@@ -20,14 +23,32 @@ class SolicitudController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         abort_unless(Entrust::can('solicitude_access'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('solicitudes.index', ['collection' => Solicitude::auth()->with([])->paginate()]);
+        $solicitudes = Solicitude::auth()
+            ->with(['status', 'empleado'])
+            ->search($request->input('search'))
+            ->from($request->input('from'))
+            ->to($request->input('to'))
+            ->byStatus($request->input('status'))
+            ->orderByDesc('created_at')
+            ->paginate();
+
+        $solicitudes->appends([
+            'search'    => $request->input('search'),
+            'from'      => $request->input('from'),
+            'to'        => $request->input('to')
+        ]);
+
+        return view('solicitudes.index', [
+            'collection'    => $solicitudes,
+            'statuses'      => Status::pluck('display_name', 'id'),
+        ]);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  \App\Ticket  $ticket
@@ -37,7 +58,7 @@ class SolicitudController extends Controller
     {
         abort_unless(Entrust::can('solicitude_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $model->load('status','ticket','ticket.sigoTicket','ticket.sigoTicket.operador','ticket.sigoTicket.usuario');
+        $model->load('status', 'ticket', 'ticket.sigoTicket', 'ticket.sigoTicket.operador', 'ticket.sigoTicket.usuario');
 
         return view('solicitudes.show', compact('model'));
     }

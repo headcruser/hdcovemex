@@ -63,7 +63,7 @@ class Solicitude extends Model
     {
         parent::boot();
 
-        //Solicitude::observe(new SolicitudeActionObserver);
+        Solicitude::observe(new SolicitudeActionObserver);
     }
 
     /**
@@ -109,28 +109,15 @@ class Solicitude extends Model
 
     public function sendCommentNotification($comment)
     {
-        $jefesDepartamento = User::where(function ($q) {
-            $q->whereHas('roles', function ($q) {
-                return $q->where('name', 'soporte');
-            })
-            ->where(function ($q) {
-                $q->whereHas('comentarios', function ($q) {
-                    return $q->where('solicitud_id', $this->id);
-                })
-                ->orWhereHas('solicitudes', function ($q) {
-                    return $q->where('id',$this->id);
-                });
-            });
-        })
-        ->when(!$comment->usuario_id, function ($q) {
-            $q->orWhereHas('roles', function ($q) {
-                return $q->where('display_name', 'Administrador');
-            });
-        })
-        ->when($comment->user, function ($q) use ($comment) {
-            $q->where('id', '!=', $comment->usuario_id);
-        })
-        ->get();
+        $jefesDepartamento = User::withRoles('soporte','jefatura','admin')->get();
+        // ->when(!$comment->usuario_id, function ($q) {
+        //     $q->orWhereHas('roles', function ($q) {
+        //         return $q->where('display_name', 'Administrador');
+        //     });
+        // })
+        // ->when($comment->user, function ($q) use ($comment) {
+        //     $q->where('id', '!=', $comment->usuario_id);
+        // })
 
         $notification = new CommentSolicitudeNotification($comment);
 
