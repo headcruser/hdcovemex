@@ -39,9 +39,9 @@ class ProfileController extends Controller
                     'nombre_foto'    => $image->getClientOriginalName(),
                     'foto'           => base64_encode(file_get_contents(addslashes($image))),
                 ]);
-            }else{
+            } else {
                 # REMOVE CURRENT IMAGE ONLY IF USER REMOVE IMAGE
-                if($request->input('deleted_image') === 'true'){
+                if ($request->input('deleted_image') === 'true') {
                     $request->request->add([
                         'tipo_foto'      => null,
                         'nombre_foto'    => null,
@@ -55,15 +55,18 @@ class ProfileController extends Controller
             DB::commit();
 
             return redirect()
-                ->back()
-                ->with('message', 'Perfil actualizado correctamente');
+                ->route('perfil')
+                ->with([
+                    'message' => 'Perfil actualizado correctamente'
+                ]);
 
         } catch (\Exception $ex) {
             DB::rollback();
 
             return redirect()
                 ->back()
-                ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
+                ->withError("Error Servidor: {$ex->getMessage()} ")
+                ->withInput();
         }
     }
 }

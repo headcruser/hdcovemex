@@ -26,7 +26,7 @@ class UserProfileRequest extends FormRequest
         return [
             'foto'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:512',
             'nombre'        => 'required',
-            'login'         => 'required|min:2',
+            'usuario'       => 'required|min:2',
             'password'      => 'nullable|confirmed|min:4',
         ];
     }
@@ -39,9 +39,9 @@ class UserProfileRequest extends FormRequest
     public function messages()
     {
         return [
-           'foto.image'           => 'El Campo foto debe ser una imagen',
-           'nombre.required'      => 'El campo nombre es requerido',
-           'login.required'       => 'El campo Usuario es requerido',
+            'foto.image'           => 'El Campo foto debe ser una imagen',
+            'nombre.required'      => 'El campo nombre es requerido',
+            'usuario.required'     => 'El campo Usuario es requerido',
         ];
     }
 }
