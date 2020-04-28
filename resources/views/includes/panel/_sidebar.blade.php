@@ -117,15 +117,6 @@
                     @endpermission
                 @endrole
 
-                 <!-- Opciones -->
-                <li class="nav-header">Opciones</li>
-                <li class="nav-item">
-                    <a href="{{ route('perfil') }}" class="nav-link {{ routeIs(['perfil','perfil.*']) }}">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>Perfil</p>
-                    </a>
-                </li>
-
                 <!-- CONFIGURACION-->
                 @permission('user_config_access')
                     <li class="nav-header">Configuración</li>
@@ -166,6 +157,15 @@
                         </a>
                     </li>
                 @endability
+
+                <!-- OPCIONES -->
+                <li class="nav-header">Opciones</li>
+                <li class="nav-item">
+                    <a href="{{ route('perfil') }}" class="nav-link {{ routeIs(['perfil','perfil.*']) }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Perfil</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- END SIDEBAR MENU -->

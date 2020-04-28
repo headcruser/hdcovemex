@@ -14,7 +14,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12 mb-4">
+    <div class="col-12 mb-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Lista de permisos</h3>
@@ -29,10 +29,6 @@
 
             <div class="card-body">
                 @include('admin.departaments.partials._table')
-            </div>
-
-            <div class="card-footer clearfix">
-               {{ $collection->render() }}
             </div>
         </div>
     </div>

@@ -30,10 +30,6 @@
             <div class="card-body">
                 @include('admin.roles.partials._table')
             </div>
-
-            <div class="card-footer clearfix">
-               {{ $collection->render() }}
-            </div>
         </div>
     </div>
 

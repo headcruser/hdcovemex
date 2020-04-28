@@ -2,6 +2,9 @@
 
 @section('title','Administrar Usuarios')
 
+@section('style')
+@endsection
+
 @section('breadcrumb')
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"> <a href="{{ route('home') }}">
@@ -14,7 +17,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12 mb-4">
+    <div class="col-12 mb-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Lista de usuarios</h3>
@@ -29,10 +32,6 @@
 
             <div class="card-body">
                 @include('admin.users.partials._table')
-            </div>
-
-            <div class="card-footer clearfix">
-               {{ $collection->render() }}
             </div>
         </div>
     </div>
