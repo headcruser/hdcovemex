@@ -4,13 +4,16 @@ namespace HelpDesk\Entities\Admin;
 
 
 
-use HelpDesk\Builder\Admin\UserQuery;
 use HelpDesk\Entities\Solicitude;
+use HelpDesk\Builder\Admin\UserQuery;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -111,5 +114,34 @@ class User extends Authenticatable
         if ($input) {
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
         }
+    }
+
+    /**
+     * Big block of caching functionality.
+     *
+     * @return mixed Roles
+     */
+    public function cachedRoles()
+    {
+        $userPrimaryKey = $this->primaryKey;
+        $cacheKey = 'entrust_roles_for_user_' . $this->$userPrimaryKey;
+
+        return Cache::remember($cacheKey, Config::get('cache.ttl'), function () {
+            return $this->roles()->get();
+        });
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function save(array $options = [])
+    {
+        $userPrimaryKey = $this->primaryKey;
+        $cacheKey = 'entrust_roles_for_user_' . $this->$userPrimaryKey;
+
+        Cache::forget($cacheKey);
+
+        return parent::save($options);
     }
 }
