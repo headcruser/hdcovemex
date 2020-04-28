@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Entities;
 
+use HelpDesk\Builder\TicketQuery;
 use HelpDesk\Entities\Admin\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
@@ -45,7 +46,8 @@ class Ticket extends Model
         'estado',
         'adjunto',
         'tipo_adjunto',
-        'nombre_adjunto'
+        'nombre_adjunto',
+        'asignado_a'
     ];
 
     /**
@@ -57,6 +59,11 @@ class Ticket extends Model
         'created_at', 'updated_at', 'deleted_At'
     ];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = ['fecha'];
 
     public static function boot()
@@ -64,12 +71,34 @@ class Ticket extends Model
         parent::boot();
     }
 
-    public function sigoTicket()
+    /**
+     *
+     * Crea una nueva instancia de el constructor de consultas Eloquent
+     * para el modelo.
+     *
+     * Este método separa los filtros a un nueva clase.
+     *
+     * @param  $query
+     * @return TicketQuery|static
+     */
+    public function newEloquentBuilder($query)
     {
-        return $this->hasMany(SigoTicket::class, 'ticket_id','id');
+        return new TicketQuery($query);
     }
 
-    public function usuario()
+    ## RELATIONS
+
+    public function sigoTicket()
+    {
+        return $this->hasMany(SigoTicket::class, 'ticket_id', 'id');
+    }
+
+    public function solicitud()
+    {
+        return $this->hasOne(Solicitude::class, 'ticket_id');
+    }
+
+    public function empleado()
     {
         return $this->belongsTo(User::class, 'usuario_id')
             ->withDefault(function ($user) {
@@ -85,7 +114,7 @@ class Ticket extends Model
             });
     }
 
-
+    ## ACCESORS
     public function getNombrePrioridadAttribute()
     {
         $prioridades = Config::get('helpdesk.tickets.prioridad.values', []);

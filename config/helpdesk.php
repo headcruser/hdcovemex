@@ -10,15 +10,20 @@ return [
     */
     'tickets' => [
         'estado' => [
+            'names' => [
+                'Abierto'       => 'Abierto',
+                'Finalizado'    => 'Finalizado',
+                'Cancelado'     => 'Cancelado',
+            ],
             'values' => [
                 'Cancelado',
                 'Abierto',
                 'Finalizado'
             ],
             'alias' => [
-                'CAN'  => 'Cancelado',
                 'ABT'  => 'Abierto',
-                'FIN'  =>'Finalizado'
+                'FIN'  => 'Finalizado',
+                'CAN'  => 'Cancelado',
             ]
         ],
         'prioridad' => [
@@ -83,8 +88,8 @@ return [
     'solicitud' => [
         'statuses'    => [
             'names' => [
-                'PEN'   => 'Pendiente',
-                'PAS'   => 'En proceso',
+                'PEN'   => 'Ingresada',
+                'PAS'   => 'Procesada',
                 'END'   => 'Finalizada',
                 'CAN'   => 'Cancelada',
             ],
@@ -122,5 +127,13 @@ return [
 
     'mail' => [
         'request_subject' => 'Aviso: se ingresó la solicitud de soporte #%1%'
+    ],
+    'roles' => [
+        'names' => [
+            'ADM'   => 'admin',
+            'SOP'   => 'soporte',
+            'EMP'   => 'empleado',
+            'JEF'   => 'jefatura'
+        ],
     ]
 ];

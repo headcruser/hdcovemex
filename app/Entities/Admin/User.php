@@ -74,10 +74,7 @@ class User extends Authenticatable
         return new UserQuery($query);
     }
 
-    /*///////////////////////////////////////////////////////////////////////////
-                        RELACIONES
-    /////////////////////////////////////////////////////////////////////////// */
-
+    ## RELACIONES
     public function departamento()
     {
         return $this->belongsTo(Departamento::class, 'departamento_id')
@@ -91,14 +88,12 @@ class User extends Authenticatable
         return $this->hasMany(Solicitude::class, 'usuario_id', 'id');
     }
 
-    /*///////////////////////////////////////////////////////////////////////////
-                        MUTADORES
-    /////////////////////////////////////////////////////////////////////////// */
+    ## ACCESORES
 
     /**
      * Obtiene la imagen de perfil
      *
-     * @return void
+     * @return string
      */
     public function getAvatarAttribute()
     {
@@ -108,6 +103,8 @@ class User extends Authenticatable
 
         return "data:image;base64,{$this->foto}";
     }
+
+    ## MUTADORES
 
     public function setPasswordAttribute($input)
     {

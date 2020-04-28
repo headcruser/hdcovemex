@@ -11,7 +11,10 @@ class SolicitudeActionObserver
 {
     public function created(Solicitude $model)
     {
-        $users = User::withRoles('soporte','jefatura','admin')->get();
+        # ALGORIMO PARA DETERMINAR A QUE USUARIO SE ENVIA LA NOTIFICACION
+        $users = User::withRoles('soporte','jefatura')->get();
+
+        # VERIFICAR ERRORES DE ENVIO DE NOTIFICACIONES
         Notification::send($users, new CreatedSolicitudeNotification($model));
     }
 }

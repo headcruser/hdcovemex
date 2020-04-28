@@ -45,6 +45,7 @@ class CreatedSolicitudeNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        # VERIFICACION DE ENVIO DE CORREO
         return (new MailMessage)
 			->subject( str_replace('%1%', $this->solicitude->id ,Config::get('helpdesk.mail.request_subject')) )
 			->greeting('Nueva Solicitud')

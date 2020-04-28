@@ -13,7 +13,7 @@ class StatusesTableSeeder extends Seeder
      */
     public function run()
     {
-        $statuses = Config::get('helpdesk.solicitud.statuses.values', []);
+        $statuses = Config::get('helpdesk.solicitud.statuses.names', []);
         $colors = Config::get('helpdesk.solicitud.statuses.colors', []);
 
         foreach ($statuses as $name => $display_name) {

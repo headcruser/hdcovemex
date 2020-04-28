@@ -30222,3 +30222,37 @@ a.text-muted:hover {
     margin-left: 6px;
     flex-basis: 140px;
 }
+
+/* INPUT ICON SUBMIT */
+.icon-input-btn{
+    display: inline-block;
+    position: relative;
+}
+.icon-input-btn input[type="submit"]{
+    padding-left: 2em;
+}
+.icon-input-btn .fa{
+    display: inline-block;
+    position: absolute;
+    left: 0.65em;
+    top: 30%;
+}
+
+/* FIELDSET THEME */
+
+fieldset.section-border {
+    border: 1px groove  rgba(0, 0, 0, 0.2) !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+        box-shadow:  0px 0px 0px 0px #000;
+}
+
+legend.section-border {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}

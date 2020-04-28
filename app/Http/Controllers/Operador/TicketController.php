@@ -1,29 +1,47 @@
 <?php
 
-namespace HelpDesk\Http\Controllers;
+namespace HelpDesk\Http\Controllers\Operador;
 
 use Entrust;
 use Illuminate\Http\Request;
 use HelpDesk\Entities\Ticket;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use HelpDesk\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class TicketController extends Controller
 {
-     /**
+    /**
      * List Resource
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        abort_unless(Entrust::can('ticket_access'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('ticket_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('tickets.index', ['collection' => Ticket::with(['usuario','usuario.departamento','usuario.roles'])->paginate()]);
+        $tickets = Ticket::assingTo($request->input('operator_id'))
+            ->with(['empleado', 'empleado.departamento', 'empleado.roles'])
+            ->search($request->input('search'))
+            ->byStatus($request->input('status'))
+            ->orderByDesc('created_at')
+            ->paginate();
+
+
+        $tickets->appends([
+            'status'    => $request->input('status'),
+            'search'    => $request->input('search'),
+        ]);
+
+        return view('operador.tickets.index', [
+            'collection'    => $tickets,
+            'statuses'      => Config::get('helpdesk.tickets.estado.names', []),
+        ]);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  \App\Ticket  $ticket
@@ -31,9 +49,9 @@ class TicketController extends Controller
      */
     public function show(Ticket $model)
     {
-        abort_unless(Entrust::can('ticket_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('ticket_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('tickets.show', compact('model'));
+        return view('operador.tickets.show', compact('model'));
     }
 
     /**
@@ -43,9 +61,9 @@ class TicketController extends Controller
      */
     public function create()
     {
-        abort_unless(Entrust::can('ticket_create'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('ticket_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('tickets.create');
+        return view('operador.tickets.create');
     }
 
     /**
@@ -84,7 +102,7 @@ class TicketController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('tickets.show', $ticket)
+                ->route('operador.tickets.show', $ticket)
                 ->withStatus("Ticket Creado correctamente");
         } catch (\Exception $e) {
             DB::rollback();
@@ -97,28 +115,55 @@ class TicketController extends Controller
 
     public function edit(Ticket $model)
     {
-        abort_unless(Entrust::can('ticket_edit'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('ticket_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('tickets.edit', [
-            'model' => $model
+        return view('operador.tickets.edit', [
+            'model'         => $model,
+            'prioridad'     => Config::get('helpdesk.tickets.prioridad.values', []),
+            'tipo_contacto' => Config::get('helpdesk.tickets.contacto.values', []),
+            'estados'       => Config::get('helpdesk.tickets.estado.names'),
         ]);
     }
 
-
     public function update(Request $request, Ticket $model)
     {
+        if (!$request->has('privado')) {
+            $request->request->add(['privado'=> 'N']);
+        }
+
         DB::beginTransaction();
 
         try {
 
+            # ACTUALIZAR INFORMACION DEL TICKET
             $model->update($request->all());
 
+            # VERIFICAR SI EXISTE UNA SOLICITUD PARA FINALIZAR LA MISMA SOLICITUD
+            $solicitud = $model->solicitud;
+
+            if ($solicitud) {
+                #$solicitud->update;
+
+                switch ($request->input('estado')) {
+                    case 'Finalizado':
+                        $solicitud->update([
+                            'estatus_id' => '3'
+                        ]);
+                        break;
+                    case 'Cancelado':
+                        $solicitud->update([
+                            'estatus_id' => '4'
+                        ]);
+                        break;
+                }
+            }
 
             DB::commit();
 
-            return  redirect()
-                ->route('tickets.index')
+            return redirect()
+                ->route('operador.tickets.index')
                 ->with(['message' => 'Ticket Actualizado correctamente']);
+
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -131,7 +176,7 @@ class TicketController extends Controller
 
     public function destroy(Ticket $model)
     {
-        abort_unless(Entrust::can('ticket_delete'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('ticket_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->delete();
 

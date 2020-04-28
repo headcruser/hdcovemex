@@ -58,7 +58,7 @@ class SolicitudController extends Controller
     {
         abort_unless(Entrust::can('solicitude_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $model->load('status', 'ticket', 'ticket.sigoTicket', 'ticket.sigoTicket.operador', 'ticket.sigoTicket.usuario');
+        $model->load('status', 'ticket', 'ticket.sigoTicket');
 
         return view('solicitudes.show', compact('model'));
     }
@@ -90,8 +90,8 @@ class SolicitudController extends Controller
 
         $request->request->add([
             'fecha'         => now(),
-            'usuario_id'   => auth()->id(),
-            'estatus_id'    => optional(Status::where('name', 'PEN')->first())->id
+            'usuario_id'    => auth()->id(),
+            'estatus_id'    => optional(Status::pendientes()->first())->id
         ]);
 
         $file = $request->file('archivo');

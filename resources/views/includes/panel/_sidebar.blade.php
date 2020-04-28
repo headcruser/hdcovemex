@@ -37,7 +37,7 @@
                         <a href="#" class="nav-link {{ active('administracion/*') }}">
                             <i class="nav-icon fas fa-users-cog"></i>
                             <p>
-                                Administracion
+                                Administración
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
@@ -69,14 +69,6 @@
                             </li>
                             @endpermission
 
-                            @permission('solicitude_access')
-                            <li class="nav-item">
-                                <a  href="{{ route('admin.solicitudes.index') }}" class="nav-link {{ routeIs(['admin.solicitudes.index','admin.solicitudes.*']) }}">
-                                    <i class="nav-icon fas fa-tasks"></i>
-                                    <p>Solicitudes</p>
-                                </a>
-                            </li>
-                            @endpermission
 
                             @permission('departament_access')
                             <li class="nav-item">
@@ -96,11 +88,22 @@
 
                 @ability('admin,soporte,ti', 'ticket_access')
                     <li class="nav-item">
-                        <a href="{{ route('tickets.index') }}" class="nav-link {{ routeIs(['tickets.index','tickets.*']) }} ">
+                        <a href="{{ route('operador.tickets.index') }}" class="nav-link {{ routeIs(['operador.tickets.index','operador.tickets.*']) }} ">
                             <i class="nav-icon fas fa-sticky-note"></i>
                             <p>Tickets</p>
                         </a>
                     </li>
+                @endpermission
+
+                @role('soporte')
+                    @permission('solicitude_access')
+                    <li class="nav-item">
+                        <a  href="{{ route('operador.gestion-solicitudes.index') }}" class="nav-link {{ routeIs(['operador.gestion-solicitudes.index','operador.gestion-solicitudes.*']) }}">
+                            <i class="nav-icon fas fa-tasks"></i>
+                            <p>Solicitudes</p>
+                        </a>
+                    </li>
+                    @endpermission
                 @endpermission
 
                 @role('empleado')

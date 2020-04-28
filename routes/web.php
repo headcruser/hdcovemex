@@ -40,11 +40,12 @@ Route::post('notificaciones', [
     'uses'          => 'HomeController@deleteNotifications'
 ]);
 
-
+# AUTENTICATION
 Auth::routes([
     'register' => false
 ]);
 
+# ADMINISTRACION
 Route::group([
     'prefix'        => 'administracion',
     'as'            => 'admin.',
@@ -66,19 +67,42 @@ Route::group([
             'permisos' => 'model'
         ]);
 
-        # USUARIOS
+        # DEPARTAMENTOS
         Route::resource('departamentos', 'DepartamentsController')->parameters([
             'departamentos'  => 'model'
         ]);
 
-        # SOLICITUDES
-        Route::resource('solicitudes', 'SolicitudesController')->parameters([
-            'solicitudes' => 'model'
-        ]);
 
     }
 );
 
+# OPERADOR
+Route::group([
+    # 'prefix'        => 'administracion',
+    'as'            => 'operador.',
+    'namespace'     => 'Operador',
+    'middleware'    => ['auth']],
+    function () {
+
+        # SOLICITUDES
+        Route::resource('gestion-solicitudes', 'SolicitudesController')->parameters([
+            'gestion-solicitudes' => 'model'
+        ]);
+
+        # TICKETS
+        Route::resource('tickets', 'TicketController')->parameters([
+            'tickets' => 'model'
+        ]);
+
+        Route::post('tickets/comentarios/{model}',[
+            'as'            => 'tickets.storeComentario',
+            'middleware'    => ['auth'],
+            'uses'          => 'TicketController@storeComment'
+        ]);
+    }
+);
+
+# CONFIGURACION
 Route::group([
     'prefix'        => 'configuracion',
     'as'            => 'config.',
@@ -97,7 +121,8 @@ Route::group([
     }
 );
 
-# SOLICITUDES
+
+# SOLICITUDES (EMPLEADO)
 Route::resource('solicitudes', 'SolicitudController')->parameters([
     'solicitudes' => 'model'
 ])->except(['edit','update','destroy']);
@@ -112,16 +137,4 @@ Route::post('solicitudes/{model}/comentario', [
     'as'            => 'solicitudes.storeComentario',
     'middleware'    => ['auth'],
     'uses'          => 'SolicitudController@storeComment'
-]);
-
-
-# TICKETS
-Route::resource('tickets', 'TicketController')->parameters([
-    'tickets' => 'model'
-]);
-
-Route::post('tickets/comentarios/{model}',[
-    'as'            => 'tickets.storeComentario',
-    'middleware'    => ['auth'],
-    'uses'          => 'TicketController@storeComment'
 ]);
