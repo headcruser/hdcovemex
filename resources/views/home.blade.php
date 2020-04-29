@@ -24,7 +24,7 @@
             </div>
         @endif
 
-        @includeWhen(Entrust::hasRole('empleado'), 'resumen._empleado')
+        @includeWhen(Entrust::hasRole('empleado'), 'usuario.resumen._empleado')
     </div>
 
 </section>

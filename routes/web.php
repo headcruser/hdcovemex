@@ -122,19 +122,27 @@ Route::group([
 );
 
 
-# SOLICITUDES (EMPLEADO)
-Route::resource('solicitudes', 'SolicitudController')->parameters([
-    'solicitudes' => 'model'
-])->except(['edit','update','destroy']);
+# USUARIO
+Route::group([
+    'namespace' => 'Usuario',
+],function () {
 
-Route::get('solicitudes/{model}/archivo', [
-    'as'            => 'solicitudes.archivo',
-    'middleware'    => ['auth'],
-    'uses'          => 'SolicitudController@archivo'
-]);
+    # SOLICITUDES (EMPLEADO)
+    Route::resource('solicitudes', 'SolicitudController')->parameters([
+        'solicitudes' => 'model'
+    ])->except(['edit','update','destroy']);
 
-Route::post('solicitudes/{model}/comentario', [
-    'as'            => 'solicitudes.storeComentario',
-    'middleware'    => ['auth'],
-    'uses'          => 'SolicitudController@storeComment'
-]);
+    # ARCHIVO ADJUNTO SOLICITUD
+    Route::get('solicitudes/{model}/archivo', [
+        'as'            => 'solicitudes.archivo',
+        'middleware'    => ['auth'],
+        'uses'          => 'SolicitudController@archivo'
+    ]);
+
+    # COMENTARIO SOLICITUD
+    Route::post('solicitudes/{model}/comentario', [
+        'as'            => 'solicitudes.storeComentario',
+        'middleware'    => ['auth'],
+        'uses'          => 'SolicitudController@storeComment'
+    ]);
+});

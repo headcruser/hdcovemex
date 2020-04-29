@@ -1,6 +1,5 @@
 <?php
-
-namespace HelpDesk\Http\Controllers;
+namespace HelpDesk\Http\Controllers\Usuario;
 
 use Entrust;
 
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 
 use HelpDesk\Entities\Solicitude;
 use HelpDesk\Entities\Config\Status;
+use HelpDesk\Http\Controllers\Controller;
 
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
@@ -42,7 +42,7 @@ class SolicitudController extends Controller
             'to'        => $request->input('to')
         ]);
 
-        return view('solicitudes.index', [
+        return view('usuario.solicitudes.index', [
             'collection'    => $solicitudes,
             'statuses'      => Status::pluck('display_name', 'id'),
         ]);
@@ -60,7 +60,7 @@ class SolicitudController extends Controller
 
         $model->load('status', 'ticket', 'ticket.sigoTicket');
 
-        return view('solicitudes.show', compact('model'));
+        return view('usuario.solicitudes.show', compact('model'));
     }
 
     /**
@@ -72,7 +72,7 @@ class SolicitudController extends Controller
     {
         abort_unless(Entrust::can('solicitude_create'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('solicitudes.create');
+        return view('usuario.solicitudes.create');
     }
 
     /**
