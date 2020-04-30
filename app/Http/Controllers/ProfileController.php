@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Http\Controllers;
 
+use HelpDesk\Entities\Media;
 use HelpDesk\Http\Requests\UserProfileRequest;
 
 use Illuminate\Support\Facades\Auth;
@@ -36,19 +37,8 @@ class ProfileController extends Controller
 
             if (!empty($file)) {
 
-                $fileExtension = $file->getMimeType();
-                $fileName = $file->getClientOriginalName();
-                $fileSize = $file->getSize();
+                $media = Media::createMediaArray($file);
 
-                $fileBase64 = base64_encode(file_get_contents(addslashes($file)));
-                $adjunto = "data:image/{$fileExtension};base64,{$fileBase64}";
-
-                $media = [
-                    'mime_type' => $fileExtension,
-                    'name'      => $fileName,
-                    'file'      => $adjunto,
-                    'size'      => $fileSize
-                ];
 
                 if($user->media()->exists()){
                     $user->media()->update($media);

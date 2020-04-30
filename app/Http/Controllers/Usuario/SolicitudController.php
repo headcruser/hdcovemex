@@ -3,15 +3,14 @@ namespace HelpDesk\Http\Controllers\Usuario;
 
 use Entrust;
 
-use Illuminate\Http\Request;
+use HelpDesk\Entities\Media;
 use HelpDesk\Entities\Solicitude;
-use Illuminate\Support\Facades\DB;
-
 use HelpDesk\Entities\Config\Status;
-
-use Illuminate\Support\Facades\Response;
-
 use HelpDesk\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 /**
@@ -103,19 +102,9 @@ class SolicitudController extends Controller
 
             if (!empty($file)) {
 
-                $fileExtension = $file->getMimeType();
-                $fileName = $file->getClientOriginalName();
-                $fileSize = $file->getSize();
+                $media = Media::createMediaArray($file);
 
-                $fileBase64 = base64_encode(file_get_contents(addslashes($file)));
-                $adjunto = "data:{$fileExtension};base64,{$fileBase64}";
-
-                $solicitud->media()->create([
-                    'mime_type' => $fileExtension,
-                    'name'      => $fileName,
-                    'file'      => $adjunto,
-                    'size'      => $fileSize
-                ]);
+                $solicitud->media()->create($media);
             }
 
             DB::commit();
@@ -125,7 +114,6 @@ class SolicitudController extends Controller
                 ->withStatus("Tu solicitud ha sido enviada. Te atenderemos a la brevedad posible");
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e);
 
             return redirect()
                 ->back()
@@ -173,21 +161,8 @@ class SolicitudController extends Controller
 
         abort_if(empty($model->media), HTTPMessages::HTTP_FORBIDDEN, __('No se ha asignado ningun archivo'));
 
-        $path = storage_path('tmp'.DIRECTORY_SEPARATOR.'uploads');
+        $pathFile = $model->media->buildMediaFilePath();
 
-        try {
-            if (!file_exists($path)) {
-                mkdir($path, 0775, true);
-            }
-        } catch (\Exception $e) {}
-
-        $data = explode(',', $model->media->file );
-        $content = base64_decode($data[1]);
-
-        $nameFile = $path.DIRECTORY_SEPARATOR.$model->media->name;
-
-        file_put_contents($nameFile, $content);
-
-        return response()->download($nameFile)->deleteFileAfterSend(true);
+        return response()->download($pathFile)->deleteFileAfterSend(true);
     }
 }

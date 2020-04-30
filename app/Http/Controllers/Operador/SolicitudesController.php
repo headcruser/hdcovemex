@@ -168,22 +168,8 @@ class SolicitudesController extends Controller
 
         abort_if(empty($model->media), HTTPMessages::HTTP_FORBIDDEN, __('No se ha asignado ningun archivo'));
 
-        $path = storage_path('tmp' . DIRECTORY_SEPARATOR . 'uploads');
+        $pathFile = $model->media->buildMediaFilePath();
 
-        try {
-            if (!file_exists($path)) {
-                mkdir($path, 0775, true);
-            }
-        } catch (\Exception $e) {
-        }
-
-        $data = explode(',', $model->media->file);
-        $content = base64_decode($data[1]);
-
-        $nameFile = $path . DIRECTORY_SEPARATOR . $model->media->name;
-
-        file_put_contents($nameFile, $content);
-
-        return response()->download($nameFile)->deleteFileAfterSend(true);
+        return response()->download($pathFile)->deleteFileAfterSend(true);
     }
 }
