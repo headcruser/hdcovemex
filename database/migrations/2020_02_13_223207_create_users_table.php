@@ -18,13 +18,27 @@ class CreateUsersTable extends Migration
             $table->string('nombre');
             $table->string('email')->unique();
             $table->datetime('email_verified_at')->nullable();
-            $table->string('telefono')->unique()->nullable();
+
+            $table->string('telefono')->nullable();
+
+            if (DB::getDriverName() !== 'sqlsrv') {
+                $table->unique('telefono', 'users_telefono_unique');
+            }
+
             $table->string('password');
             $table->string('remember_token')->nullable();
             $table->unsignedInteger('departamento_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
         });
+
+        # supports index SQL SERVER
+        if (DB::getDriverName() === 'sqlsrv') {
+            DB::statement('CREATE UNIQUE INDEX users_telefono_unique'
+               . ' ON usuarios (telefono)'
+               . ' WHERE telefono IS NOT NULL');
+        }
     }
 
     /**

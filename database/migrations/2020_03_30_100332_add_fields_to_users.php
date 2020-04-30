@@ -15,12 +15,7 @@ class AddFieldsToUsers extends Migration
     {
         Schema::table('usuarios', function (Blueprint $table) {
             $table->string('usuario', 20)->unique()->after('password')->nullable();
-            $table->binary('foto')->after('usuario')->nullable();
-            $table->string('tipo_foto')->after('foto')->nullable();
-            $table->string('nombre_foto')->after('tipo_foto')->nullable();
         });
-
-        DB::statement("ALTER TABLE usuarios MODIFY foto MEDIUMBLOB"); # MYSQL
     }
 
     /**
@@ -31,10 +26,8 @@ class AddFieldsToUsers extends Migration
     public function down()
     {
         Schema::table('usuarios', function (Blueprint $table) {
+            $table->dropUnique('usuarios_usuario_unique');
             $table->dropColumn('usuario');
-            $table->dropColumn('foto');
-            $table->dropColumn('tipo_foto');
-            $table->dropColumn('nombre_foto');
         });
     }
 }

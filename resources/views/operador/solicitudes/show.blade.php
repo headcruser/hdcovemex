@@ -60,12 +60,11 @@
                                 ESTATUS
                             </th>
                             <td>
-                                <span class="badge badge-primary">
+                                <span class="badge badge-primary text-sm"  style="background-color:{{ $model->status->color }}">
                                     {{ $model->status->display_name }}
                                 </span>
                             </td>
                         </tr>
-
                         <tr>
                             <th>
                                 EMPLEADO
@@ -75,66 +74,29 @@
                             </td>
                         </tr>
 
-
-                        @isset($model->adjunto)
+                        @isset($model->media)
                             <tr>
                                 <th>
                                     INCIDENTE
                                 </th>
                                 <td>
-                                    <a class="linked" href="{{ route('operador.gestion-solicitudes.archivo',$model) }}" target="_blank">{{ $model->nombre_adjunto }}</a>
+                                    <p>
+                                        <a href="{{ route('operador.gestion-solicitudes.archivo',$model) }}" target="_blank" class="linked text-sm"><i class="fas fa-link mr-1"></i> {{ $model->media->name }} </a>
+                                    </p>
                                 </td>
                             </tr>
                         @endisset
-
-                        {{-- <tr>
-                            <th>
-                                COMENTARIOS
-                            </th>
-                            <td>
-                                @forelse ($model->comentarios as $comentario)
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="font-weight-bold"><a href="mailto:{{ $comentario->autor_email }}">{{ $comentario->autor_nombre }}</a> ({{ $comentario->created_at }})</p>
-                                            <p>{{ $comentario->comentario_texto }}</p>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                @empty
-                                    <div class="row">
-                                        <div class="col">
-                                            <p>No hay comentarios.</p>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                @endforelse
-
-                                <form class="mt-3" action="{{ route('admin.solicitudes.storeComentario', $model->id) }}" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="ta-comentario_texto">Deja un comentario</label>
-                                        <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
-
-                                        <div id="login-help" class="error invalid-feedback">
-                                            @error('comentario_texto') {{ $message }} @enderror
-                                        </div>
-                                    </div>
-                                    <div class="float-right">
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr> --}}
-
                     </tbody>
                 </table>
-
-
             </div>
 
             <div class="card-footer">
                 <a class="btn btn-default" href="{{ route('operador.gestion-solicitudes.index') }}">
                     <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+
+                <a class="btn btn-primary float-right" href="{{ route('operador.gestion-solicitudes.edit',$model) }}">
+                    <i class="fas fa-pencil-alt"></i> Editar
                 </a>
             </div>
         </div>

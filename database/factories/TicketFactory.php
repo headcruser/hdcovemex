@@ -21,7 +21,6 @@ $factory->define(Ticket::class, function (Faker $faker) {
         'prioridad'     => $faker->randomElement(array_keys(Config::get('helpdesk.tickets.prioridad.values', []))),
         'titulo'        => $faker->sentence(2),
         'incidente'     => $faker->text(),
-        'adjunto'       => null,
         'proceso'       => $faker->randomElement(Config::get('helpdesk.tickets.proceso.values')),
         'tipo'          => $faker->randomElement(array_keys(Config::get('helpdesk.tickets.tipo.values'))),
         'sub_tipo'      => '',

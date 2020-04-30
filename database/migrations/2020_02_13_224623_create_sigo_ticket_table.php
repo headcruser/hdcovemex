@@ -24,16 +24,9 @@ class CreateSigoTicketTable extends Migration
             $table->text('comentario');
             $table->enum('privado', ['S', 'N'])->default('N');
 
-            # ARCHIVO ADJUNTO
-            $table->binary('adjunto')->nullable();
-            $table->string('tipo_adjunto')->nullable();
-            $table->string('nombre_adjunto')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE sigo_ticket MODIFY adjunto MEDIUMBLOB"); # MYSQL
     }
 
     /**

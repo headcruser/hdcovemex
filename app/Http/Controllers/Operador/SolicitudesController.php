@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Validator;
 
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
+/**
+ * Administra las solicitudes por medio del operador
+ */
 class SolicitudesController extends Controller
 {
     public function index(Request $request)
@@ -96,7 +99,6 @@ class SolicitudesController extends Controller
                     'operador_id'   => $user->id,
                     'contacto'      => 'email',
                     'prioridad'     => 3,
-                    'adjunto'       => null,
                     'proceso'       => 'En Proceso',
                     'tipo'          => 'Personal',
                     'sub_tipo'      => '',
@@ -143,44 +145,8 @@ class SolicitudesController extends Controller
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        #$model->load('comentarios');
-
         return view('operador.solicitudes.show', compact('model'));
     }
-
-    // public function storeComment(Request $request, Solicitude $model)
-    // {
-    //     $request->validate([
-    //         'comentario_texto' => 'required'
-    //     ]);
-
-    //     $user = auth()->user();
-    //     $comentario = null;
-
-    //     DB::beginTransaction();
-    //     try {
-    //         $comentario = $model->comentarios()->create([
-    //             'autor_nombre'     => $user->nombre,
-    //             'autor_email'      => $user->email,
-    //             'usuario_id'       => $user->id,
-    //             'comentario_texto' => $request->input('comentario_texto'),
-    //         ]);
-
-    //         DB::commit();
-    //     } catch (\Exception $ex) {
-    //         DB::rollback();
-
-    //         return redirect()
-    //             ->back()
-    //             ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
-    //     }
-
-    //     $model->sendCommentNotification($comentario);
-
-    //     return redirect()
-    //         ->back()
-    //         ->with(['message' => 'Comentario agregado correctamente']);
-    // }
 
     public function destroy(Solicitude $model)
     {
@@ -194,5 +160,30 @@ class SolicitudesController extends Controller
         $model->delete();
 
         return back();
+    }
+
+    public function archivo(Solicitude $model)
+    {
+        $model->load('media');
+
+        abort_if(empty($model->media), HTTPMessages::HTTP_FORBIDDEN, __('No se ha asignado ningun archivo'));
+
+        $path = storage_path('tmp' . DIRECTORY_SEPARATOR . 'uploads');
+
+        try {
+            if (!file_exists($path)) {
+                mkdir($path, 0775, true);
+            }
+        } catch (\Exception $e) {
+        }
+
+        $data = explode(',', $model->media->file);
+        $content = base64_decode($data[1]);
+
+        $nameFile = $path . DIRECTORY_SEPARATOR . $model->media->name;
+
+        file_put_contents($nameFile, $content);
+
+        return response()->download($nameFile)->deleteFileAfterSend(true);
     }
 }

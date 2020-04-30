@@ -5,7 +5,7 @@
     <a href="{{ route('home') }}" class="brand-link">
         <img src="{{ asset('img/logo-corporativo.jpg') }}"
             alt="{{ config('app.name') }}"
-            class="brand-image img-circle elevation-3"
+            class="brand-image img-circle elevation-2"
             style="opacity: .9">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
@@ -19,7 +19,8 @@
                 <img id="avatar-image" src="{{  auth()->user()->avatar }}" class="img-circle elevation-2" alt="User Image" style="width:35px;height:35px;">
             </div>
             <div class="info">
-                <a href="{{ route('perfil') }}" class="d-block">{{ auth()->user()->nombre }}</a>
+                <a href="{{ route('perfil') }}" class="d-block"> <span>{{ auth()->user()->nombre }}</span> </a>
+                <span class="description text-gray">{{ auth()->user()->nameRoleUser }}</span>
             </div>
         </div>
 
@@ -86,15 +87,6 @@
                 <!-- GESTION -->
                 <li class="nav-header">Gestión</li>
 
-                @ability('admin,soporte,ti', 'ticket_access')
-                    <li class="nav-item">
-                        <a href="{{ route('operador.tickets.index') }}" class="nav-link {{ routeIs(['operador.tickets.index','operador.tickets.*']) }} ">
-                            <i class="nav-icon fas fa-sticky-note"></i>
-                            <p>Tickets</p>
-                        </a>
-                    </li>
-                @endpermission
-
                 @role('soporte')
                     @permission('solicitude_access')
                     <li class="nav-item">
@@ -104,7 +96,7 @@
                         </a>
                     </li>
                     @endpermission
-                @endpermission
+                @endrole
 
                 @role('empleado')
                     @permission('solicitude_access')
@@ -116,6 +108,15 @@
                     </li>
                     @endpermission
                 @endrole
+
+                @ability('admin,soporte,ti', 'ticket_access')
+                <li class="nav-item">
+                    <a href="{{ route('operador.tickets.index') }}" class="nav-link {{ routeIs(['operador.tickets.index','operador.tickets.*']) }} ">
+                        <i class="nav-icon fas fa-sticky-note"></i>
+                        <p>Tickets</p>
+                    </a>
+                </li>
+                @endpermission
 
                 <!-- CONFIGURACION-->
                 @permission('user_config_access')

@@ -12,8 +12,8 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12">
+<div class="row justify-content-center">
+    <div class="col-12">
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -34,7 +34,7 @@
                     enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-3">
                             <div class="text-center">
                                 <img id="profile-image" src="{{ $user->avatar }}"
                                     class="avatar img-circle img-thumbnail" alt="foto de perfil"
@@ -53,7 +53,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-9">
+                        <div class="col-9">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -126,10 +126,7 @@
                 <div class="btn-group float-right">
                     <button type="submit" class="btn btn-primary" form="profile-form"> <i class="fas fa-save"></i>
                         Guardar</button>
-                    <button type="reset" class="btn btn-default" form="profile-form"><i class="fas fa-trash-alt"></i>
-                        Limpiar</button>
                 </div>
-
             </div>
         </div>
     </div>

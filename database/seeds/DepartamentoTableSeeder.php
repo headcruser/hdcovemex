@@ -14,39 +14,39 @@ class DepartamentoTableSeeder extends Seeder
     {
         $departamentos = [
             [
-                'id'        => 1,
+                #'id'        => 1,
                 'nombre'    => 'Operaciones',
             ],
             [
-                'id'        => 2,
+                #'id'        => 2,
                 'nombre'    => 'Supervisores de Producción',
             ],
             [
-                'id'        => 3,
+                #'id'        => 3,
                 'nombre'    => 'Contabilidad-Compras',
             ],
             [
-                'id'        => 4,
+                #'id'        => 4,
                 'nombre'    => 'Recursos Humanos',
             ],
             [
-                'id'        => 5,
+                #'id'        => 5,
                 'nombre'    => 'Tecnólogias de la Información',
             ],
             [
-                'id'        => 6,
+                #'id'        => 6,
                 'nombre'    => 'Administración Embolsado',
             ],
             [
-                'id'        => 7,
+                #'id'        => 7,
                 'nombre'    => 'Embarques y Logística',
             ],
             [
-                'id'        => 8,
+                #'id'        => 8,
                 'nombre'    => 'Vigilancia',
             ],
             [
-                'id'        => 9,
+                #'id'        => 9,
                 'nombre'    => 'TGAB',
             ],
         ];

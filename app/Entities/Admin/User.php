@@ -2,8 +2,7 @@
 
 namespace HelpDesk\Entities\Admin;
 
-
-
+use HelpDesk\Entities\Media;
 use HelpDesk\Entities\Solicitude;
 use HelpDesk\Builder\Admin\UserQuery;
 
@@ -14,8 +13,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+
+
 
 class User extends Authenticatable
 {
@@ -41,7 +41,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre', 'email', 'telefono', 'password', 'departamento_id', 'usuario', 'foto', 'tipo_foto', 'nombre_foto',
+        'nombre', 'email', 'telefono', 'password', 'departamento_id', 'usuario'
     ];
 
     /**
@@ -78,6 +78,15 @@ class User extends Authenticatable
     }
 
     ## RELACIONES
+
+    /**
+     * Obtiene el archivo asociado al modelo
+     */
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'media');
+    }
+
     public function departamento()
     {
         return $this->belongsTo(Departamento::class, 'departamento_id')
@@ -93,6 +102,21 @@ class User extends Authenticatable
 
     ## ACCESORES
 
+     /**
+     * Obtiene el nombre del rol del usuario
+     *
+     * @return string
+     */
+    public function getNameRoleUserAttribute()
+    {
+        $roles = $this->cachedRoles();
+
+        if (is_null($roles) || $roles->isEmpty()) {
+            return '(Sin Rol)';
+        }
+
+        return $roles->pluck('display_name')->implode(' ');
+    }
     /**
      * Obtiene la imagen de perfil
      *
@@ -100,11 +124,11 @@ class User extends Authenticatable
      */
     public function getAvatarAttribute()
     {
-        if (!$this->foto) {
+        if (empty($this->media)) {
             return asset('img/theme/avatar.png');
         }
 
-        return "data:image;base64,{$this->foto}";
+        return $this->media->file;
     }
 
     ## MUTADORES

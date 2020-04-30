@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Ver Solicitud')
+@section('title','Detalle Solicitud #' .$model->id)
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
@@ -59,20 +59,22 @@
                                 ESTATUS
                             </th>
                             <td>
-                                <span class="badge badge-primary">
+                                <span class="badge badge-primary text-sm"  style="background-color:{{ $model->status->color }}">
                                     {{ $model->status->display_name }}
                                 </span>
                             </td>
                         </tr>
 
-
-                        @isset($model->adjunto)
+                        @isset($model->media)
                             <tr>
                                 <th>
-                                    INCIDENTE
+                                    ARCHIVO ADJUNTO
                                 </th>
                                 <td>
-                                    <a class="linked" href="{{ route('solicitudes.archivo',$model) }}" target="_blank">{{ $model->nombre_adjunto }}</a>
+                                    <p>
+                                        <a href="{{ route('solicitudes.archivo',$model) }}" target="_blank" class="linked text-sm"><i class="fas fa-link mr-1"></i> {{ $model->media->name }} </a>
+                                      </p>
+
                                 </td>
                             </tr>
                         @endisset

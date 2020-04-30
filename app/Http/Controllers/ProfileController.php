@@ -2,9 +2,8 @@
 
 namespace HelpDesk\Http\Controllers;
 
-use Illuminate\Http\Request;
-use HelpDesk\Entities\Admin\User;
 use HelpDesk\Http\Requests\UserProfileRequest;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -27,30 +26,42 @@ class ProfileController extends Controller
      */
     public function store(UserProfileRequest $request)
     {
-        $image = $request->file('archivo');
+        $file = $request->file('archivo');
         $user = Auth::user();
 
         DB::beginTransaction();
 
         try {
-            if (!empty($image)) {
-                $request->request->add([
-                    'tipo_foto'      => $image->getMimeType(),
-                    'nombre_foto'    => $image->getClientOriginalName(),
-                    'foto'           => base64_encode(file_get_contents(addslashes($image))),
-                ]);
+            $user->update($request->all());
+
+            if (!empty($file)) {
+
+                $fileExtension = $file->getMimeType();
+                $fileName = $file->getClientOriginalName();
+                $fileSize = $file->getSize();
+
+                $fileBase64 = base64_encode(file_get_contents(addslashes($file)));
+                $adjunto = "data:image/{$fileExtension};base64,{$fileBase64}";
+
+                $media = [
+                    'mime_type' => $fileExtension,
+                    'name'      => $fileName,
+                    'file'      => $adjunto,
+                    'size'      => $fileSize
+                ];
+
+                if($user->media()->exists()){
+                    $user->media()->update($media);
+                }else{
+                    $user->media()->create($media);
+                }
+
             } else {
                 # REMOVE CURRENT IMAGE ONLY IF USER REMOVE IMAGE
                 if ($request->input('deleted_image') === 'true') {
-                    $request->request->add([
-                        'tipo_foto'      => null,
-                        'nombre_foto'    => null,
-                        'foto'           => null,
-                    ]);
+                    $user->media()->delete();
                 }
             }
-
-            $user->update($request->all());
 
             DB::commit();
 
@@ -62,7 +73,6 @@ class ProfileController extends Controller
 
         } catch (\Exception $ex) {
             DB::rollback();
-
             return redirect()
                 ->back()
                 ->withError("Error Servidor: {$ex->getMessage()} ")

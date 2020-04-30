@@ -16,7 +16,7 @@
     <div class="col-md-12 mb-4">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Gestionar Solcicitudes</h3>
+                <h3 class="card-title">Gestionar Solicitudes</h3>
             </div>
             <div class="card-body">
                 @include('operador.solicitudes.partials._filters')

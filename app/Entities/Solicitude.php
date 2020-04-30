@@ -5,7 +5,6 @@ namespace HelpDesk\Entities;
 use HelpDesk\Builder\SolicitudeQuery;
 use HelpDesk\Entities\Admin\User;
 use HelpDesk\Entities\Config\Status;
-
 use HelpDesk\Notifications\CommentSolicitudeNotification;
 use HelpDesk\Observers\SolicitudeActionObserver;
 
@@ -43,9 +42,6 @@ class Solicitude extends Model
         'estatus_id',
         'titulo',
         'incidente',
-        'adjunto',
-        'tipo_adjunto',
-        'nombre_adjunto',
     ];
 
     /**
@@ -81,6 +77,15 @@ class Solicitude extends Model
         return new SolicitudeQuery($query);
     }
 
+    /**
+     * Obtiene el archivo asociado al modelo
+     */
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'media');
+    }
+
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'estatus_id')->withDefault([
@@ -103,13 +108,14 @@ class Solicitude extends Model
         return $this->belongsTo(User::class, 'revisado_por')->withDefault();
     }
 
-    public function ticket(){
-        return $this->belongsTo(Ticket::class,'ticket_id','id');
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticket_id', 'id');
     }
 
     public function sendCommentNotification($comment)
     {
-        $jefesDepartamento = User::withRoles('soporte','jefatura','admin')->get();
+        $jefesDepartamento = User::withRoles('soporte', 'jefatura', 'admin')->get();
         // ->when(!$comment->usuario_id, function ($q) {
         //     $q->orWhereHas('roles', function ($q) {
         //         return $q->where('display_name', 'Administrador');

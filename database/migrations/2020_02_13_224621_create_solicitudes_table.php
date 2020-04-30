@@ -19,14 +19,9 @@ class CreateSolicitudesTable extends Migration
             $table->timestamp('fecha')->nullable();
             $table->string('titulo',50);
             $table->text('incidente');
-            $table->binary('adjunto')->nullable();
-            $table->string('tipo_adjunto')->nullable();
-            $table->string('nombre_adjunto')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE solicitudes MODIFY adjunto MEDIUMBLOB"); # MYSQL
     }
 
     /**

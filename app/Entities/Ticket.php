@@ -44,9 +44,6 @@ class Ticket extends Model
         'tipo',
         'sub_tipo',
         'estado',
-        'adjunto',
-        'tipo_adjunto',
-        'nombre_adjunto',
         'asignado_a'
     ];
 
@@ -87,6 +84,14 @@ class Ticket extends Model
     }
 
     ## RELATIONS
+
+    /**
+     * Obtiene el archivo asociado al modelo
+     */
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'media');
+    }
 
     public function sigoTicket()
     {

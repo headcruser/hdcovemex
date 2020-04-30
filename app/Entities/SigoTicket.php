@@ -39,9 +39,6 @@ class SigoTicket extends Model
         'valor_actual',
         'comentario',
         'privado',
-        'adjunto',
-        'tipo_adjunto',
-        'nombre_adjunto',
     ];
 
     protected $dates = ['fecha'];
@@ -59,6 +56,15 @@ class SigoTicket extends Model
     {
         parent::boot();
     }
+
+    /**
+     * Obtiene el archivo asociado al modelo
+     */
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'media');
+    }
+
 
     function ticket()
     {

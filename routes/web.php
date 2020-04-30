@@ -2,43 +2,53 @@
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web Routes (HDCOVEMEX)
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| Here is where you can register web routes for your application.
 |
 */
 
+# DASHBOARD
 Route::get('/', 'HomeController@index')
     ->middleware('auth')
     ->name('home');
 
-Route::get('perfil',[
-    'as'            => 'perfil',
-    'middleware'    =>['auth'],
-    'uses'          => 'ProfileController@edit'
-]);
+# PERFIL
+Route::group([
+    'prefix'        => 'perfil',
+    'middleware'    => ['auth']],
+    function () {
+        Route::get('/',[
+            'as'    => 'perfil',
+            'uses'  => 'ProfileController@edit'
+        ]);
 
-Route::post('perfil',[
-    'as'            => 'perfil.store',
-    'middleware'    =>['auth'],
-    'uses'          => 'ProfileController@store'
-]);
+        Route::post('/',[
+            'as'    => 'perfil.store',
+            'uses'  => 'ProfileController@store'
+        ]);
+    }
+);
 
+# NOTIFICACIONES
+Route::group([
+    'prefix'        => 'notificaciones',
+    'middleware'    => ['auth']],
+    function () {
 
-Route::get('notificaciones', [
-    'as'            => 'notificaciones',
-    'middleware'    => ['auth'],
-    'uses'          => 'HomeController@notificaciones'
-]);
+        Route::get('/', [
+            'as'    => 'notificaciones',
+            'uses'  => 'HomeController@notificaciones'
+        ]);
 
-Route::post('notificaciones', [
-    'as'            => 'notificaciones.delete',
-    'middleware'    =>['auth'],
-    'uses'          => 'HomeController@deleteNotifications'
-]);
+        Route::post('/', [
+            'as'    => 'notificaciones.delete',
+            'uses'  => 'HomeController@deleteNotifications'
+        ]);
+    }
+);
+
 
 # AUTENTICATION
 Auth::routes([
@@ -78,7 +88,6 @@ Route::group([
 
 # OPERADOR
 Route::group([
-    # 'prefix'        => 'administracion',
     'as'            => 'operador.',
     'namespace'     => 'Operador',
     'middleware'    => ['auth']],
@@ -89,6 +98,12 @@ Route::group([
             'gestion-solicitudes' => 'model'
         ]);
 
+        # ARCHIVO ADJUNTO SOLICITUD
+        Route::get('gestion-solicitudes/{model}/archivo', [
+            'as'            => 'gestion-solicitudes.archivo',
+            'uses'          => 'SolicitudesController@archivo'
+        ]);
+
         # TICKETS
         Route::resource('tickets', 'TicketController')->parameters([
             'tickets' => 'model'
@@ -96,7 +111,6 @@ Route::group([
 
         Route::post('tickets/comentarios/{model}',[
             'as'            => 'tickets.storeComentario',
-            'middleware'    => ['auth'],
             'uses'          => 'TicketController@storeComment'
         ]);
     }
@@ -121,10 +135,10 @@ Route::group([
     }
 );
 
-
 # USUARIO
 Route::group([
-    'namespace' => 'Usuario',
+    'namespace'     => 'Usuario',
+    'middleware'    => ['auth'],
 ],function () {
 
     # SOLICITUDES (EMPLEADO)
@@ -135,14 +149,12 @@ Route::group([
     # ARCHIVO ADJUNTO SOLICITUD
     Route::get('solicitudes/{model}/archivo', [
         'as'            => 'solicitudes.archivo',
-        'middleware'    => ['auth'],
         'uses'          => 'SolicitudController@archivo'
     ]);
 
     # COMENTARIO SOLICITUD
     Route::post('solicitudes/{model}/comentario', [
         'as'            => 'solicitudes.storeComentario',
-        'middleware'    => ['auth'],
         'uses'          => 'SolicitudController@storeComment'
     ]);
 });

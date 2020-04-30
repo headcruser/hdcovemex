@@ -28,16 +28,9 @@ class CreateTicketsTable extends Migration
             $table->string('sub_tipo',20);
             $table->string('estado',20);
 
-            # ARCHIVO ADJUNTO
-            $table->binary('adjunto')->nullable();
-            $table->string('tipo_adjunto')->nullable();
-            $table->string('nombre_adjunto')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE tickets MODIFY adjunto MEDIUMBLOB"); # MYSQL
     }
 
     /**

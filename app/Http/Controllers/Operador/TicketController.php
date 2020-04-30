@@ -79,22 +79,6 @@ class TicketController extends Controller
             'incidente'     => 'required',
         ]);
 
-        // $request->request->add([
-        //     'fecha'         => now(),
-        //     'usuario_id'   => auth()->id(),
-        //     'estatus_id'    => optional(Status::where('name', 'PEN')->first())->id
-        // ]);
-
-        // $file = $request->file('archivo');
-
-        // if (!empty($file)) {
-        //     $request->request->add([
-        //         'tipo_adjunto'      => $file->getMimeType(),
-        //         'nombre_adjunto'    => $file->getClientOriginalName(),
-        //         'adjunto'           => file_get_contents($file),
-        //     ]);
-        // }
-
         DB::beginTransaction();
         try {
             $ticket = Ticket::create($request->all());

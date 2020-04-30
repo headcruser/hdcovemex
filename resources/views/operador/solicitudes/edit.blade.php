@@ -79,9 +79,9 @@
                                 readonly>{{ old('incidente', $model->incidente) }}</textarea>
                         </div>
 
-                        @if($model->adjunto)
+                        @if($model->media)
                         <div class="form-group">
-                            <label for="input-file-archivo">Adjuntar Archivo</label>
+                            <label for="input-file-archivo">Archivo Adjunto</label>
 
                             <div class="row">
                                 <!--UPLOAD BOOSTRAP THEME-->
@@ -99,8 +99,9 @@
                                                                     <i class="fas fa-file" style='font-size: 2.5em'></i>
                                                                 </div>
                                                                 <div class="media-body mar-top pad-lft">
-                                                                    <p class="text-main text-bold mar-no text-overflow"><a class="linked" href="{{ route('solicitudes.archivo',$model) }}" target="_blank">{{ $model->nombre_adjunto }}</a></p>
+                                                                    <p class="text-main text-bold mar-no text-overflow"><a class="linked" href="{{ route('solicitudes.archivo',$model) }}" target="_blank">{{ $model->media->name }}</a></p>
                                                                     <span class="text-danger text-sm"></span>
+                                                                    <p class="text-sm font-weight-light">{{ $model->media->size }}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
