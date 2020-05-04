@@ -51,6 +51,11 @@ return [
                 'En proceso',
                 'Finalizado',
                 'En espera',
+            ],
+            'alias' => [
+                'EPS'   => 'En proceso',
+                'FIN'  => 'Finalizado',
+                'CAN'  => 'Cancelado',
             ]
         ],
         'tipo' => [
@@ -76,9 +81,13 @@ return [
                     'Reparacion',
                     'Proveedores'
                 ],
+                'Solicitud' => [
+                    'Seguimiento',
+                ],
                 'Servicio' => [
                     'Personal',
-                    'Remoto'
+                    'Remoto',
+                    'Solicitud'
                 ],
                 'Control de equipo' => []
             ]

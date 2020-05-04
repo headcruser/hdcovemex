@@ -16,6 +16,15 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Gestionar Tickets</h3>
+
+                <div class="card-tools">
+                    <a href="{{ route('operador.tickets.create') }}"
+                        class="btn btn-success btn-sm"
+                        title="Crear">
+                        Crear <i class="fas fa-plus-circle"></i>
+                    </a>
+                </div>
+
             </div>
             <div class="card-body">
                 @include('operador.tickets.partials._filters')

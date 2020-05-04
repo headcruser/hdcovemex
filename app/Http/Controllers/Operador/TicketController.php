@@ -3,12 +3,18 @@
 namespace HelpDesk\Http\Controllers\Operador;
 
 use Entrust;
-use Illuminate\Http\Request;
+
+use HelpDesk\Entities\Media;
 use HelpDesk\Entities\Ticket;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
+use HelpDesk\Entities\Admin\User;
+use HelpDesk\Entities\Config\Attribute;
 use HelpDesk\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class TicketController extends Controller
@@ -63,7 +69,15 @@ class TicketController extends Controller
     {
         abort_unless(Entrust::can('ticket_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('operador.tickets.create');
+        return view('operador.tickets.create',[
+            'model'         => new Ticket,
+            'prioridad'     => Config::get('helpdesk.tickets.prioridad.values', []),
+            'contacto'      => Attribute::contact()->pluck('value','id'),
+            'tipo_contacto' => Attribute::type()->pluck('value','id'),
+            'actividad'     => collect()->prepend('Selecciona antes tipo Contacto', ''),
+            'estados'       => Config::get('helpdesk.tickets.estado.names'),
+            'asignado'      => User::withRoles('soporte','jefatura')->pluck('nombre','id'),
+        ]);
     }
 
     /**
@@ -74,14 +88,54 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $user = Auth::user();
+
+        $validated = $request->validate([
             'titulo'        => 'required',
             'incidente'     => 'required',
+            'archivo'       => 'nullable',
+            'prioridad'     => '',
+            'estado'        => '',
+            'asignado_a'    => '',
+            'contacto'      => '',
+            'tipo'          => '', #ATENCION
+            'sub_tipo'       => '', #ACTIVIDAD
+            'privado'       => '', #VISIBILIDAD MENSAJES
         ]);
 
+        $defaultData = [
+            'fecha'         => now(),
+            'usuario_id'    => $user->id,
+            'operador_id'   => $user->id,
+            'contacto'      => 'email',
+            'proceso'       => Config::get('helpdesk.tickets.proceso.alias.EPS'),
+        ];
+
+        $modelData = array_merge($validated,$defaultData);
+        $file = $request->file('archivo');
+
         DB::beginTransaction();
+
         try {
-            $ticket = Ticket::create($request->all());
+
+            $ticket = Ticket::create($modelData);
+
+            # ADJUNTAR ARCHIVO
+            if (!empty($file)) {
+                $media = Media::createMediaArray($file);
+                $ticket->media()->create($media);
+            }
+
+            # CREAR SEGUIMIENTO
+            $ticket->sigoTicket()->create([
+                'operador_id'   => $user->id,
+                'usuario_id'    => null,
+                'fecha'         => now(),
+                'comentario'    => '',
+                'visible'       => 'S',
+            ]);
+
+            $ticket->save();
 
             DB::commit();
 
@@ -105,6 +159,7 @@ class TicketController extends Controller
             'model'         => $model,
             'prioridad'     => Config::get('helpdesk.tickets.prioridad.values', []),
             'tipo_contacto' => Config::get('helpdesk.tickets.contacto.values', []),
+            'actividad'     => collect()->prepend('Selecciona un vehiculo', ''),
             'estados'       => Config::get('helpdesk.tickets.estado.names'),
         ]);
     }
