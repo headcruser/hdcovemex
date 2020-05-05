@@ -21,4 +21,5 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1'], function ()
 {
     Route::post('/attributes/subtipo', 'AttributeController@subtipo')->name('api.attributes.subtipo');
+    Route::post('/auth/auth-user', 'UserController@authUser')->name('api.user.auth-user');
 });

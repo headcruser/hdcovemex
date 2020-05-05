@@ -33,7 +33,7 @@ class ProfileController extends Controller
         DB::beginTransaction();
 
         try {
-            $user->update($request->all());
+            $user->update($request->only(['password']));
 
             if (!empty($file)) {
 

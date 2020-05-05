@@ -31,7 +31,8 @@
             </div>
             <div class="card-body">
                 <form class="form" action="{{ route('perfil.store') }}" method="POST" id="profile-form"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data"
+                    oninput='password_confirmation.setCustomValidity(password_confirmation.value != password.value ? "Las contraseñas no coinciden." : "")'>
                     @csrf
                     <div class="row">
                         <div class="col-3">
@@ -58,23 +59,32 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="input-nombre">Nombre</label>
-                                        <input type="text" class="form-control @error('nombre') is-invalid @enderror"
-                                            name="nombre" id="input-nombre" placeholder="Nombre"
-                                            title="Ingrese su nombre." autocomplete="off"
-                                            value="{{ old('nombre', $user->nombre) }}" required>
-
+                                        <input type="text"
+                                            class="form-control"
+                                            name="nombre"
+                                            id="input-nombre"
+                                            placeholder="Nombre"
+                                            title="Ingrese su nombre"
+                                            autocomplete="off"
+                                            value="{{ old('nombre', $user->nombre) }}"
+                                            readonly>
                                         <div id="login-help" class="error invalid-feedback">
-                                            @error('nombre') {{ $message }} @enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label for="input-login">Usuario</label>
-                                        <input type="text" class="form-control  @error('usuario') is-invalid @enderror"
-                                            name="usuario" id="input-usuario" placeholder="Ejemplo: Usuario09"
-                                            title="Usuario" autocomplete="off" aria-describedby="usuario-help"
-                                            value="{{ old('usuario', $user->usuario) }}" required>
+                                        <input type="text"
+                                            class="form-control"
+                                            name="usuario"
+                                            id="input-usuario"
+                                            placeholder="Ejemplo: Usuario09"
+                                            title="Usuario"
+                                            autocomplete="off"
+                                            aria-describedby="usuario-help"
+                                            value="{{ old('usuario', $user->usuario) }}"
+                                            readonly>
 
                                         <div id="usuario-help" class="error invalid-feedback">
                                             @error('usuario') {{ $message }} @enderror
@@ -88,16 +98,16 @@
                                     <div class="form-group">
                                         <label for="password">Contraseña</label>
                                         <input type="password"
-                                            class="form-control @error('password') is-invalid @enderror" name="password"
-                                            id="input-password" placeholder="Contraseña"
+                                            class="form-control @error('password') is-invalid @enderror"
+                                            name="password"
+                                            id="input-password"
+                                            placeholder="Contraseña"
                                             aria-describedby="password-help" title="Ingresa tu contraseña."
-                                            autocomplete="off">
+                                            autocomplete="off"
+                                            required>
                                         <div id="password-help" class="error invalid-feedback">
                                             @error('password') {{ $message }} @enderror
                                         </div>
-                                        <small class="form-text text-muted">
-                                            Dejar el campo en blanco en caso de no cambiar la contraseña
-                                        </small>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -105,10 +115,13 @@
                                         <label for="input-password_confirmation">Confirmar Contraseña</label>
                                         <input type="password"
                                             class="form-control  @error('password_confirmation') is-invalid @enderror"
-                                            name="password_confirmation" id="input-password_confirmation"
+                                            name="password_confirmation"
+                                            id="input-password_confirmation"
                                             placeholder="Confirmar Contraseña"
                                             aria-describedby="password_confirmation-help"
-                                            title="Confirma tu contraseña." autocomplete="off">
+                                            title="Confirma tu contraseña."
+                                            autocomplete="off"
+                                            required>
                                         <div id="password_confirmation-help" class="error invalid-feedback">
                                             @error('password_confirmation') {{ $message }} @enderror
                                         </div>
@@ -145,6 +158,8 @@
             'image_navbar': document.getElementById('avatar-image')
         };
         const DEFAULT_IMAGE = "{{ asset('img/theme/avatar.png') }}";
+        const API_AUTH_ROUTE = "{{ route('api.user.auth-user') }}"
+        const USER_ID = "{{ auth()->id() }}"
 
         let removedImage = false
 
@@ -192,23 +207,58 @@
 
             var input = document.createElement('input');
 
-            input.type = 'hidden';
-            input.name = 'deleted_image';
-            input.value = removedImage;
-
             Swal.fire({
-                title: 'Procesando',
-                html: 'Espere un momento por favor.',
-                allowEscapeKey:false,
-                allowOutsideClick:false,
-                allowEnterKey:false,
-                onBeforeOpen: () => {
-                    Swal.showLoading()
+                title: 'Ingresa tu contraseña actual',
+                input: 'password',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                showLoaderOnConfirm: true,
+                inputAttributes: {
+                    maxlength: 10,
+                    autocapitalize: 'off',
+                    autocorrect: 'off',
+                    id:'input-auth-password'
                 },
-            })
+                preConfirm: (password) => {
+                    return axios.post(API_AUTH_ROUTE,{
+                        user_id: USER_ID,
+                        password:password
+                    }).then(function(response){
+                        return response.data.success;
+                    }).catch(function(error){
+                        let inputPasswd = document.getElementById('input-auth-password');
+                        inputPasswd.value = null
 
-            dom.form.appendChild(input);
-            dom.form.submit();
+                        if(error.response) {
+                            Swal.showValidationMessage(error.response.data.message)
+                        }else{
+                            Swal.showValidationMessage(`Error en la peticion: ${error}`)
+                        }
+                    })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+
+                }).then((result) => {
+                    if (result.value) {
+                        input.type = 'hidden';
+                        input.name = 'deleted_image';
+                        input.value = removedImage;
+
+                        Swal.fire({
+                            title: 'Procesando',
+                            html: 'Espere un momento por favor.',
+                            allowEscapeKey:false,
+                            allowOutsideClick:false,
+                            allowEnterKey:false,
+                            onBeforeOpen: () => {
+                                Swal.showLoading()
+                            },
+                        })
+
+                        dom.form.appendChild(input);
+                        dom.form.submit();
+                    }
+                })
         }
     })();
 </script>
