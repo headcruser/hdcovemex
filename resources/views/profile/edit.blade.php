@@ -31,8 +31,7 @@
             </div>
             <div class="card-body">
                 <form class="form" action="{{ route('perfil.store') }}" method="POST" id="profile-form"
-                    enctype="multipart/form-data"
-                    oninput='password_confirmation.setCustomValidity(password_confirmation.value != password.value ? "Las contraseñas no coinciden." : "")'>
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-3">
@@ -103,11 +102,13 @@
                                             id="input-password"
                                             placeholder="Contraseña"
                                             aria-describedby="password-help" title="Ingresa tu contraseña."
-                                            autocomplete="off"
-                                            required>
+                                            autocomplete="off">
                                         <div id="password-help" class="error invalid-feedback">
                                             @error('password') {{ $message }} @enderror
                                         </div>
+                                        <small class="form-text text-muted">
+                                            Dejar el campo en blanco en caso de no cambiar la contraseña
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -120,8 +121,7 @@
                                             placeholder="Confirmar Contraseña"
                                             aria-describedby="password_confirmation-help"
                                             title="Confirma tu contraseña."
-                                            autocomplete="off"
-                                            required>
+                                            autocomplete="off">
                                         <div id="password_confirmation-help" class="error invalid-feedback">
                                             @error('password_confirmation') {{ $message }} @enderror
                                         </div>
@@ -137,8 +137,12 @@
                     <i class="fas fa-arrow-left"></i> {{ __('Regresar') }}
                 </a>
                 <div class="btn-group float-right">
-                    <button type="submit" class="btn btn-primary" form="profile-form"> <i class="fas fa-save"></i>
-                        Guardar</button>
+                    <button type="submit"
+                        class="btn btn-primary"
+                        id="btn-submit-profile"
+                        form="profile-form">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
                 </div>
             </div>
         </div>
@@ -157,61 +161,131 @@
             'remove_btn': document.getElementById('profile-image-remove'),
             'image_navbar': document.getElementById('avatar-image')
         };
-        const DEFAULT_IMAGE = "{{ asset('img/theme/avatar.png') }}";
+
+
         const API_AUTH_ROUTE = "{{ route('api.user.auth-user') }}"
         const USER_ID = "{{ auth()->id() }}"
 
-        let removedImage = false
+
+        const checkPassword = (function(){
+            let $inputPassword = $('#input-password');
+            let $inputPasswordConfirm = $('#input-password_confirmation');
+            let $inputPasswordHelp =  $('#password_confirmation-help');
+
+            const classValidation = 'is-invalid';
+            const messageValidation = 'Las contraseñas no coinciden';
+
+            function isValid() {
+                return $inputPassword.val() == $inputPasswordConfirm.val();
+            }
+
+            function isEmptyInputPasswords (){
+                return $inputPassword.val() == '' && $inputPasswordConfirm.val() == '';
+            }
+
+            function removeErrors(){
+                $inputPasswordConfirm.removeClass(classValidation)
+                $inputPasswordHelp.html(null)
+            }
+
+            function addErrors(){
+                $inputPasswordConfirm.addClass(classValidation)
+                $inputPasswordHelp.html(messageValidation)
+            }
+
+
+            $('#input-password, #input-password_confirmation').on('keyup', function () {
+                if ( isValid() ) {
+                    removeErrors();
+                } else {
+                    addErrors()
+                }
+            });
+
+            return {
+                isValid,isEmptyInputPasswords
+            }
+        })();
+
+        const previewImage = (function(){
+            const DEFAULT_IMAGE = "{{ asset('img/theme/avatar.png') }}";
+
+            let removedImage = false;
+
+            // EVENTS
+            dom.input.addEventListener('change', loadImage);
+            dom.remove_btn.addEventListener('click',removeImage);
+
+            function loadImage(e)
+            {
+                let firstFile = this.files[0];
+
+                if(!firstFile){
+                    return;
+                }
+
+                if(!firstFile.type.match('image.*')){
+                    return alert('Solo imagenes válidas');
+                }
+
+                let reader = new FileReader();
+
+                reader.onload = function(readerEvent) {
+                    dom.image.src = readerEvent.target.result;
+                    dom.image_navbar.src = readerEvent.target.result;
+                }
+
+                reader.readAsDataURL(firstFile);
+            }
+
+            function removeImage(e){
+                const btn = event.target.closest("button");
+
+                if (btn) {
+                    dom.image.src = DEFAULT_IMAGE;
+                    dom.image_navbar.src = DEFAULT_IMAGE;
+                    dom.input.value = null
+                }
+
+                removedImage = true;
+            }
+
+            function isRemoveImage(){
+                return removedImage;
+            }
+
+            return {
+                isRemoveImage
+            }
+
+        })();
+
 
         // EVENTS
-        dom.input.addEventListener('change', loadImage);
-        dom.remove_btn.addEventListener('click',removeImage);
         dom.form.addEventListener('submit',submit);
 
-        function loadImage(e)
-        {
-            let firstFile = this.files[0];
-
-            if(!firstFile){
-                return;
-            }
-
-            if(!firstFile.type.match('image.*')){
-                return alert('Solo imagenes válidas');
-            }
-
-            let reader = new FileReader();
-
-            reader.onload = function(readerEvent) {
-                dom.image.src = readerEvent.target.result;
-                dom.image_navbar.src = readerEvent.target.result;
-            }
-
-            reader.readAsDataURL(firstFile);
-        }
-
-        function removeImage(e){
-            const btn = event.target.closest("button");
-
-            if (btn) {
-                dom.image.src = DEFAULT_IMAGE;
-                dom.image_navbar.src = DEFAULT_IMAGE;
-                dom.input.value = null
-            }
-
-            removedImage = true;
-        }
-
-        function submit(e){
+        function submit(e) {
             e.preventDefault();
 
-            var input = document.createElement('input');
+            if(!checkPassword.isEmptyInputPasswords()){
+                if(!checkPassword.isValid()){
+                    Swal.fire(
+                        'Error',
+                        'Las contraseñas deben coincidir',
+                        'error'
+                    );
+
+                    return;
+                }
+            }
 
             Swal.fire({
-                title: 'Ingresa tu contraseña actual',
+                title: 'Confirmación de contraseña',
+                text: 'Escribe tu contraseña actual',
                 input: 'password',
                 showCancelButton: true,
-                confirmButtonText: 'Aceptar',
+                confirmButtonText: '<i class="fas fa-check-circle"></i> Aceptar',
+                cancelButtonText: '<i class="fas fa-times-circle"></i> Cancelar',
                 showLoaderOnConfirm: true,
                 inputAttributes: {
                     maxlength: 10,
@@ -240,9 +314,11 @@
 
                 }).then((result) => {
                     if (result.value) {
+                        let input = document.createElement('input');
+
                         input.type = 'hidden';
                         input.name = 'deleted_image';
-                        input.value = removedImage;
+                        input.value = previewImage.isRemoveImage();
 
                         Swal.fire({
                             title: 'Procesando',
