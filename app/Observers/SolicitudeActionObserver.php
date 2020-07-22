@@ -2,19 +2,25 @@
 
 namespace HelpDesk\Observers;
 
-use HelpDesk\Entities\Admin\User;
+use HelpDesk\Entities\Admin\Operador;
 use HelpDesk\Entities\Solicitude;
 use HelpDesk\Notifications\CreatedSolicitudeNotification;
+
 use Illuminate\Support\Facades\Notification;
 
 class SolicitudeActionObserver
 {
     public function created(Solicitude $model)
     {
-        # ALGORIMO PARA DETERMINAR A QUE USUARIO SE ENVIA LA NOTIFICACION
-        $users = User::withRoles('soporte','jefatura')->get();
+        $operadores = Operador::with(['usuario'])
+            ->where('notificar_solicitud',1)->get();
 
-        # VERIFICAR ERRORES DE ENVIO DE NOTIFICACIONES
-        Notification::send($users, new CreatedSolicitudeNotification($model));
+        foreach ($operadores as $operador) {
+            if ($operador->notificar_solicitud) {
+
+                # VERIFICAR ERRORES DE ENVIO DE NOTIFICACIONES
+                Notification::send($operador->usuario, new CreatedSolicitudeNotification($model));
+            }
+        }
     }
 }

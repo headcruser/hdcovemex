@@ -46,7 +46,7 @@ class CreatedSolicitudeNotification extends Notification
     public function toMail($notifiable)
     {
         # VERIFICACION DE ENVIO DE CORREO
-        return (new MailMessage)
+        $mailMessage =  (new MailMessage)
 			->subject( str_replace('%1%', $this->solicitude->id ,Config::get('helpdesk.mail.request_subject')) )
 			->greeting('Nueva Solicitud')
             ->line('Solicitud de soporte: '. $this->solicitude->id )
@@ -54,6 +54,8 @@ class CreatedSolicitudeNotification extends Notification
             ->line("Detalle: {$this->solicitude->incidente}")
             ->salutation(Config::get('helpdesk.global.name'))
             ->from(Config::get('helpdesk.global.from_user_request'), Config::get('helpdesk.global.name'));
+
+        return $mailMessage;
     }
 
     /**

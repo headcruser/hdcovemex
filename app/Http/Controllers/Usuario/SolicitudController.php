@@ -6,6 +6,7 @@ use Entrust;
 use HelpDesk\Entities\Media;
 use HelpDesk\Entities\Solicitude;
 use HelpDesk\Entities\Config\Status;
+use HelpDesk\Events\SolicitudRegistrada;
 use HelpDesk\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -97,6 +98,9 @@ class SolicitudController extends Controller
         $file = $request->file('archivo');
 
         DB::beginTransaction();
+
+        $solicitud = null;
+
         try {
             $solicitud = Solicitude::create($request->all());
 
@@ -105,20 +109,22 @@ class SolicitudController extends Controller
                 $media = Media::createMediaArray($file);
 
                 $solicitud->media()->create($media);
+                $solicitud->save();
             }
 
             DB::commit();
-
-            return redirect()
-                ->route('solicitudes.show', $solicitud)
-                ->withStatus("Tu solicitud ha sido enviada. Te atenderemos a la brevedad posible");
         } catch (\Exception $e) {
             DB::rollback();
-
             return redirect()
                 ->back()
                 ->with(['error' => "Error Servidor: {$e->getMessage()} ",])->withInput();
         }
+
+        event(new SolicitudRegistrada($solicitud));
+
+        return redirect()
+            ->route('solicitudes.show', $solicitud)
+            ->withStatus("Tu solicitud ha sido enviada. Te atenderemos a la brevedad posible");
     }
 
     public function storeComment(Request $request, Solicitude $model)

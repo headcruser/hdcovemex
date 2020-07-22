@@ -18,6 +18,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        'HelpDesk\Events\SolicitudRegistrada' => [
+            'HelpDesk\Listeners\SolicitudListener'
+        ]
     ];
 
     /**

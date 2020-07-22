@@ -59,7 +59,7 @@ class Solicitude extends Model
     {
         parent::boot();
 
-        Solicitude::observe(new SolicitudeActionObserver);
+        // Solicitude::observe(new SolicitudeActionObserver);
     }
 
     /**
