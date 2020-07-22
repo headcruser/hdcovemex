@@ -73,7 +73,7 @@ class CreatedSolicitudeNotification extends Notification
             'fecha'         => $this->solicitude->fecha->format('d/m/Y'),
             'hora'          => $this->solicitude->fecha->format('h:i'),
             'creado_por'    => $this->solicitude->empleado->nombre,
-            'route'         => route('solicitudes.show',$this->solicitude)
+            'route'         => route('operador.gestion-solicitudes.show',$this->solicitude), # Operator visualization
         ];
     }
 }

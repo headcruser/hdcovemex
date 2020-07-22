@@ -22,10 +22,34 @@
                 <h3 class="card-title">
                     <i class="fas fa-tag"></i>
                     Detalle solicitud
-                  </h3>
+                </h3>
             </div>
 
             <div class="card-body">
+
+                @if(auth()->user()->hasRole('empleado'))
+                    @if($model->status->name === 'PEN')
+                        <div class="callout callout-warning">
+                            <h5>Tu solicitud esta aún en revisión</h5>
+                            <p>Te atenderemos a la brevedad posible.</p>
+                        </div>
+                    @endif
+
+                    @if($model->status->name === 'PAS')
+                        <div class="callout callout-info">
+                            <h5>Tu solicitud esta en proceso</h5>
+                            <p>Estamos trabajando en resolver tu solicitud</p>
+                        </div>
+                    @endif
+
+                    @if($model->status->name === 'CAN')
+                        <div class="callout callout-warning">
+                            <h5>Tu solicitud ha sido Cancelada</h5>
+                            <p>La solicitud que realizaste no pudo ser procesada</p>
+                        </div>
+                    @endif
+                @endif
+
                 <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>

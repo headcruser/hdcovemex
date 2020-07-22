@@ -26,7 +26,9 @@ class SolicitudController extends Controller
      */
     public function index(Request $request)
     {
-        abort_unless(Entrust::can('solicitude_access'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        $verifyAccess = Entrust::hasRole(['empleado']) && Entrust::can('solicitude_access');
+
+        abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $solicitudes = Solicitude::auth()
             ->with(['status', 'empleado'])
@@ -57,7 +59,9 @@ class SolicitudController extends Controller
      */
     public function show(Solicitude $model)
     {
-        abort_unless(Entrust::can('solicitude_show'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        $verifyAccess = Entrust::hasRole(['empleado']) && Entrust::can('solicitude_show');
+
+        abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->load('status', 'ticket', 'ticket.sigoTicket');
 
@@ -71,7 +75,9 @@ class SolicitudController extends Controller
      */
     public function create()
     {
-        abort_unless(Entrust::can('solicitude_create'), HTTPMessages::HTTP_FORBIDDEN, '403 Forbidden');
+        $verifyAccess = Entrust::hasRole(['empleado']) && Entrust::can('solicitude_create');
+
+        abort_unless(Entrust::can('solicitude_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('usuario.solicitudes.create');
     }

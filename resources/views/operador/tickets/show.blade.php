@@ -131,7 +131,7 @@
                                         </div>
                                     </div>
                                     <div class="float-right">
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                        <button type="submit" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Enviar</button>
                                     </div>
                                 </form>
                             </td>
@@ -147,6 +147,12 @@
                 <a class="btn btn-default" href="{{ route('operador.tickets.index') }}">
                     <i class="fas fa-arrow-left"></i> Regresar
                 </a>
+
+                @if($model->estado === 'Abierto' || auth()->user()->hasRole('admin'))
+                    <a class="btn btn-primary float-right" href="{{ route('operador.tickets.edit', $model) }}">
+                        <i class="fas fa-pencil-alt"></i> Editar
+                    </a>
+                @endif
             </div>
         </div>
     </div>
