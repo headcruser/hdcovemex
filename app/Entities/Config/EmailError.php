@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Entities\Config;
 
+use HelpDesk\Entities\Admin\User;
 use Illuminate\Database\Eloquent\Model;
 
 class EmailError extends Model
@@ -38,4 +39,21 @@ class EmailError extends Model
     protected $hidden = [
         'created_at', 'updated_at'
     ];
+
+    /**
+     *
+     * Obtiene al operador que atendio la solicitud
+     */
+    public function operador() {
+        return $this->belongsTo(User::class,'user_id')->withDefault([
+        ]);
+    }
+
+    /**
+     * Get the owning mediable model.
+     */
+    public function subject()
+    {
+        return $this->morphTo();
+    }
 }

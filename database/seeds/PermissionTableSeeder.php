@@ -282,6 +282,26 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a reportes',
                 'description'   => 'Permite visualizar la seccion de reportes'
             ],
+            [
+                'name'          => 'log_email_show',
+                'display_name'  => 'Ver Log email',
+                'description'   => 'Permite ver el error del envio de correo'
+            ],
+            [
+                'name'          => 'log_email_delete',
+                'display_name'  => 'Eliminar registros del log',
+                'description'   => 'Permite eliminar un registro del log'
+            ],
+            [
+                'name'          => 'log_email_all_delete',
+                'display_name'  => 'Eliminar todos los registros del log',
+                'description'   => 'Permite eliminar todos los registros del log'
+            ],
+            [
+                'name'          => 'log_email_access',
+                'display_name'  => 'Acceso a log Email',
+                'description'   => 'Permite el acceso a la vista de log Errors'
+            ],
         ];
 
         Permission::insert($permissions);

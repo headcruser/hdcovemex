@@ -80,6 +80,15 @@
                             </li>
                             @endpermission
 
+                            @permission('log_email_access')
+                            <li class="nav-item">
+                                <a  href="{{ route('admin.log-email.index') }}" class="nav-link {{ routeIs(['admin.log-email.index','admin.log-email.*']) }}">
+                                    <i class="nav-icon fas fa-envelope-open-text"></i>
+                                    <p>Log Email</p>
+                                </a>
+                            </li>
+                            @endpermission
+
                         </ul>
                     </li>
                 @endpermission

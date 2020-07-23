@@ -82,6 +82,13 @@ Route::group([
             'departamentos'  => 'model'
         ]);
 
+        # LOG EMAIL
+        Route::delete('log-email/destroy', 'LogEmailController@massDestroy')->name('log-email.masive-destroy');
+
+        Route::resource('log-email', 'LogEmailController')->parameters([
+            'log-email' => 'logEmail'
+        ])->only(['index','show','destroy']);
+
 
     }
 );
