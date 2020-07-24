@@ -89,6 +89,15 @@
                             </li>
                             @endpermission
 
+                            @permission('operator_access')
+                            <li class="nav-item">
+                                <a  href="{{ route('admin.operadores.index') }}" class="nav-link {{ routeIs(['admin.operadores.index','admin.operadores.*']) }}">
+                                    <i class="nav-icon fas fa-people-carry"></i>
+                                    <p>Operadores</p>
+                                </a>
+                            </li>
+                            @endpermission
+
                         </ul>
                     </li>
                 @endpermission

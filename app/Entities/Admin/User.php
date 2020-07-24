@@ -100,6 +100,10 @@ class User extends Authenticatable
         return $this->hasMany(Solicitude::class, 'usuario_id', 'id');
     }
 
+    public function operador() {
+        return $this->hasOne(Operador::class, 'usuario_id', 'id')->withDefault();
+    }
+
     ## ACCESORES
 
      /**

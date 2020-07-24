@@ -2,12 +2,13 @@
 
 namespace HelpDesk\Entities\Admin;
 
+use HelpDesk\Traits\IconStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Operador extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,IconStatus;
 
     /**
      * The number of models to return for pagination.
@@ -39,6 +40,27 @@ class Operador extends Model
     ];
 
     public function usuario(){
-        return $this->belongsTo(User::class,'usuario_id','id');
+        return $this->belongsTo(User::class,'usuario_id','id')
+            ->withDefault();
+    }
+
+    /**
+     * Es un mutador que entrega un label dependiendo el estado del campo `notificar_solicitud`
+     *
+     * @return string
+     */
+    public function getNotificarSolicitudIconAttribute()
+    {
+        return $this->flagIcon((bool)$this->notificar_solicitud);
+    }
+
+    /**
+     * Es un mutador que entrega un label dependiendo el estado del campo `notificar_asignacion`
+     *
+     * @return string
+     */
+    public function getNotificarAsignacionIconAttribute()
+    {
+        return $this->flagIcon((bool)$this->notificar_asignacion);
     }
 }

@@ -89,7 +89,10 @@ Route::group([
             'log-email' => 'logEmail'
         ])->only(['index','show','destroy']);
 
-
+        # OPERADORES
+        Route::resource('operadores', 'OperatorsController')->parameters([
+            'operadores'  => 'operador'
+        ]);
     }
 );
 

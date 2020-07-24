@@ -302,6 +302,31 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a log Email',
                 'description'   => 'Permite el acceso a la vista de log Errors'
             ],
+            [
+                'name'          => 'operator_create',
+                'display_name'  => 'Crear Permiso',
+                'description'   => 'Permite Crear un permiso'
+            ],
+            [
+                'name'          => 'operator_edit',
+                'display_name'  => 'Editar Permiso',
+                'description'   => 'Permite Editar un permiso'
+            ],
+            [
+                'name'          => 'operator_show',
+                'display_name'  => 'Ver permiso',
+                'description'   => 'Permite ver el detalle de un permiso'
+            ],
+            [
+                'name'          => 'operator_delete',
+                'display_name'  => 'Eliminar permiso',
+                'description'   => 'Permite Eliminar un permiso'
+            ],
+            [
+                'name'          => 'operator_access',
+                'display_name'  => 'Acceso a permisos',
+                'description'   => 'Permite el acceso a la vista de permisos'
+            ],
         ];
 
         Permission::insert($permissions);
