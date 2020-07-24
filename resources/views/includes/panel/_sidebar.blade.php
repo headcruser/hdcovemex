@@ -105,27 +105,24 @@
                 <!-- GESTION -->
                 <li class="nav-header">Gestión</li>
 
-                @role('soporte')
-                    @permission('solicitude_access')
+
+                @if( (\Entrust::hasRole(['admin']) || auth()->user()->isOperador() ) && auth()->user()->can('solicitude_show'))
                     <li class="nav-item">
                         <a  href="{{ route('operador.gestion-solicitudes.index') }}" class="nav-link {{ routeIs(['operador.gestion-solicitudes.index','operador.gestion-solicitudes.*']) }}">
                             <i class="nav-icon fas fa-tasks"></i>
                             <p>Solicitudes</p>
                         </a>
                     </li>
-                    @endpermission
-                @endrole
+                @endif
 
-                @role('empleado')
-                    @permission('solicitude_access')
+                @if(\Entrust::hasRole(['empleado']) && \Entrust::can('solicitude_access'))
                     <li class="nav-item">
                         <a href="{{ route('solicitudes.index') }}" class="nav-link {{ routeIs(['solicitudes.index','solicitudes.*']) }}">
                             <i class="nav-icon fas fa-tasks"></i>
                             <p>Solicitudes</p>
                         </a>
                     </li>
-                    @endpermission
-                @endrole
+                @endif
 
                 @ability('admin,soporte,ti', 'ticket_access')
                 <li class="nav-item">

@@ -24,7 +24,9 @@ class SolicitudesController extends Controller
 {
     public function index(Request $request)
     {
-        $verifyAccess = Entrust::hasRole(['soporte']) && Entrust::can('solicitude_access');
+        $userAuth = Auth::user();
+
+        $verifyAccess =  (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_access');
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
@@ -67,7 +69,9 @@ class SolicitudesController extends Controller
 
     public function edit(Solicitude $model)
     {
-        $verifyAccess = Entrust::hasRole(['soporte']) && Entrust::can('solicitude_edit');
+        $userAuth = Auth::user();
+
+        $verifyAccess =  (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_edit');
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
@@ -82,8 +86,14 @@ class SolicitudesController extends Controller
 
     public function update(Request $request, Solicitude $model)
     {
+        $userAuth = Auth::user();
+
+        $verifyAccess =  (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_edit');
+
+        abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
+
         DB::beginTransaction();
-        $user = Auth::user();
+
 
         try {
             if ($request->has('abrir-ticket')) {
@@ -94,9 +104,9 @@ class SolicitudesController extends Controller
                     'usuario_id'    => $model->usuario_id,
                     'incidente'     => $model->incidente,
                     'estado'        => Config::get('helpdesk.tickets.estado.alias.ABT'),
-                    'asignado_a'    => $user->id,
+                    'asignado_a'    => $userAuth->id,
                     'privado'       => 'N',
-                    'operador_id'   => $user->id,
+                    'operador_id'   => $userAuth->id,
                     'contacto'      => 'email',
                     'prioridad'     => 3,
                     'proceso'       => 'En Proceso',
@@ -141,7 +151,9 @@ class SolicitudesController extends Controller
 
     public function show(Solicitude $model)
     {
-        $verifyAccess = Entrust::hasRole(['soporte']) && Entrust::can('solicitude_show');
+        $userAuth = Auth::user();
+
+        $verifyAccess =  (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_show');
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
@@ -150,7 +162,9 @@ class SolicitudesController extends Controller
 
     public function destroy(Solicitude $model)
     {
-        $verifyAccess = Entrust::hasRole(['soporte']) && Entrust::can('solicitude_delete');
+        $userAuth = Auth::user();
+
+        $verifyAccess = (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_delete');
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 

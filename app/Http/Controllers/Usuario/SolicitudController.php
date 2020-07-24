@@ -11,7 +11,6 @@ use HelpDesk\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 /**
@@ -77,7 +76,7 @@ class SolicitudController extends Controller
     {
         $verifyAccess = Entrust::hasRole(['empleado']) && Entrust::can('solicitude_create');
 
-        abort_unless(Entrust::can('solicitude_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
+        abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('usuario.solicitudes.create');
     }

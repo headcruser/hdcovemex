@@ -104,6 +104,10 @@ class User extends Authenticatable
         return $this->hasOne(Operador::class, 'usuario_id', 'id')->withDefault();
     }
 
+    public function isOperador() {
+        return $this->operador()->exists();
+    }
+
     ## ACCESORES
 
      /**
