@@ -2,6 +2,8 @@
 
 namespace HelpDesk\Http\Controllers\Admin;
 
+use Entrust;
+
 use HelpDesk\Entities\Admin\{Role, User, Departamento};
 use HelpDesk\Http\Controllers\Controller;
 use HelpDesk\Http\Requests\Admin\User\{CreateUserRequest, UpdateUserRequest};
@@ -9,21 +11,20 @@ use HelpDesk\Http\Requests\Admin\User\{CreateUserRequest, UpdateUserRequest};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Symfony\Component\HttpFoundation\Response;
-use Entrust;
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class UsersController extends Controller
 {
     public function index()
     {
-        abort_unless(Entrust::can('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('user_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.users.index', [ 'collection' => User::with(['departamento', 'roles'])->paginate() ]);
     }
 
     public function create()
     {
-        abort_unless(Entrust::can('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('user_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.users.create', [
             'roles'         => Role::all()->pluck('name', 'id'),
@@ -56,7 +57,7 @@ class UsersController extends Controller
 
     public function edit(User $model)
     {
-        abort_unless(Entrust::can('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('user_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->load('roles');
 
@@ -91,7 +92,7 @@ class UsersController extends Controller
 
     public function show(User $model)
     {
-        abort_unless(Entrust::can('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('user_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->load(['roles', 'departamento']);
 
@@ -100,7 +101,7 @@ class UsersController extends Controller
 
     public function destroy(User $model)
     {
-        abort_unless(Entrust::can('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('user_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->delete();
 
@@ -110,6 +111,6 @@ class UsersController extends Controller
     public function massDestroy(Request $request)
     {
         User::whereIn('id', $request->input('ids'))->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response(null, HTTPMessages::HTTP_NO_CONTENT);
     }
 }

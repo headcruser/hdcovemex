@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Admin\Permission;
 use HelpDesk\Http\Controllers\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use HelpDesk\Http\Requests\Admin\Permisos\{CreatePermisoRequest, UpdatePermisoRequest};
 use Entrust;
 
@@ -14,14 +14,14 @@ class PermisosController extends Controller
 {
     public function index()
     {
-        abort_unless(Entrust::can('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('permission_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.permisos.index', ['collection' => Permission::paginate() ]);
     }
 
     public function create()
     {
-        abort_unless(Entrust::can('permission_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('permission_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.permisos.create', ['model' => new Permission()]);
     }
@@ -48,7 +48,7 @@ class PermisosController extends Controller
 
     public function edit(Permission $model)
     {
-        abort_unless(Entrust::can('permission_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('permission_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.permisos.edit', ['model'=> $model]);
     }
@@ -77,14 +77,14 @@ class PermisosController extends Controller
 
     public function show(Permission $model)
     {
-        abort_unless(Entrust::can('permission_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('permission_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.permisos.show', ['model'=> $model]);
     }
 
     public function destroy(Permission $model)
     {
-        abort_unless(Entrust::can('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('permission_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->delete();
 
@@ -95,6 +95,6 @@ class PermisosController extends Controller
     {
         Permission::whereIn('id', $request->input('ids'))->delete();
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response(null, HTTPMessages::HTTP_NO_CONTENT);
     }
 }

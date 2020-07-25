@@ -7,22 +7,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Config\Attribute;
 use HelpDesk\Http\Controllers\Controller;
-use Symfony\Component\HttpFoundation\Response;
+
 use HelpDesk\Http\Requests\Config\Attribute\CreateAttributeRequest;
 use HelpDesk\Http\Requests\Config\Attribute\UpdateAttributeRequest;
+
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class AttributesController extends Controller
 {
     public function index()
     {
-        abort_unless(Entrust::can('attribute_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('attribute_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('config.attributes.index', ['collection' => Attribute::orderBy('attribute')->paginate()]);
     }
 
     public function create()
     {
-        abort_unless(Entrust::can('attribute_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('attribute_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
+
         return view('config.attributes.create', [
             'model'         => new Attribute(),
             'categorias'    => Attribute::categories()
@@ -51,7 +54,7 @@ class AttributesController extends Controller
 
     public function edit(Attribute $model)
     {
-        abort_unless(Entrust::can('attribute_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('attribute_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('config.attributes.edit', [
             'model'         => $model,
@@ -82,14 +85,14 @@ class AttributesController extends Controller
 
     public function show(Attribute $model)
     {
-        abort_unless(Entrust::can('attribute_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('attribute_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('config.attributes.show', ['model' => $model]);
     }
 
     public function destroy(Attribute $model)
     {
-        abort_unless(Entrust::can('attribute_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('attribute_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->delete();
 
@@ -100,6 +103,6 @@ class AttributesController extends Controller
     {
         Attribute::whereIn('id', $request->input('ids'))->delete();
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response(null, HTTPMessages::HTTP_NO_CONTENT);
     }
 }

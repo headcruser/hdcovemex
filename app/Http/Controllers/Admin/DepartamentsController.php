@@ -7,22 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Admin\Departamento;
 use HelpDesk\Http\Controllers\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use HelpDesk\Http\Requests\Admin\Departamentos\CreateDepartamentoRequest;
 use HelpDesk\Http\Requests\Admin\Departamentos\UpdateDepartamentoRequest;
+
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class DepartamentsController extends Controller
 {
     public function index()
     {
-        abort_unless(Entrust::can('departament_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('departament_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.departaments.index', [ 'collection' => Departamento::paginate() ]);
     }
 
     public function create()
     {
-        abort_unless(Entrust::can('departament_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('departament_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.departaments.create', [
             'model' => new Departamento()
@@ -53,7 +54,7 @@ class DepartamentsController extends Controller
 
     public function edit(Departamento $model)
     {
-        abort_unless(Entrust::can('departament_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('departament_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.departaments.edit', [
             'model' => $model
@@ -83,14 +84,14 @@ class DepartamentsController extends Controller
 
     public function show(Departamento $model)
     {
-        abort_unless(Entrust::can('departament_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('departament_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.departaments.show', ['model' => $model]);
     }
 
     public function destroy(Departamento $model)
     {
-        abort_unless(Entrust::can('departament_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_unless(Entrust::can('departament_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         $model->delete();
 
@@ -103,6 +104,6 @@ class DepartamentsController extends Controller
     {
         Departamento::whereIn('id', $request->input('ids'))->delete();
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response(null, HTTPMessages::HTTP_NO_CONTENT);
     }
 }
