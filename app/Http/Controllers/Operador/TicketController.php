@@ -28,22 +28,35 @@ class TicketController extends Controller
     {
         abort_unless(Entrust::can('ticket_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        $tickets = Ticket::assingTo($request->input('operator_id'))
+        $userAuth = auth()->user();
+
+        $defaultOperator = (optional($userAuth)->isOperador())? $userAuth->id:null;
+        $userOperator = $request->input('operator_id',$defaultOperator);
+
+        $statusDefault = 'Abierto';
+
+        $tickets = Ticket::assingTo($userOperator)
             ->with(['empleado', 'empleado.departamento', 'empleado.roles'])
             ->search($request->input('search'))
-            ->byStatus($request->input('status'))
+            ->from($request->input('from'))
+            ->to($request->input('to'))
+            ->byStatus( $request->input('status',$statusDefault))
             ->orderByDesc('created_at')
             ->paginate();
-
 
         $tickets->appends([
             'status'    => $request->input('status'),
             'search'    => $request->input('search'),
+            'from'      => $request->input('from'),
+            'to'        => $request->input('to'),
         ]);
 
         return view('operador.tickets.index', [
             'collection'    => $tickets,
             'statuses'      => Config::get('helpdesk.tickets.estado.names', []),
+            'operators'     => User::with(['operador'])->has('operador')->pluck('nombre','id'),
+            'userOperator'  => $userOperator,
+            'statusDefault' => $statusDefault
         ]);
     }
 
@@ -99,7 +112,7 @@ class TicketController extends Controller
             'asignado_a'    => '',
             'contacto'      => '',
             'tipo'          => '', #ATENCION
-            'sub_tipo'       => '', #ACTIVIDAD
+            'sub_tipo'      => '', #ACTIVIDAD
             'privado'       => '', #VISIBILIDAD MENSAJES
         ]);
 

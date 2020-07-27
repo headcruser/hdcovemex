@@ -4,6 +4,7 @@ namespace HelpDesk\Builder;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class TicketQuery extends Builder
 {
@@ -45,11 +46,11 @@ class TicketQuery extends Builder
      */
     public function byStatus($status)
     {
-        if ($status) {
-            return $this->where('estado', $status);
+        if (empty($status)) {
+            return $this;
         }
 
-        return $this;
+        return $this->where('estado', $status);
     }
 
     /**
@@ -88,10 +89,42 @@ class TicketQuery extends Builder
      */
     function assingTo($id)
     {
-        if ($id) {
-            return $this->where('asignado_a', $id);
+        if (empty($id)) {
+            return $this;
         }
 
-        return $this->where('asignado_a', Auth::user()->id);
+        return $this->where('asignado_a', $id);
+    }
+
+     /**
+     * Filtra los elementos con la fecha mayor a la especificada
+     *
+     * @param string $date
+     * @return Builder
+     */
+    public function from($date)
+    {
+        if ($date) {
+            $date = Carbon::createFromFormat('d/m/Y', $date);
+            return $this->whereDate('created_at', '>=', $date);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Filtra los elementos hasta la fecha especificada
+     *
+     * @param [type] $date
+     * @return Build
+     */
+    public function to($date)
+    {
+        if ($date) {
+            $date = Carbon::createFromFormat('d/m/Y', $date);
+            return $this->whereDate('created_at', '<=', $date);
+        }
+
+        return $this;
     }
 }

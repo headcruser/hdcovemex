@@ -4,8 +4,6 @@
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th width="10">
-                        </th>
                         <th>
                             TICKET
                         </th>
@@ -41,17 +39,16 @@
                 <tbody>
                     @forelse ($collection as $element)
                     <tr>
-                        <td></td>
-                        <td>{{ $element->id }}</td>
-                        <td class="text-center" style="background-color:{{ $element->colorPrioridad }};">
+                        <td class="align-middle"">{{ $element->id }}</td>
+                        <td class="text-center align-middle" style="background-color:{{ $element->colorPrioridad }};">
                             <strong>{{ $element->nombrePrioridad }}</strong>
                         </td>
-                        <td>{{ $element->fecha->format('d/m/Y H:i') }}</td>
-                        <td>{{ $element->empleado->usuario }}</td>
-                        <td>{{ $element->empleado->nombre }}</td>
-                        <td>{{ $element->empleado->departamento->nombre }}</td>
-                        <td>{{ $element->titulo }}</td>
-                        <td class="text-center">
+                        <td class="align-middle"">{{ $element->fecha->format('d/m/Y') }}</td>
+                        <td class="align-middle"">{{ $element->empleado->usuario }}</td>
+                        <td class="align-middle"">{{ $element->empleado->nombre }}</td>
+                        <td class="align-middle"">{{ $element->empleado->departamento->nombre }}</td>
+                        <td class="align-middle"">{{ $element->titulo }}</td>
+                        <td class="text-center align-middle"">
                             <span class="badge badge-primary text-sm">
                                 {{ $element->estado }}
                             </span>

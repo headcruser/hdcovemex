@@ -36,5 +36,54 @@
 @endsection
 
 @section('scripts')
+<script>
+    const locale = {
+        "format": "DD/MM/YYYY",
+        "separator": " - ",
+        "applyLabel": "Aplicar",
+        "cancelLabel": "Cancelar",
+        "fromLabel": "Desde",
+        "toLabel": "Hasta",
+        "customRangeLabel": "Personalizar",
+        "daysOfWeek": [
+            "Do",
+            "Lu",
+            "Ma",
+            "Mi",
+            "Ju",
+            "Vi",
+            "Sa"
+        ],
+        "monthNames": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+    }
+
+    const from = "{{ request('from') }}",
+          to = "{{ request('to') }}";
+
+    $('#from').daterangepicker({
+        singleDatePicker: true,
+        startDate: (!from) ? moment().subtract(6, 'days'): from,
+        locale: locale
+    });
+
+    $('#to').daterangepicker({
+        singleDatePicker: true,
+        locale: locale,
+        startDate: (!to) ? moment(): to
+    });
+</script>
 @endsection
 
