@@ -20,15 +20,13 @@
                         <th>
                             NOMBRE
                         </th>
-
-                        <th>
-                            DEPARTAMENTO
-                        </th>
-
                         <th>
                             TITULO
                         </th>
 
+                        <th>
+                            PROCESO
+                        </th>
                         <th>
                             ESTADO
                         </th>
@@ -46,8 +44,13 @@
                         <td class="align-middle"">{{ $element->fecha->format('d/m/Y') }}</td>
                         <td class="align-middle"">{{ $element->empleado->usuario }}</td>
                         <td class="align-middle"">{{ $element->empleado->nombre }}</td>
-                        <td class="align-middle"">{{ $element->empleado->departamento->nombre }}</td>
+
                         <td class="align-middle"">{{ $element->titulo }}</td>
+                        <td class="text-center align-middle"">
+                            <span class="badge badge-primary text-sm">
+                                {{ $element->proceso }}
+                            </span>
+                        </td>
                         <td class="text-center align-middle"">
                             <span class="badge badge-primary text-sm">
                                 {{ $element->estado }}

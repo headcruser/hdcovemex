@@ -55,27 +55,33 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label>Titulo*</label>
+                                        <input
+                                            type="text"
+                                            title="Titulo"
+                                            class="form-control"
+                                            readonly
+                                            aria-describedby="titulo-help"
+                                            value="{{ old('titulo',$model->solicitud->titulo) }}"  autocomplete="off" required>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="incidente">Incidente</label>
+                                        <textarea
+                                            title="Incidente"
+                                            class="form-control"
+                                            aria-describedby="incidente-help"
+                                            readonly
+                                            rows="5"  required>{{ old('incidente', $model->solicitud->incidente) }}</textarea>
+                                    </div>
                                 </div>
                             </fieldset>
                         @endif
 
                         <fieldset class="section-border">
                             <legend class="section-border">Datos del ticket</legend>
-
-                            <div class="form-group">
-                                <label for="titulo">Titulo*</label>
-                                <input id="input-titulo"
-                                    type="text"
-                                    class="form-control @error('titulo') is-invalid @enderror"
-                                    name="titulo"
-                                    title="Titulo"
-                                    aria-describedby="titulo-help"
-                                    value="{{ old('titulo',$model->titulo) }}"  autocomplete="off" required>
-
-                                <div id="titulo-help" class="error invalid-feedback">
-                                    @error('titulo') {{ $message }} @enderror
-                                </div>
-                            </div>
 
                             <div class="form-group">
                                 <label for="incidente">Incidente</label>
@@ -85,10 +91,28 @@
                                     title="Incidente"
                                     class="form-control @error('incidente') is-invalid @enderror"
                                     aria-describedby="incidente-help"
-                                    rows="5"  required>{{ old('incidente', $model->incidente) }}</textarea>
+                                    placeholder="Describe el incidente"
+                                    readonly
+                                    rows="2" >{{ old('incidente', $model->incidente) }}</textarea>
 
                                 <div id="incidente-help" class="error invalid-feedback">
                                     @error('incidente') {{ $message }} @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comentario">Comentario</label>
+
+                                <textarea  id="ta-comentario"
+                                    name="comentario"
+                                    title="comentario"
+                                    class="form-control @error('comentario') is-invalid @enderror"
+                                    aria-describedby="comentario-help"
+                                    placeholder="Escribe tu observación"
+                                    rows="5" >{{ old('comentario', '') }}</textarea>
+
+                                <div id="comentario-help" class="error invalid-feedback">
+                                    @error('comentario') {{ $message }} @enderror
                                 </div>
                             </div>
                         </fieldset>
@@ -99,7 +123,7 @@
 
                             <div class="row">
                                 <!-- PRIORIDAD -->
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>Prioridad</label>
                                         <select class="custom-select" name="prioridad">
@@ -111,12 +135,24 @@
                                 </div>
 
                                 <!-- TIPO_CONTACTO -->
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>Tipo Contacto</label>
-                                        <select class="custom-select" name="contacto">
+                                        <label>Tipo Actividad</label>
+                                        <select class="custom-select" name="contacto" id="select-tipo">
                                             @foreach ($tipo_contacto as $key => $value)
-                                                <option value="{{ $value }}" @if($model->tipo == $value) selected @endif>{{ $value }}</option>
+                                                <option value="{{ $value }}" @if(old('contacto',$model->tipo) == $value) selected @endif>{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- SUBTIPO|ACTIVIDAD -->
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="select-subtipo" >Actividad</label>
+                                        <select class="custom-select" name="sub_tipo" id="select-subtipo">
+                                            @foreach ($actividad as $key => $value)
+                                                <option value="{{ $value }}" @if(old('sub_tipo',$model->sub_tipo) == $value ) selected @endif>{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -127,11 +163,12 @@
                                 <!-- VISIBILIDAD -->
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Visibilidad mensajes</label>
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" name="privado" id="privado" value="S" @if($model->privado == 'S') checked @endif>
-                                            <label for="privado" class="custom-control-label">Privado</label>
-                                        </div>
+                                        <label>Proceso</label>
+                                        <select class="custom-select" name="proceso" id="s-proceso">
+                                            @foreach ($procesos as $key => $value)
+                                                <option value="{{ $value }}" @if($model->proceso == $value) selected @endif>{{ $value }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
@@ -142,9 +179,21 @@
                                         <label for="estatus">Estatus</label>
                                         <select class="custom-select" name="estado">
                                             @foreach ($estados as $key => $value)
-                                                <option value="{{ $key }}" @if($model->estado == $key) selected @endif >{{ $value }}</option>
+                                                <option value="{{ $key }}" @if(old('estado',$model->estado) == $key) selected @endif >{{ $value }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Visibilidad mensajes</label>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" name="privado" id="privado" value="S" @if($model->privado == 'S') checked @endif>
+                                            <label for="privado" class="custom-control-label">Privado</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -167,6 +216,98 @@
 @endsection
 
 @section('scripts')
+    <script type="text/javascript">
+        const selectElement = (function(element){
 
+            if(!element || !element instanceof HTMLElement){
+                throw "Select no es un elemento HTML"
+            }
+
+            let select = element;
+
+
+            function addOption(text = '',value = '',attrs = [] )
+            {
+                let option = document.createElement("option");
+                option.text = text;
+                option.value = value;
+
+                select.add(option, '');
+
+                for (let attr of Object.keys(attrs) ) {
+                    option.setAttribute(attr, attrs[attr]);
+                }
+            }
+
+            function clearOptions()
+            {
+                let options = Array.from(select.options);
+
+                options.forEach(option => {
+                    option.remove();
+                    option.selected = false;
+                });
+            }
+
+            function addFromCollection(collection) {
+                for (let key in collection) {
+                    if (collection[key].hasOwnProperty('text') && collection[key].hasOwnProperty('value')) {
+                        addOption( collection[key]['text'],collection[key]['value']);
+                    }
+                }
+            }
+
+            return {addOption,clearOptions,addFromCollection};
+
+        })
+
+        const editTicket = (function(){
+            const dom = {
+                'select_tipo':document.getElementById('select-tipo'),
+                'select_subtipo':document.getElementById('select-subtipo')
+            },
+            apiSubtipo = "{{ route('api.attributes.subtipo') }}",
+            objectSelectSubtipo = new selectElement(dom.select_subtipo);
+
+            // Events
+            document.addEventListener('change',async function(e) {
+                if (dom.select_tipo == e.target) {
+
+                    let element = e.target,
+                        value =  element.options[element.selectedIndex].value
+
+                    if (!value) {
+                        objectSelectSubtipo.clearOptions();
+                        objectSelectSubtipo.addOption('Selecciona antes el tipo de atención','',{"selected":"selected"});
+                        return;
+                    }
+
+                    try {
+                        const response  = await axios.post(apiSubtipo,{
+                            tipo: value
+                        })
+
+                        let subList = response.data.list;
+
+                        let listElements = subList.map(function(element){
+                            var object = [];
+
+                            object['text'] = element.value;
+                            object['value'] =element.value;
+
+                            return object
+                        });
+
+                        objectSelectSubtipo.clearOptions();
+                        objectSelectSubtipo.addFromCollection(listElements);
+                        objectSelectSubtipo.addOption('Selecciona el tipo de atención','',{"selected":"selected"});
+
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            });
+        })()
+    </script>
 @endsection
 

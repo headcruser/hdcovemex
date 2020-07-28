@@ -30,22 +30,7 @@
                             <legend class="section-border">Datos del ticket</legend>
 
                             <div class="form-group">
-                                <label for="input-titulo">Titulo</label>
-                                <input id="input-titulo"
-                                    name="titulo"
-                                    type="text"
-                                    class="form-control @error('titulo') is-invalid @enderror"
-                                    title="Titulo"
-                                    aria-describedby="titulo-help"
-                                    value="{{ old('titulo',$model->titulo) }}" autocomplete="off" required >
-
-                                <div id="titulo-help" class="error invalid-feedback">
-                                    @error('titulo') {{ $message }} @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ta-incidente">Observacion</label>
+                                <label for="ta-incidente">Incidente</label>
 
                                 <textarea class="form-control @error('incidente') is-invalid @enderror"
                                     id="ta-incidente"
@@ -53,8 +38,22 @@
                                     aria-describedby="incidente-help"
                                     rows="5"  required>{{ old('incidente',$model->incidente) }}</textarea>
 
-                                <div id="incidente-help" class="error invalid-feedback">
-                                    @error('observacion') {{ $message }} @enderror
+                                <div id="titulo-help" class="error invalid-feedback">
+                                    @error('titulo') {{ $message }} @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ta-comentario">Comentario</label>
+
+                                <textarea class="form-control @error('comentario') is-invalid @enderror"
+                                    id="ta-comentario"
+                                    name="comentario"
+                                    aria-describedby="comentario-help"
+                                    rows="5"  required>{{ old('comentario','') }}</textarea>
+
+                                <div id="comentario-help" class="error invalid-feedback">
+                                    @error('comentario') {{ $message }} @enderror
                                 </div>
                             </div>
 
@@ -160,7 +159,7 @@
                                         <label for="select-prioridad">Contacto</label>
                                         <select class="custom-select" name="contacto" id="select-contacto">
                                             @foreach ($contacto as $key => $value)
-                                                <option value="{{ $key }}" @if( old('contacto','Personal') == 'Personal') selected @endif >{{ $value }}</option>
+                                                <option value="{{ $value }}" @if( old('contacto','Personal') == 'Personal') selected @endif >{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>

@@ -101,8 +101,8 @@ class SolicitudesController extends Controller
                 $ticket = $model->ticket()->create([
                     'fecha'         => now(),
                     'titulo'        => "Atentiendo Solicitud {$model->id}",
-                    'usuario_id'    => $model->usuario_id,
                     'incidente'     => $model->incidente,
+                    'usuario_id'    => $model->usuario_id,
                     'estado'        => Config::get('helpdesk.tickets.estado.alias.ABT'),
                     'asignado_a'    => $userAuth->id,
                     'privado'       => 'N',
@@ -116,12 +116,23 @@ class SolicitudesController extends Controller
 
                 $model->ticket_id = $ticket->id;
                 $model->estatus_id = optional(Status::proceso()->first())->id;
-
                 $model->save();
+
+                # CREATE ASIGN MODEL
+                $ticket->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'asignado_a',
+                    'valor_anterior'    => null,
+                    'valor_actual'      => auth()->id(),
+                    'comentario'        => '',
+                    'privado'           => 'N',
+                ]);
+
                 DB::commit();
 
                 return redirect()
-                    ->route('operador.tickets.show', $ticket)
+                    ->route('operador.tickets.edit', $ticket)
                     ->with(['message' => 'Ticket Asignado correctamente']);
             }
 

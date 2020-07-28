@@ -82,6 +82,21 @@ class TicketQuery extends Builder
     }
 
     /**
+     * Filtra los tickets por su proceso
+     *
+     * @param string|null $search
+     * @return Builder
+     */
+    public function byProcess($proceso)
+    {
+        if (!empty($proceso)) {
+            return $this->orWhere('proceso', 'like', "%{$proceso}%");
+        }
+
+        return $this;
+    }
+
+    /**
      * Filtra los tickets por el personal al que fue asignado el ticket
      *
      * @param string|null $id

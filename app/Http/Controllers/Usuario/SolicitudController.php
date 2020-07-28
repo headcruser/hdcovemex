@@ -62,7 +62,9 @@ class SolicitudController extends Controller
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        $model->load('status', 'ticket', 'ticket.sigoTicket');
+        $model->load(['status', 'ticket', 'ticket.sigoTicket' => function($query){
+            $query->where('comentario','!=','');
+        }]);
 
         return view('usuario.solicitudes.show', compact('model'));
     }

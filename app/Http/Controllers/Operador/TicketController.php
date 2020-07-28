@@ -5,16 +5,18 @@ namespace HelpDesk\Http\Controllers\Operador;
 use Entrust;
 
 use HelpDesk\Entities\Media;
+use Illuminate\Http\Request;
 use HelpDesk\Entities\Ticket;
 use HelpDesk\Entities\Admin\User;
-use HelpDesk\Entities\Config\Attribute;
-use HelpDesk\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use HelpDesk\Entities\Config\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use HelpDesk\Entities\Config\Attribute;
 
+use HelpDesk\Http\Controllers\Controller;
+use HelpDesk\Http\Requests\Operador\Tickets\TicketCreateRequest;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class TicketController extends Controller
@@ -30,8 +32,8 @@ class TicketController extends Controller
 
         $userAuth = auth()->user();
 
-        $defaultOperator = (optional($userAuth)->isOperador())? $userAuth->id:null;
-        $userOperator = $request->input('operator_id',$defaultOperator);
+        $defaultOperator = (optional($userAuth)->isOperador()) ? $userAuth->id : null;
+        $userOperator = $request->input('operator_id', $defaultOperator);
 
         $statusDefault = 'Abierto';
 
@@ -40,12 +42,14 @@ class TicketController extends Controller
             ->search($request->input('search'))
             ->from($request->input('from'))
             ->to($request->input('to'))
-            ->byStatus( $request->input('status',$statusDefault))
+            ->byStatus($request->input('status', $statusDefault))
+            ->byProcess($request->input('proceso',''))
             ->orderByDesc('created_at')
             ->paginate();
 
         $tickets->appends([
-            'status'    => $request->input('status'),
+            'status'    => $request->input('status', $statusDefault),
+            'proceso'   => $request->input('proceso',''),
             'search'    => $request->input('search'),
             'from'      => $request->input('from'),
             'to'        => $request->input('to'),
@@ -54,7 +58,8 @@ class TicketController extends Controller
         return view('operador.tickets.index', [
             'collection'    => $tickets,
             'statuses'      => Config::get('helpdesk.tickets.estado.names', []),
-            'operators'     => User::with(['operador'])->has('operador')->pluck('nombre','id'),
+            'procesos'      => Attribute::process()->pluck('value'),
+            'operators'     => User::with(['operador'])->has('operador')->pluck('nombre', 'id'),
             'userOperator'  => $userOperator,
             'statusDefault' => $statusDefault
         ]);
@@ -70,6 +75,10 @@ class TicketController extends Controller
     {
         abort_unless(Entrust::can('ticket_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
+        $model->load(['sigoTicket' => function ($query) {
+            $query->where('comentario', '!=', '');
+        }]);
+
         return view('operador.tickets.show', compact('model'));
     }
 
@@ -82,49 +91,48 @@ class TicketController extends Controller
     {
         abort_unless(Entrust::can('ticket_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('operador.tickets.create',[
+        return view('operador.tickets.create', [
             'model'         => new Ticket,
             'prioridad'     => Config::get('helpdesk.tickets.prioridad.values', []),
-            'contacto'      => Attribute::contact()->pluck('value','id'),
-            'tipo_contacto' => Attribute::type()->pluck('value','id'),
+            'contacto'      => Attribute::contact()->pluck('value', 'id'),
+            'tipo_contacto' => Attribute::type()->pluck('value', 'id'),
             'actividad'     => collect()->prepend('Selecciona antes tipo Contacto', ''),
             'estados'       => Config::get('helpdesk.tickets.estado.names'),
-            'asignado'      => User::withRoles('soporte','jefatura')->pluck('nombre','id'),
+            'asignado'      => User::withRoles('soporte', 'jefatura')->pluck('nombre', 'id'),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \HelpDesk\Http\Requests\Operador\Tickets\TicketCreateRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TicketCreateRequest $request)
     {
         $user = Auth::user();
-
-        $validated = $request->validate([
-            'titulo'        => 'required',
-            'incidente'     => 'required',
-            'archivo'       => 'nullable',
-            'prioridad'     => '',
-            'estado'        => '',
-            'asignado_a'    => '',
-            'contacto'      => '',
-            'tipo'          => '', #ATENCION
-            'sub_tipo'      => '', #ACTIVIDAD
-            'privado'       => '', #VISIBILIDAD MENSAJES
-        ]);
 
         $defaultData = [
             'fecha'         => now(),
             'usuario_id'    => $user->id,
             'operador_id'   => $user->id,
-            'contacto'      => 'email',
+            'contacto'      => 'web',
             'proceso'       => Config::get('helpdesk.tickets.proceso.alias.EPS'),
         ];
 
-        $modelData = array_merge($validated,$defaultData);
+        $modelData = array_merge([
+            'titulo'        => "Ingresado por operador {$user->id}",
+            'incidente'     => $request->input('incidente'),
+            'archivo'       => 'nullable',
+            'prioridad'     => $request->input('prioridad', '3'),
+            'estado'        => $request->input('estado'),
+            'asignado_a'    => $request->input('asignado_a'),
+            'contacto'      => $request->input('contacto'),
+            'tipo'          => $request->input('tipo'), #ATENCION
+            'sub_tipo'      => $request->input('sub_tipo'), #ACTIVIDAD
+            'privado'       => $request->input('privado', 'N'), #VISIBILIDAD MENSAJES
+        ], $defaultData);
+
         $file = $request->file('archivo');
 
         DB::beginTransaction();
@@ -140,21 +148,20 @@ class TicketController extends Controller
             }
 
             # CREAR SEGUIMIENTO
-            $ticket->sigoTicket()->create([
-                'operador_id'   => $user->id,
-                'usuario_id'    => null,
-                'fecha'         => now(),
-                'comentario'    => '',
-                'visible'       => 'S',
-            ]);
+            if ($request->filled('comentario')) {
+                $ticket->sigoTicket()->create([
+                    'visible'           => $request->input('privado', 'N'),
+                    'fecha'             => now(),
+                    'operador_id'       => $user->id,
+                    'comentario'        => $request->input('comentario'),
+                ]);
+            }
 
             $ticket->save();
 
             DB::commit();
 
-            return redirect()
-                ->route('operador.tickets.show', $ticket)
-                ->withStatus("Ticket Creado correctamente");
+
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -162,6 +169,12 @@ class TicketController extends Controller
                 ->back()
                 ->with(['error' => "Error Servidor: {$e->getMessage()} ",])->withInput();
         }
+
+        # AQUI ENVIAR NOTIFICACIONES AL RESPECTIVO USUARIO
+
+        return redirect()
+            ->route('operador.tickets.show', $ticket)
+            ->withStatus("Ticket Creado correctamente");
     }
 
     public function edit(Ticket $model)
@@ -171,51 +184,125 @@ class TicketController extends Controller
         return view('operador.tickets.edit', [
             'model'         => $model,
             'prioridad'     => Config::get('helpdesk.tickets.prioridad.values', []),
-            'tipo_contacto' => Config::get('helpdesk.tickets.contacto.values', []),
-            'actividad'     => collect()->prepend('Selecciona un vehiculo', ''),
+            'tipo_contacto' => Attribute::type()->pluck('value', 'id'),
+            'actividad'     => Attribute::typeAttribute($model->tipo)->orderBy('value','desc')->pluck('value'),
             'estados'       => Config::get('helpdesk.tickets.estado.names'),
+            'procesos'      => Attribute::process()->pluck('value')
         ]);
     }
 
     public function update(Request $request, Ticket $model)
     {
         if (!$request->has('privado')) {
-            $request->request->add(['privado'=> 'N']);
+            $request->request->add(['privado' => 'N']);
         }
+
+        $originalTicketData = $model->getOriginal();
+        $comment = null;
 
         DB::beginTransaction();
 
         try {
-
-            # ACTUALIZAR INFORMACION DEL TICKET
             $model->update($request->all());
 
-            # VERIFICAR SI EXISTE UNA SOLICITUD PARA FINALIZAR LA MISMA SOLICITUD
-            $solicitud = $model->solicitud;
-
-            if ($solicitud) {
-                #$solicitud->update;
-
+            if ($model->solicitud()->exists()) {
                 switch ($request->input('estado')) {
-                    case 'Finalizado':
-                        $solicitud->update([
-                            'estatus_id' => '3'
+                    case Config::get('helpdesk.tickets.proceso.alias.FIN'):
+                        $model->solicitud()->update([
+                            'estatus_id' => optional(Status::finalizadas()->first())->id
                         ]);
                         break;
-                    case 'Cancelado':
-                        $solicitud->update([
-                            'estatus_id' => '4'
+                    case Config::get('helpdesk.tickets.proceso.alias.CAN'):
+                        $model->solicitud()->update([
+                            'estatus_id' => optional(Status::canceladas()->first())->id
                         ]);
                         break;
                 }
             }
 
+            if ($originalTicketData['prioridad'] !=  $request->input('prioridad')) {
+                $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'prioridad',
+                    'valor_anterior'    => $originalTicketData['prioridad'],
+                    'valor_actual'      => $request->input('prioridad'),
+                    'comentario'        => '',
+                    'privado'           => $request->input('privado'),
+                ]);
+            }
+
+            if ($originalTicketData['contacto'] !=  $request->input('contacto')) {
+                $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'contacto',
+                    'valor_anterior'    => $originalTicketData['contacto'],
+                    'valor_actual'      => $request->input('contacto'),
+                    'comentario'        => '',
+                    'privado'           => $request->input('privado'),
+                ]);
+            }
+
+            if ($originalTicketData['estado'] !=  $request->input('estado')) {
+                $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'estado',
+                    'valor_anterior'    => $originalTicketData['estado'],
+                    'valor_actual'      => $request->input('estado'),
+                    'comentario'        => '',
+                    'privado'           => $request->input('privado'),
+                ]);
+            }
+
+            if ($originalTicketData['proceso'] !=  $request->input('proceso')) {
+                $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'proceso',
+                    'valor_anterior'    => $originalTicketData['proceso'],
+                    'valor_actual'      => $request->input('proceso'),
+                    'comentario'        => '',
+                    'privado'           => $request->input('privado'),
+                ]);
+            }
+
+            if ($originalTicketData['tipo'] !=  $request->input('tipo')) {
+                $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'tipo',
+                    'valor_anterior'    => $originalTicketData['tipo'],
+                    'valor_actual'      => $request->input('tipo'),
+                    'comentario'        => '',
+                    'privado'           => $request->input('privado'),
+                ]);
+            }
+
+            if ($originalTicketData['sub_tipo'] !=  $request->input('sub_tipo')) {
+                $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'sub_tipo',
+                    'valor_anterior'    => $originalTicketData['sub_tipo'],
+                    'valor_actual'      => $request->input('sub_tipo'),
+                    'comentario'        => '',
+                    'privado'           => $request->input('privado'),
+                ]);
+            }
+
+            if ($request->filled('incidente')) {
+                $comment = $model->sigoTicket()->create([
+                    'fecha'             => now(),
+                    'operador_id'       => auth()->id(),
+                    'campo_cambiado'    => 'comentario',
+                    'comentario'        => $request->input('incidente'),
+                    'visible'           => $request->input('privado'),
+                ]);
+            }
+
             DB::commit();
-
-            return redirect()
-                ->route('operador.tickets.index')
-                ->with(['message' => 'Ticket Actualizado correctamente']);
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -224,6 +311,18 @@ class TicketController extends Controller
                     'error' => 'Error Servidor; ' . $e->getMessage(),
                 ])->withInput();
         }
+
+        if ($request->filled('incidente')) {
+            #$model->sendCommentNotification($comment); #SEND NOTIFICATION MESSAGE FOR USER
+
+            // $notification = new CommentSolicitudeNotification($comment);
+            // Notification::send($jefesDepartamento, $notification);
+        }
+
+
+        return redirect()
+            ->route('operador.tickets.index')
+            ->with(['message' => 'Ticket Actualizado correctamente']);
     }
 
     public function destroy(Ticket $model)

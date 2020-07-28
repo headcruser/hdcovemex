@@ -47,6 +47,17 @@
                     @endforeach
                 </select>
             </div>
+            &nbsp;&nbsp;
+            <label class="form-label-sm">Proceso:</label>&nbsp;
+            <div class="btn-group">
+                <select name="proceso" id="proceso" class="custom-select custom-select-sm">
+                    <option value="">Todos</option>
+                    @foreach($procesos as $value => $text)
+                        <option value="{{ $text }}" {{ request('proceso','') == $text ? ' selected' : '' }}>{{ $text }}</option>
+                    @endforeach
+                </select>
+            </div>
+            &nbsp;
         </div>
     </div>
 </form>
