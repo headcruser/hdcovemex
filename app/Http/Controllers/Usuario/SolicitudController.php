@@ -6,6 +6,7 @@ use Entrust;
 use HelpDesk\Entities\Media;
 use HelpDesk\Entities\Solicitude;
 use HelpDesk\Entities\Config\Status;
+use HelpDesk\Events\CommentEmpleadoEvent;
 use HelpDesk\Events\SolicitudRegistrada;
 use HelpDesk\Http\Controllers\Controller;
 
@@ -53,7 +54,7 @@ class SolicitudController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Ticket  $ticket
+     * @param  Solicitude  $model
      * @return \Illuminate\Http\Response
      */
     public function show(Solicitude $model)
@@ -134,6 +135,13 @@ class SolicitudController extends Controller
             ->withStatus("Tu solicitud ha sido enviada. Te atenderemos a la brevedad posible");
     }
 
+    /**
+     * create new Comment for the user (Employe)
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Solicitude  $model
+     * @return \Illuminate\Http\Response
+     */
     public function storeComment(Request $request, Solicitude $model)
     {
         $request->validate([
@@ -161,13 +169,19 @@ class SolicitudController extends Controller
                 ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
         }
 
-        # $model->sendCommentNotification($comment);
+        event(new CommentEmpleadoEvent($comment));
 
         return redirect()
             ->back()
             ->with(['message' => 'Comentario agregado correctamente']);
     }
 
+    /**
+     * Upload file for solicitude
+     *
+     * @param Solicitude $model
+     * @return \Illuminate\Http\Response
+     */
     public function archivo(Solicitude $model)
     {
         $model->load('media');

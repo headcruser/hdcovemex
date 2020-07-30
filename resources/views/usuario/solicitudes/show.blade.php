@@ -97,7 +97,7 @@
                                 <td>
                                     <p>
                                         <a href="{{ route('solicitudes.archivo',$model) }}" target="_blank" class="linked text-sm"><i class="fas fa-link mr-1"></i> {{ $model->media->name }} </a>
-                                      </p>
+                                    </p>
 
                                 </td>
                             </tr>
@@ -109,47 +109,48 @@
                                 Comentarios
                             </th>
                             <td>
-                                @forelse ($model->ticket->sigoTicket as $comentario)
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="font-weight-bold"><a href="mailto:  ">{{ $comentario->autor }}</a> ({{ $comentario->fecha }})</p>
-                                            <p>{{ $comentario->comentario }}</p>
+                                <div style="height: 300px;overflow-y:auto;overflow-x:hidden">
+                                    @forelse ($model->ticket->sigoTicket as $comentario)
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="font-weight-bold"><a href="mailto:  ">{{ $comentario->autor }}</a> ({{ $comentario->fecha }})</p>
+                                                <p>{{ $comentario->comentario }}</p>
+                                            </div>
+                                        </div>
+                                        @if(!$loop->last)
+                                            <hr />
+                                        @endif
+                                    @empty
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>No hay comentarios.</p>
+                                            </div>
+                                        </div>
+                                    @endforelse
+                                </div>
+
+                                @if( $model->ticket()->exists() )
+                                <form id="form-comentario" class="mt-3" action="{{ route('solicitudes.storeComentario', $model->id) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="ta-comentario_texto">Deja un comentario</label>
+                                        <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
+
+                                        <div id="login-help" class="error invalid-feedback">
+                                            @error('comentario_texto') {{ $message }} @enderror
                                         </div>
                                     </div>
-                                    @if(!$loop->last)
-                                        <hr />
-                                    @endif
-                                @empty
-                                    <div class="row">
-                                        <div class="col">
-                                            <p>No hay comentarios.</p>
-                                        </div>
+                                    <div class="float-right">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
                                     </div>
-                                @endforelse
+                                </form>
+                                @endif
                             </td>
                         </tr>
                         @endif
 
                     </tbody>
                 </table>
-
-                @if( $model->ticket()->exists() )
-                <form class="mt-3" action="{{ route('solicitudes.storeComentario', $model->id) }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="ta-comentario_texto">Deja un comentario</label>
-                        <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
-
-                        <div id="login-help" class="error invalid-feedback">
-                            @error('comentario_texto') {{ $message }} @enderror
-                        </div>
-                    </div>
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
-                    </div>
-                </form>
-                @endif
-
             </div>
 
             <div class="card-footer">
@@ -159,10 +160,25 @@
             </div>
         </div>
     </div>
-
 </div>
 @endsection
 
 @section('scripts')
+    <script type="text/javascript">
+        const $form = $('#form-comentario');
+
+        $form.submit(function(e){
+            Swal.fire({
+                title: 'Procesando comentario',
+                html: 'Espere un momento por favor.',
+                allowEscapeKey:false,
+                allowOutsideClick:false,
+                allowEnterKey:false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+        });
+    </script>
 @endsection
 

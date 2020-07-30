@@ -20,7 +20,7 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <form id="form-solicitud" method="POST" action="{{ route('operador.tickets.store') }}" enctype="multipart/form-data">
+            <form id="form-ticket" method="POST" action="{{ route('operador.tickets.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="card">
                     <div class="card-header">Motivo Ticket</div>
@@ -185,7 +185,7 @@
                     <div class="card-footer">
 
                         <div class="btn-group float-right">
-                            <button type="submit" class="btn btn-primary " form="form-solicitud"> <i class="fas fa-save"></i> Guardar</button>
+                            <button type="submit" class="btn btn-primary " form="form-ticket"> <i class="fas fa-save"></i> Guardar</button>
                             <button type="reset" class="btn btn-default"><i class="fas fa-trash-alt"></i> Limpiar</button>
                         </div>
 
@@ -204,7 +204,7 @@
         const uploadFile = (function(){
 
             const container = document.getElementById('file_preview'),
-                form = document.getElementById('form-solicitud')
+                form = document.getElementById('form-ticket')
                 removeFile = document.getElementById('remove_file'),
                 inputFile = document.getElementById('input-file-archivo');
 
@@ -313,10 +313,12 @@
 
 
         const createTicket = (function(){
+            const d = document;
 
             const dom = {
-                'select_tipo':document.getElementById('select-tipo'),
-                'select_subtipo':document.getElementById('select-subtipo')
+                'select_tipo':d.getElementById('select-tipo'),
+                'select_subtipo':d.getElementById('select-subtipo'),
+                'form_ticket': d.getElementById('form-ticket'),
             }
             const apiSubtipo = "{{ route('api.attributes.subtipo') }}" ;
             const objectSelectSubtipo = new selectElement(dom.select_subtipo);
@@ -363,7 +365,21 @@
             });
 
 
-        })()
+            d.addEventListener('submit',function(e){
+                if(dom.form_ticket === e.target){
+                    Swal.fire({
+                        title: 'Creando ticket',
+                        html: 'Espere un momento por favor.',
+                        allowEscapeKey:false,
+                        allowOutsideClick:false,
+                        allowEnterKey:false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    })
+                }
+            });
+        })();
     </script>
 @endsection
 

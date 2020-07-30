@@ -102,25 +102,26 @@
                                 COMENTARIOS
                             </th>
                             <td>
-
-                                @forelse ($model->sigoTicket as $comentario)
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="font-weight-bold"><a href="mailto:  ">{{ $comentario->autor }}</a> ({{ $comentario->fecha }})</p>
-                                            <p>{{ $comentario->comentario }}</p>
+                                <div style="height: 300px;overflow-y:auto;overflow-x:hidden">
+                                    @forelse ($model->sigoTicket as $comentario)
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="font-weight-bold"><a href="mailto:  ">{{ $comentario->autor }}</a> ({{ $comentario->fecha }})</p>
+                                                <p>{{ $comentario->comentario }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <hr />
-                                @empty
-                                    <div class="row">
-                                        <div class="col">
-                                            <p>No hay comentarios.</p>
+                                        <hr />
+                                    @empty
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>No hay comentarios.</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <hr />
-                                @endforelse
+                                        <hr />
+                                    @endforelse
+                                </div>
 
-                                <form class="mt-3" action="{{ route('operador.tickets.storeComentario', $model->id) }}" method="POST">
+                                <form id="form-comentario" class="mt-3" action="{{ route('operador.tickets.storeComentario', $model->id) }}" method="POST">
                                     @csrf
                                     <div class="form-group">
                                         <label for="ta-comentario_texto">Deja un comentario</label>
@@ -161,5 +162,21 @@
 @endsection
 
 @section('scripts')
+    <script type="text/javascript">
+        const $form = $('#form-comentario');
+
+        $form.submit(function(e){
+            Swal.fire({
+                title: 'Procesando comentario',
+                html: 'Espere un momento por favor.',
+                allowEscapeKey:false,
+                allowOutsideClick:false,
+                allowEnterKey:false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+        });
+    </script>
 @endsection
 

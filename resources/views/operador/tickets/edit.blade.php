@@ -262,15 +262,18 @@
         })
 
         const editTicket = (function(){
+            const d = document;
+
             const dom = {
-                'select_tipo':document.getElementById('select-tipo'),
-                'select_subtipo':document.getElementById('select-subtipo')
+                'select_tipo':d.getElementById('select-tipo'),
+                'select_subtipo':d.getElementById('select-subtipo'),
+                'form_ticket': d.getElementById('form-ticket'),
             },
             apiSubtipo = "{{ route('api.attributes.subtipo') }}",
             objectSelectSubtipo = new selectElement(dom.select_subtipo);
 
             // Events
-            document.addEventListener('change',async function(e) {
+            d.addEventListener('change',async function(e) {
                 if (dom.select_tipo == e.target) {
 
                     let element = e.target,
@@ -307,6 +310,22 @@
                     }
                 }
             });
+
+            d.addEventListener('submit',function(e){
+                if(dom.form_ticket === e.target){
+                    Swal.fire({
+                        title: 'Procesando ticket',
+                        html: 'Espere un momento por favor.',
+                        allowEscapeKey:false,
+                        allowOutsideClick:false,
+                        allowEnterKey:false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    })
+                }
+            });
+
         })()
     </script>
 @endsection

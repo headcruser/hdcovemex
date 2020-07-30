@@ -19,8 +19,19 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
+        # REGISTRO DE SOLICITUD
         'HelpDesk\Events\SolicitudRegistrada' => [
             'HelpDesk\Listeners\SolicitudListener'
+        ],
+
+        # COMENTARIO DE OPERADORES
+        'HelpDesk\Events\CommentOperatorEvent' => [
+            'HelpDesk\Listeners\CommentOperatorListener'
+        ],
+
+        # COMENTARIO DE EMPLEADOS
+        'HelpDesk\Events\CommentEmpleadoEvent' => [
+            'HelpDesk\Listeners\CommentEmpleadoListener'
         ]
     ];
 

@@ -9,12 +9,11 @@ use Illuminate\Http\Request;
 use HelpDesk\Entities\Ticket;
 use HelpDesk\Entities\Admin\User;
 use Illuminate\Support\Facades\DB;
-
 use HelpDesk\Entities\Config\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use HelpDesk\Entities\Config\Attribute;
-
+use HelpDesk\Events\CommentOperatorEvent;
 use HelpDesk\Http\Controllers\Controller;
 use HelpDesk\Http\Requests\Operador\Tickets\TicketCreateRequest;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
@@ -177,6 +176,12 @@ class TicketController extends Controller
             ->withStatus("Ticket Creado correctamente");
     }
 
+     /**
+     * Display view edit for the Ticket
+     *
+     * @param  Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
     public function edit(Ticket $model)
     {
         abort_unless(Entrust::can('ticket_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
@@ -191,6 +196,13 @@ class TicketController extends Controller
         ]);
     }
 
+    /**
+     * Update resorce ticket in databaqse
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param Ticket $model
+     * @return void
+     */
     public function update(Request $request, Ticket $model)
     {
         if (!$request->has('privado')) {
@@ -292,12 +304,12 @@ class TicketController extends Controller
                 ]);
             }
 
-            if ($request->filled('incidente')) {
+            if ($request->filled('comentario')) {
                 $comment = $model->sigoTicket()->create([
                     'fecha'             => now(),
                     'operador_id'       => auth()->id(),
                     'campo_cambiado'    => 'comentario',
-                    'comentario'        => $request->input('incidente'),
+                    'comentario'        => $request->input('comentario'),
                     'visible'           => $request->input('privado'),
                 ]);
             }
@@ -312,11 +324,8 @@ class TicketController extends Controller
                 ])->withInput();
         }
 
-        if ($request->filled('incidente')) {
-            #$model->sendCommentNotification($comment); #SEND NOTIFICATION MESSAGE FOR USER
-
-            // $notification = new CommentSolicitudeNotification($comment);
-            // Notification::send($jefesDepartamento, $notification);
+        if ($request->filled('comentario')) {
+            event(new CommentOperatorEvent($comment));
         }
 
 
@@ -325,6 +334,12 @@ class TicketController extends Controller
             ->with(['message' => 'Ticket Actualizado correctamente']);
     }
 
+    /**
+     * Delete logical resource (use mecanism soft delete)
+     *
+     * @param Ticket $model
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Ticket $model)
     {
         abort_unless(Entrust::can('ticket_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
@@ -334,6 +349,13 @@ class TicketController extends Controller
         return back();
     }
 
+    /**
+     * Create a comment for ticket
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param Ticket $model
+     * @return \Illuminate\Http\Response
+     */
     public function storeComment(Request $request, Ticket $model)
     {
         $request->validate([
@@ -341,12 +363,13 @@ class TicketController extends Controller
         ]);
 
         $comment = null;
+        $authUser = auth()->id();
 
         DB::beginTransaction();
         try {
 
             $comment = $model->sigoTicket()->create([
-                'operador_id'   => auth()->id(),
+                'operador_id'   => $authUser,
                 'fecha'         => now(),
                 'comentario'    => $request->input('comentario_texto'),
                 'visible'       => 'S',
@@ -361,7 +384,9 @@ class TicketController extends Controller
                 ->with(['error' => "Error Servidor: {$ex->getMessage()} "])->withInput();
         }
 
-        # $model->sendCommentNotification($comment);
+        $model->refresh();
+
+        event(new CommentOperatorEvent($comment));
 
         return redirect()
             ->back()
