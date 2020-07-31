@@ -21,7 +21,9 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <a href="{{ route('notificaciones') }}" class="dropdown-item">
                     <i class="fas fa-bell mr-2"></i> Notificaciones
-                    <span class="float-right text-muted text-sm">{{ auth()->user()->unreadNotifications->count() }}</span>
+                    @if(auth()->user()->unreadNotifications->count())
+                        <span class="float-right text-muted text-sm">{{ auth()->user()->unreadNotifications->count() }}</span>
+                    @endif
                 </a>
             </div>
         </li>
