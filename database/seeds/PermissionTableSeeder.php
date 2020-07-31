@@ -282,6 +282,11 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a operadores',
                 'description'   => 'Permite el acceso a la vista de los operadores'
             ],
+            [
+                'name'          => 'report_efficiency',
+                'display_name'  => 'Acceso a Reporte de eficiencia',
+                'description'   => 'Permite visualizar reporte de eficiencia'
+            ],
         ];
 
         Permission::insert($permissions);

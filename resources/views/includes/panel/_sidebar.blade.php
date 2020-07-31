@@ -160,12 +160,14 @@
                 @ability('admin,ti', 'report_access')
                     <li class="nav-header">Reportes</li>
 
+                    @permission('report_efficiency')
                     <li class="nav-item">
                         <a href="{{ route('reporte.eficiencia') }}" class="nav-link {{ routeIs(['reporte.eficiencia']) }}">
                             <i class="nav-icon fas fa-plus-circle"></i>
                             <p>Eficiencia</p>
                         </a>
                     </li>
+                    @endpermission
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fas fa-clock nav-icon"></i>
