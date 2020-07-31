@@ -43,11 +43,7 @@ class CommentEmpleadoNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $subject = str_replace(
-            ['%usuario_id%','%usuario_nombre%','%ticket_id%'],
-            [$this->comment->operador->id, $this->comment->operador->nombre,$this->comment->ticket->id],
-            Config::get('helpdesk.mail.alert_ticket_comment_subject')
-        );
+        $subject = $this->getSubject();
 
         $mailMessage =  (new MailMessage)
         ->subject( $subject )
@@ -57,6 +53,30 @@ class CommentEmpleadoNotification extends Notification
         ->from(Config::get('helpdesk.global.from_user_request'), Config::get('helpdesk.global.name'));
 
         return $mailMessage;
+    }
+
+    /**
+     * Build string description for mail
+     *
+     * @return string
+     */
+    private function getSubject(): string {
+        $argsCommentSubject =  [
+            '%usuario_id%',
+            '%usuario_nombre%',
+            '%ticket_id%'
+        ];
+
+        $valuesCommentSubject = [
+            $this->comment->ticket->solicitud->empleado->id,
+            $this->comment->ticket->solicitud->empleado->nombre,
+            $this->comment->ticket->id
+        ];
+
+        return str_replace($argsCommentSubject,
+            $valuesCommentSubject,
+            Config::get('helpdesk.mail.alert_ticket_comment_subject')
+        );
     }
 
     /**
