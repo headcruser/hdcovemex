@@ -3,17 +3,18 @@
 namespace HelpDesk\Entities\Admin;
 
 use HelpDesk\Entities\Media;
+use HelpDesk\Entities\Ticket;
 use HelpDesk\Entities\Solicitude;
-use HelpDesk\Builder\Admin\UserQuery;
 
 use Illuminate\Support\Facades\Hash;
+use HelpDesk\Builder\Admin\UserQuery;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notifiable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
+
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 
 
@@ -98,6 +99,11 @@ class User extends Authenticatable
     public function solicitudes()
     {
         return $this->hasMany(Solicitude::class, 'usuario_id', 'id');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'usuario_id', 'id');
     }
 
     public function operador() {

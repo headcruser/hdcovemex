@@ -168,3 +168,22 @@ Route::group([
         'uses'          => 'SolicitudController@storeComment'
     ]);
 });
+
+# REPORTES
+Route::group([
+    'prefix'        => 'reportes',
+    'as'            => 'reporte.',
+    'namespace'     => 'Reportes',
+    'middleware'    => ['auth']
+], function () {
+    Route::get('eficiencia/export', [
+        'as'    => 'eficiencia.export',
+        'uses'  => 'EficienciaReportController@export'
+    ]);
+
+    Route::get('eficiencia', [
+        'as'    => 'eficiencia',
+        'uses'  => 'EficienciaReportController@eficiencia'
+    ]);
+});
+

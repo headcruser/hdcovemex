@@ -161,9 +161,9 @@
                     <li class="nav-header">Reportes</li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('reporte.eficiencia') }}" class="nav-link {{ routeIs(['reporte.eficiencia']) }}">
                             <i class="nav-icon fas fa-plus-circle"></i>
-                            <p>Creados</p>
+                            <p>Eficiencia</p>
                         </a>
                     </li>
                     <li class="nav-item">

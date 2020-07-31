@@ -10,13 +10,14 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
-        "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0",
         "browner12/helpers": "^3.0",
         "fideloper/proxy": "^4.0",
-        "laraveles/spanish": "^1.4",
         "gghughunishvili/entrust": "^3.0",
-        "laravel/ui": "^2.0"
+        "laravel/framework": "^7.0",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.0",
+        "laraveles/spanish": "^1.4",
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
