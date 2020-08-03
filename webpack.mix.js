@@ -34,3 +34,4 @@ mix.styles([
 
 .version();
 
+mix.browserSync(process.env.APP_URL)
