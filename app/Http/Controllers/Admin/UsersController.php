@@ -19,7 +19,14 @@ class UsersController extends Controller
     {
         abort_unless(Entrust::can('user_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('admin.users.index', [ 'collection' => User::with(['departamento', 'roles'])->paginate() ]);
+        $usuarios = User::query()
+            ->select(['id','nombre','email','telefono','departamento_id','usuario'])
+            ->activos()
+            ->with(['departamento', 'roles','media'])->paginate();
+
+        return view('admin.users.index', [
+            'collection' =>  $usuarios
+        ]);
     }
 
     public function create()
@@ -116,9 +123,13 @@ class UsersController extends Controller
     {
         abort_unless(Entrust::can('user_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        $model->delete();
+        $model->roles()->sync([]);
+        $model->deleted_at = now();
+        $model->save();
 
-        return back();
+        return redirect()->back()->with([
+            'message' => 'Usuario Eliminado Correctamente'
+        ]);
     }
 
     public function massDestroy(Request $request)

@@ -20,4 +20,9 @@ class UserQuery extends Builder
             $query->whereIn('name', $values);
         });
     }
+
+    public function activos()
+    {
+        return $this->whereNull('deleted_at');
+    }
 }

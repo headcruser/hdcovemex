@@ -139,6 +139,10 @@ class OperatorsController extends Controller
     {
         abort_unless(Entrust::can('operator_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
+        $operador->usuario->roles()->sync([]);
+        $operador->usuario->deleted_at = now();
+        $operador->usuario->save();
+
         $operador->delete();
 
         return redirect()
