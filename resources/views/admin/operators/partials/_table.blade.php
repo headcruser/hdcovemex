@@ -6,6 +6,7 @@
                     <tr>
                         <th>ID </th>
                         <th>NOMBRE</th>
+                        <th>USUARIO</th>
                         <th>EMAIL</th>
                         <th>ROLES</th>
                         <th>SOLICITUD</th>
@@ -21,6 +22,9 @@
                             </td>
                             <td>
                                 {{ $element->usuario->nombre }}
+                            </td>
+                            <td>
+                                {{ $element->usuario->usuario }}
                             </td>
                             <td>
                                 {{ $element->usuario->email }}

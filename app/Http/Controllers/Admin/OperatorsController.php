@@ -16,18 +16,31 @@ class OperatorsController extends Controller
     {
         abort_unless(Entrust::can('operator_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
+        $operadores = Operador::with(['usuario'])->paginate();
+
         return view('admin.operators.index',[
-            'collection' => Operador::with(['usuario'])->paginate()
+            'collection' => $operadores
         ]);
     }
 
     public function create(){
         abort_unless(Entrust::can('operator_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
+        $roles = Role::query()
+            ->select(['name','id'])
+            ->whereNotIn('name', ['empleado'])
+            ->pluck('name', 'id');
+
+        $departamentos = Departamento::query()
+            ->select(['id','nombre'])
+            ->pluck('nombre', 'id')
+            ->prepend('Selecciona un departamento', '');
+
+
         return view('admin.operators.create', [
-            'roles'         => Role::all()->pluck('name', 'id'),
-            'departamentos' => Departamento::all()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
-            'model'          => (new User())
+            'roles'         => $roles,
+            'departamentos' => $departamentos,
+            'model'          => (new Operador())
         ]);
     }
 
@@ -63,11 +76,21 @@ class OperatorsController extends Controller
     {
         abort_unless(Entrust::can('operator_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden') );
 
-        $operador->load(['usuario','usuario.roles']);
+        $operador->load(['usuario','usuario.roles','usuario.media']);
+
+        $roles = Role::query()
+            ->select(['name','id'])
+            ->whereNotIn('name', ['empleado'])
+            ->pluck('name', 'id');
+
+        $departamentos = Departamento::query()
+            ->select(['id','nombre'])
+            ->pluck('nombre', 'id')
+            ->prepend('Selecciona un departamento', '');
 
         return view('admin.operators.edit', [
-            'roles'         => Role::all()->pluck('name', 'id'),
-            'departamentos' => Departamento::all()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
+            'roles'         => $roles,
+            'departamentos' => $departamentos,
             'model'         => $operador
         ]);
     }

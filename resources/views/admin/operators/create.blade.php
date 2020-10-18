@@ -25,7 +25,7 @@
             </div>
             <div class="card-body">
 
-                <form action="{{ route("admin.operadores.store") }}" method="POST" enctype="multipart/form-data">
+                <form id="form-crear-operador" action="{{ route("admin.operadores.store") }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     @include('admin.operators.partials._fields')
@@ -46,4 +46,25 @@
 @endsection
 
 @section('scripts')
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        const $form = $('#form-crear-operador');
+
+        $form.submit(function(e){
+            Swal.fire({
+                title: 'Procesando',
+                html: 'Espere un momento por favor.',
+                allowEscapeKey:false,
+                allowOutsideClick:false,
+                allowEnterKey:false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+        });
+    });
+
+</script>
 @endsection

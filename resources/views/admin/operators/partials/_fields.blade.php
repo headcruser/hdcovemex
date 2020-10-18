@@ -16,6 +16,17 @@
     </div>
 </div>
 
+<div class="form-group @error('usuario') has-error @enderror">
+    <label for="input-usuario">Usuario*</label>
+    <input type="text" id="input-usuario" name="usuario" class="form-control" value="{{ old('usuario', $model->usuario->usuario) }}"
+        autocomplete="off" required>
+    <div class="help-block with-errors">
+        @error('usuario')
+        <span>{{ $errors->first('usuario') }}</span>
+        @enderror
+    </div>
+</div>
+
 <div class="form-group @error('email') has-error @enderror">
     <label for="input-email">Correo electronico*</label>
 
