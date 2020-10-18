@@ -7,6 +7,7 @@
                         <th width="10"></th>
                         <th>ID </th>
                         <th>NOMBRE</th>
+                        <th>USUARIO</th>
                         <th>EMAIL</th>
                         <th>DEPARTAMENTO</th>
                         <th>ROLES</th>
@@ -17,19 +18,22 @@
                     @foreach($collection as $key => $element)
                         <tr data-entry-id="{{ $element->id }}">
                             <td></td>
-                            <td>
+                            <td class="align-middle">
                                 {{ $element->id }}
                             </td>
-                            <td>
+                            <td class="align-middle" >
                                 {{ $element->nombre }}
                             </td>
-                            <td>
+                            <td class="align-middle">
+                                {{ $element->usuario }}
+                            </td>
+                            <td class="align-middle">
                                 {{ $element->email }}
                             </td>
-                            <td>
+                            <td class="align-middle">
                                 {{ $element->departamento->nombre }}
                             </td>
-                            <td>
+                            <td class="align-middle text-center">
                                 @forelse($element->roles as $key => $item)
                                     <span class="badge badge-info">{{ $item->name }}</span>
                                 @empty

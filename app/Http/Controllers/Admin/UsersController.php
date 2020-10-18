@@ -39,8 +39,9 @@ class UsersController extends Controller
         try {
             $user = User::create($request->all());
             $user->roles()->sync($request->input('roles', []));
-
             DB::commit();
+
+            # TODO Envio de correo al usuario
 
             return redirect()->route('admin.usuarios.index')
                 ->with(['message' => 'Usuario Creado Correctamente']);
@@ -72,7 +73,19 @@ class UsersController extends Controller
     {
         DB::beginTransaction();
         try {
-            $model->update($request->all());
+
+            $model->nombre  = $request->input('nombre');
+            $model->email = $request->input('email');
+            $model->telefono = $request->input('telefono');
+
+            if (!empty($request->input('password'))) {
+                $model->password = $request->input('password');
+            }
+
+            $model->departamento_id = $request->input('departamento_id');
+            $model->usuario = $request->input('usuario');
+            $model->save();
+
             $model->roles()->sync($request->input('roles', []));
 
             DB::commit();

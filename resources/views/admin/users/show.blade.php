@@ -38,6 +38,15 @@
                                 {{ $model->nombre }}
                             </td>
                         </tr>
+
+                        <tr>
+                            <th>
+                                USUARIO
+                            </th>
+                            <td>
+                                {{ $model->usuario }}
+                            </td>
+                        </tr>
                         <tr>
                             <th>
                                 EMAIL
@@ -56,13 +65,13 @@
                         </tr>
                         <tr>
                             <th>
-                                Roles
+                                ROLES
                             </th>
                             <td>
-                                @forelse($model->roles as $id => $roles)
-                                    <span class="label label-info label-many">{{ $roles->nombre }}</span>
+                                @forelse($model->roles as $key => $item)
+                                    <span class="badge badge-info">{{ $item->name }}</span>
                                 @empty
-                                    <span class="label label-warning label-many">Sin Roles</span>
+                                    <span class="badge badge-warning"> Sin Roles</span>
                                 @endforelse
                             </td>
                         </tr>

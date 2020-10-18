@@ -23,7 +23,7 @@
                 <h3 class="card-title">Información del usuario</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route("admin.usuarios.update", $model) }}" method="POST" enctype="multipart/form-data">
+                <form id="form-editar-usuario" action="{{ route("admin.usuarios.update", $model) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -45,5 +45,25 @@
 @endsection
 
 @section('scripts')
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        const $form = $('#form-editar-usuario');
+
+        $form.submit(function(e){
+            Swal.fire({
+                title: 'Procesando',
+                html: 'Espere un momento por favor.',
+                allowEscapeKey:false,
+                allowOutsideClick:false,
+                allowEnterKey:false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+        });
+    });
+
+</script>
 @endsection
 
