@@ -186,7 +186,8 @@ return [
         HelpDesk\Providers\AuthServiceProvider::class,
         HelpDesk\Providers\EventServiceProvider::class,
         HelpDesk\Providers\RouteServiceProvider::class,
-        HelpDesk\Providers\BladeServiceProvider::class
+        HelpDesk\Providers\BladeServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
 
     ],
 
@@ -239,6 +240,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
+
+        'DNS1D'         => Milon\Barcode\Facades\DNS1DFacade::class,
     ],
 
 ];

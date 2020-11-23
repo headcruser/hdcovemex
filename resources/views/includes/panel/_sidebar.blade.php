@@ -176,6 +176,31 @@
                     </li>
                 @endability
 
+                 <!-- ADMINISTRACION -->
+                 @permission('tools_access')
+                 <li class="nav-header">Utilerias</li>
+
+                 <li class="nav-item has-treeview {{ active('herramientas/*', 'menu-open') }} ">
+                     <a href="#" class="nav-link {{ active('herramientas/*') }}">
+                         <i class="nav-icon fas fa-users-cog"></i>
+                         <p>
+                             Herramientas
+                             <i class="fas fa-angle-left right"></i>
+                         </p>
+                     </a>
+                     <ul class="nav nav-treeview">
+                         @permission('barcode_access')
+                             <li class="nav-item ">
+                                 <a href="{{ route('herramientas.barcode.index') }}" class="nav-link {{ routeIs(['herramientas.barcode.index','herramientas.barcode.*']) }}">
+                                     <i class="nav-icon fas fa-barcode"></i>
+                                     <p>Codigo de barras</p>
+                                 </a>
+                             </li>
+                         @endpermission
+                     </ul>
+                 </li>
+             @endpermission
+
                 <!-- OPCIONES -->
                 <li class="nav-header">Opciones</li>
                 <li class="nav-item">

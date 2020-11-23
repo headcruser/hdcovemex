@@ -187,3 +187,23 @@ Route::group([
     ]);
 });
 
+
+# HERRAMIENTAS
+
+Route::group([
+    'prefix'        => 'herramientas',
+    'as'            => 'herramientas.',
+    'namespace'     => 'Herramientas',
+    'middleware'    => ['auth']],
+    function () {
+        Route::get('barcode', [
+            'as'            => 'barcode.index',
+            'uses'          => 'BarcodeController@index'
+        ]);
+
+        Route::get('barcode/download', [
+            'as'            => 'barcode.download',
+            'uses'          => 'BarcodeController@download'
+        ]);
+    }
+);
