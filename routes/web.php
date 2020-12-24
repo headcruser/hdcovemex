@@ -205,5 +205,16 @@ Route::group([
             'as'            => 'barcode.download',
             'uses'          => 'BarcodeController@download'
         ]);
+
+        # REPORTE IMPRESORAS
+        Route::get('reporte-impresoras', [
+            'as'            => 'impresoras.index',
+            'uses'          => 'ImpresorasController@index'
+        ]);
+
+        Route::post('reporte-impresoras', [
+            'as'            => 'impresoras.calcular',
+            'uses'          => 'ImpresorasController@calcular'
+        ]);
     }
 );

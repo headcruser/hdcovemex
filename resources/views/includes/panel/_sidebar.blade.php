@@ -197,6 +197,12 @@
                                  </a>
                              </li>
                          @endpermission
+                         <li class="nav-item ">
+                            <a href="{{ route('herramientas.impresoras.index') }}" class="nav-link {{ routeIs(['herramientas.impresoras.index','herramientas.impresoras.*']) }}">
+                                <i class="nav-icon fas fa-print"></i>
+                                <p>Reporte Impresiones</p>
+                            </a>
+                        </li>
                      </ul>
                  </li>
              @endpermission

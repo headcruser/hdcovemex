@@ -29,6 +29,10 @@ mix.styles([
     'resources/vendor/daterangepicker/daterangepicker.js',
 ], 'public/js/vendor.js')
 
+.scripts([
+    'resources/vendor/table-html-exel/table-html.js'
+],'public/js/vendor/table-html/table-html.js')
+
 .copy('resources/vendor/fontawesome-free-5.12.1-web/webfonts','public/webfonts')
 .copy('resources/img','public/img')
 
