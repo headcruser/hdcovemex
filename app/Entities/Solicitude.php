@@ -11,10 +11,11 @@ use HelpDesk\Observers\SolicitudeActionObserver;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Solicitude extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     /**
      * The table associated with the model.
@@ -60,6 +61,16 @@ class Solicitude extends Model
         parent::boot();
 
         // Solicitude::observe(new SolicitudeActionObserver);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\SolicitudFactory::new();
     }
 
     /**

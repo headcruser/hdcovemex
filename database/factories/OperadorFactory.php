@@ -1,19 +1,34 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
 use HelpDesk\Entities\Admin\User;
 use HelpDesk\Entities\Admin\Operador;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Operador::class, function (Faker $faker) {
+class OperadorFactory extends Factory {
 
-    $operadores = User::withRoles('soporte', 'jefatura')->get();
-    $operador = $operadores->random();
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Operador::class;
 
-    return [
-        'usuario_id'            => $operador->id,
-        'notificar_solicitud'   => true,
-        'notificar_asignacion'  => true,
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $operadores = User::withRoles('soporte', 'jefatura')->get();
+        $operador = $operadores->random();
+
+        return [
+            'usuario_id'            => $operador->id,
+            'notificar_solicitud'   => true,
+            'notificar_asignacion'  => true,
+        ];
+    }
+}

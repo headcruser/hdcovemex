@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 
 use HelpDesk\Entities\Admin\User;
 use Illuminate\Database\Seeder;

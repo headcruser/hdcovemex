@@ -1,7 +1,9 @@
 <?php
+namespace Database\Seeders;
 
 use HelpDesk\Entities\Config\Attribute;
 use Illuminate\Database\Seeder;
+
 
 class AttributeTableSeeder extends Seeder
 {

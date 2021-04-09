@@ -1,8 +1,10 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use HelpDesk\Entities\Admin\Role;
 use HelpDesk\Entities\Admin\Permission;
+
 
 class PermissionRoleTableSeeder extends Seeder
 {

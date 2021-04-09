@@ -1,8 +1,8 @@
 <?php
+namespace Database\Seeders;
 
 use HelpDesk\Entities\Admin\Operador;
 use HelpDesk\Entities\Admin\User;
-
 use Illuminate\Database\Seeder;
 
 class OperatorSeeders extends Seeder

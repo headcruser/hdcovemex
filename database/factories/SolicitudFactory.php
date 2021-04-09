@@ -1,35 +1,52 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use HelpDesk\Entities\Ticket;
 use HelpDesk\Entities\Admin\User;
 use HelpDesk\Entities\Solicitude;
 use HelpDesk\Entities\Config\Status;
 use Illuminate\Support\Facades\Config;
 
-$factory->define(Solicitude::class, function (Faker $faker) {
-    return [
-        'fecha'         => now(),
-        'usuario_id'    => optional(User::withRole('empleado')->get()->random())->id,
-        'estatus_id'    => optional(Status::pendientes()->first())->id,
-        'titulo'        => $faker->sentence(2),
-        'incidente'     => $faker->text(),
-    ];
-});
+class SolicitudFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Solicitude::class;
 
-$factory->afterCreatingState(Solicitude::class, 'ticket', function ($solicitud, $faker) {
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'fecha'         => now(),
+            'usuario_id'    => optional(User::withRole('empleado')->get()->random())->id,
+            'estatus_id'    => optional(Status::pendientes()->first())->id,
+            'titulo'        => $this->faker->sentence(2),
+            'incidente'     => $this->faker->text(),
+        ];
+    }
 
-    $ticket = factory(Ticket::class)->state('comentario')->create([
-        'titulo'        => 'Atentiendo Solicitud ' . $solicitud->id,
-        'usuario_id'    => $solicitud->usuario_id,
-        'incidente'     => $solicitud->incidente,
-        'estado'        => Config::get('helpdesk.tickets.estado.alias.ABT'),
-    ]);
+    public function createTicket()
+    {
+        return $this->afterCreating(function (Solicitude $solicitud) {
+            $ticket = Ticket::factory()->comentario()->create([
+                'titulo'        => 'Atentiendo Solicitud ' . $solicitud->id,
+                'usuario_id'    => $solicitud->usuario_id,
+                'incidente'     => $solicitud->incidente,
+                'estado'        => Config::get('helpdesk.tickets.estado.alias.ABT'),
+            ]);
 
-    $solicitud->ticket()->associate($ticket);
-    $solicitud->estatus_id = optional(Status::proceso()->first())->id;
-    $solicitud->save();
-});
-
+            $solicitud->ticket()->associate($ticket);
+            $solicitud->estatus_id = optional(Status::proceso()->first())->id;
+            $solicitud->save();
+        });
+    }
+}

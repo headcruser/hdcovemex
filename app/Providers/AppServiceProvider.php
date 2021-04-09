@@ -5,6 +5,7 @@ namespace HelpDesk\Providers;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
             'create'    => 'crear',
             'edit'      => 'editar',
         ]);
+
+        Paginator::useBootstrap();
     }
 
     /**

@@ -7,10 +7,11 @@ use HelpDesk\Entities\Admin\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ticket extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     /**
      * The table associated with the model.
@@ -66,6 +67,16 @@ class Ticket extends Model
     public static function boot()
     {
         parent::boot();
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\TicketFactory::new();
     }
 
     /**

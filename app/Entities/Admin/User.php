@@ -12,15 +12,13 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notifiable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
-
 class User extends Authenticatable
 {
-    use Notifiable, EntrustUserTrait;
+    use Notifiable, EntrustUserTrait, HasFactory;
 
     /**
      * The table associated with the model.
@@ -78,6 +76,16 @@ class User extends Authenticatable
         return new UserQuery($query);
     }
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\UserFactory::new();
+    }
+
     ## RELACIONES
 
     /**
@@ -106,17 +114,19 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, 'usuario_id', 'id');
     }
 
-    public function operador() {
+    public function operador()
+    {
         return $this->hasOne(Operador::class, 'usuario_id', 'id')->withDefault();
     }
 
-    public function isOperador() {
+    public function isOperador()
+    {
         return $this->operador()->exists();
     }
 
     ## ACCESORES
 
-     /**
+    /**
      * Obtiene el nombre del rol del usuario
      *
      * @return string

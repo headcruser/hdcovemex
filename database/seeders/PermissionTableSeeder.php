@@ -1,4 +1,5 @@
 <?php
+namespace Database\Seeders;
 
 use HelpDesk\Entities\Admin\Permission;
 use Illuminate\Database\Seeder;
@@ -287,8 +288,30 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso a Reporte de eficiencia',
                 'description'   => 'Permite visualizar reporte de eficiencia'
             ],
+            [
+                'name'          => 'tools_access',
+                'display_name'  => 'Acceso a herramientas',
+                'description'   => 'Habilita la seccion de herramientas'
+            ],
+            [
+                'name'          => 'barcode_access',
+                'display_name'  => 'Acceso Codigo de Barras',
+                'description'   => 'Acceso al generador de codigo de barras'
+            ],
         ];
 
-        Permission::insert($permissions);
+        # Permission::insert($permissions);
+
+        foreach ($permissions as $permission) {
+            Permission::updateOrCreate(
+                ['name'         =>  $permission['name'] ],
+                [
+                    'display_name'  => $permission['display_name'],
+                    'description'   => $permission['description'],
+                ]
+            );
+        }
+
+        #\HelpDesk\Entities\Admin\Role::findOrFail(1)->perms()->sync(\HelpDesk\Entities\Admin\Permission::all());
     }
 }

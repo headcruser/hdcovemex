@@ -1,4 +1,5 @@
 <?php
+namespace Database\Seeders;
 
 use HelpDesk\Entities\Admin\Departamento;
 use Illuminate\Database\Seeder;

@@ -5,10 +5,11 @@ namespace HelpDesk\Entities\Admin;
 use HelpDesk\Traits\IconStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Operador extends Model
 {
-    use SoftDeletes,IconStatus;
+    use SoftDeletes,IconStatus,HasFactory;
 
     /**
      * The number of models to return for pagination.
@@ -38,6 +39,16 @@ class Operador extends Model
         'updated_at',
         'deleted_at',
     ];
+
+      /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\OperadorFactory::new();
+    }
 
     public function usuario(){
         return $this->belongsTo(User::class,'usuario_id','id')
