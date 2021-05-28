@@ -15,7 +15,7 @@
         "gghughunishvili/entrust": "^4.0",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
+        "laravel/ui": "^3.0",
         "laraveles/spanish": "^1.4",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^8.0",
