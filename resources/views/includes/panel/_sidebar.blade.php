@@ -102,6 +102,66 @@
                     </li>
                 @endpermission
 
+                <!-- GESTION DE INVENTARIO-->
+
+                @permission('inventory_management')
+                <li class="nav-header">Inventario</li>
+
+                <li class="nav-item has-treeview {{ active('gestion-inventarios/*', 'menu-open') }} ">
+                    <a href="#" class="nav-link {{ active('gestion-inventarios/*') }}">
+                        <i class="nav-icon fas fa-warehouse"></i>
+                        <p>
+                            Gestión de inventarios
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.sucursales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.sucursales.*']) }}">
+                                <i class="nav-icon far fa-building"></i>
+                                <p>Sucursales</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.tipo-hardware.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.tipo-hardware.*']) }}">
+                                <i class="nav-icon fas fa-memory"></i>
+                                <p>Tipo Hardware</p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.hardware.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.hardware.*']) }}">
+                                <i class="nav-icon fas fa-microchip"></i>
+                                <p>Hardware</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.equipos.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.equipos.*']) }}">
+                                <i class="nav-icon fas fa-laptop-code"></i>
+                                <p>Equipos</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.personal.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.personal.*']) }}">
+                                <i class="nav-icon fas fa-user-friends"></i>
+                                <p>Personal</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.impresoras.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresoras.index','gestion-inventarios.impresoras.*']) }}">
+                                <i class="nav-icon fas fa-print"></i>
+                                <p>Reporte Impresiones</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endpermission
+
+
                 <!-- GESTION -->
                 <li class="nav-header">Gestión</li>
 
@@ -176,8 +236,8 @@
                     </li>
                 @endability
 
-                 <!-- ADMINISTRACION -->
-                 @permission('tools_access')
+                 {{--
+                @permission('tools_access')
                  <li class="nav-header">Utilerias</li>
 
                  <li class="nav-item has-treeview {{ active('herramientas/*', 'menu-open') }} ">
@@ -197,15 +257,9 @@
                                  </a>
                              </li>
                          @endpermission
-                         <li class="nav-item ">
-                            <a href="{{ route('herramientas.impresoras.index') }}" class="nav-link {{ routeIs(['herramientas.impresoras.index','herramientas.impresoras.*']) }}">
-                                <i class="nav-icon fas fa-print"></i>
-                                <p>Reporte Impresiones</p>
-                            </a>
-                        </li>
                      </ul>
                  </li>
-             @endpermission
+                @endpermission --}}
 
                 <!-- OPCIONES -->
                 <li class="nav-header">Opciones</li>

@@ -13,13 +13,15 @@
         "browner12/helpers": "^3.0",
         "fideloper/proxy": "^4.0",
         "gghughunishvili/entrust": "^4.0",
+        "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "laravelcollective/html": "^6.2",
         "laraveles/spanish": "^1.4",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^8.0",
-        "guzzlehttp/guzzle": "^7.0.1"
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

@@ -298,6 +298,11 @@ class PermissionTableSeeder extends Seeder
                 'display_name'  => 'Acceso Codigo de Barras',
                 'description'   => 'Acceso al generador de codigo de barras'
             ],
+            [
+                'name'          => 'inventory_management',
+                'display_name'  => 'Gestion de inventarios',
+                'description'   => 'Permite ver la seccion de inventarios'
+            ],
         ];
 
         # Permission::insert($permissions);
@@ -311,7 +316,7 @@ class PermissionTableSeeder extends Seeder
                 ]
             );
         }
-
+        # php artisan db:seed --class=PermissionTableSeeder
         #\HelpDesk\Entities\Admin\Role::findOrFail(1)->perms()->sync(\HelpDesk\Entities\Admin\Permission::all());
     }
 }

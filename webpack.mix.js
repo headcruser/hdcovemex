@@ -18,7 +18,6 @@ mix.styles([
     'resources/vendor/daterangepicker/daterangepicker.css',
     'resources/css/app.css'
 ],'public/css/app.css')
-
 .js('resources/js/app.js', 'public/js')
 
 .scripts([

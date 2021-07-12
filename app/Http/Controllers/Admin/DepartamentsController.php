@@ -18,7 +18,7 @@ class DepartamentsController extends Controller
     {
         abort_unless(Entrust::can('departament_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('admin.departaments.index', [ 'collection' => Departamento::paginate() ]);
+        return view('admin.departaments.index', ['collection' => Departamento::paginate()]);
     }
 
     public function create()
@@ -41,7 +41,6 @@ class DepartamentsController extends Controller
             return redirect()
                 ->route('admin.departamentos.index')
                 ->with(['message' => 'Departamento Creado Correctamente']);
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -72,7 +71,6 @@ class DepartamentsController extends Controller
             return redirect()
                 ->route('admin.departamentos.index')
                 ->with(['message' => 'Departamento actualizado correctamente']);
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -105,5 +103,34 @@ class DepartamentsController extends Controller
         Departamento::whereIn('id', $request->input('ids'))->delete();
 
         return response(null, HTTPMessages::HTTP_NO_CONTENT);
+    }
+
+    public function select2(Request $request)
+    {
+        $term  = $request->input('term');
+        $page = $request->input('page');
+        $resultCount = 10;
+
+        $offset = ($page - 1) * $resultCount;
+
+        $results = Departamento::query()
+            ->where('nombre', 'like', '%' . $term . '%')
+            ->orderBy('nombre')
+            ->skip($offset)
+            ->take($resultCount)->get();
+
+        $count = Departamento::query()
+            ->where('nombre', 'like', '%' . $term . '%')
+            ->count();
+
+        $endCount = $offset + $resultCount;
+        $morePages = $count > $endCount;
+
+        return response()->json([
+            "results" => $results,
+            "pagination" => [
+                "more" => $morePages
+            ]
+        ]);
     }
 }

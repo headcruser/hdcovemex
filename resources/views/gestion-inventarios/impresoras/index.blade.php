@@ -22,7 +22,7 @@
                     <div class="input-group input-group-sm">
                       <div class="input-group-append">
                         <button id="btn-report" type="button" class="btn btn-primary" title="Imprimir">Imprimir Reporte</button>
-                        <a class="btn btn-default" href="{{ route('herramientas.impresoras.index') }}">Regresar</a>
+                        <a class="btn btn-default" href="{{ route('gestion-inventarios.impresoras.index') }}">Regresar</a>
                       </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-12">
                         @if (!session('tb_printer'))
-                            <form class="form" action="{{ route('herramientas.impresoras.calcular') }}" method="POST">
+                            <form class="form" action="{{ route('gestion-inventarios.impresoras.calcular') }}" method="POST">
                                 @csrf
                                 <div class="form-group @error('info') has-error @enderror">
                                     <label>Ingresa la informacion de la impresora</label>

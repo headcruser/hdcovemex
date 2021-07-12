@@ -188,7 +188,7 @@ return [
         HelpDesk\Providers\RouteServiceProvider::class,
         HelpDesk\Providers\BladeServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
-
+        Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
     /*
@@ -240,7 +240,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
-
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'DNS1D'         => Milon\Barcode\Facades\DNS1DFacade::class,
     ],
 

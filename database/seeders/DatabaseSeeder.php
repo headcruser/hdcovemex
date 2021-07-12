@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
             PermissionRoleTableSeeder::class,
             AttributeTableSeeder::class,
             StatusesTableSeeder::class,
-            OperatorSeeders::class
+            OperatorSeeders::class,
+            TipoHardwareSeeder::class,
+            SucursalSeeder::class,
         ]);
     }
 }

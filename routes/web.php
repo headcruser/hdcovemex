@@ -78,6 +78,9 @@ Route::group([
         ]);
 
         # DEPARTAMENTOS
+        Route::post('departamentos/select2', 'DepartamentsController@select2')
+            ->name('departamentos.select2');
+
         Route::resource('departamentos', 'DepartamentsController')->parameters([
             'departamentos'  => 'model'
         ]);
@@ -92,6 +95,75 @@ Route::group([
         # OPERADORES
         Route::resource('operadores', 'OperatorsController')->parameters([
             'operadores'  => 'operador'
+        ]);
+    }
+);
+
+# GESTION DE INVENTARIOS
+Route::group([
+    'prefix'        => 'gestion-inventarios',
+    'as'            => 'gestion-inventarios.',
+    'namespace'     => 'GestionInventarios',
+    'middleware'    => ['auth']],
+    function () {
+
+        # TIPO DE HARDWARE
+        Route::post('tipo-hardware/select2', 'TipoHardwareController@select2')->name('tipo-hardware.select2');
+        Route::post('tipo-hardware/datatables','TipoHardwareController@datatables')->name('tipo-hardware.datatables');
+        Route::resource('tipo-hardware', 'TipoHardwareController')->parameters([
+            'tipo-hardware'  => 'tipoHardware'
+        ])->except('show');
+
+        # HARDWARE
+        Route::post('hardware/select2', 'HardwareController@select2')->name('hardware.select2');
+        Route::post('hardware/datatables','HardwareController@datatables')->name('hardware.datatables');
+        Route::resource('hardware', 'HardwareController')->parameters([
+            'hardware'  => 'hardware'
+        ])->except('show');
+
+        # EQUIPOS
+        Route::post('equipos/buscar_componente_equipo/{componenteEquipo}','EquiposController@buscar_componente_equipo')->name('equipos.buscar_componente_equipo');
+        Route::post('equipos/agregar_componente_equipo','EquiposController@agregar_componente_equipo')->name('equipos.agregar_componente_equipo');
+        Route::put('equipos/actualizar_componente_equipo','EquiposController@actualizar_componente_equipo')->name('equipos.actualizar_componente_equipo');
+        Route::delete('equipos/eliminar_componente_equipo/{componenteEquipo}','EquiposController@eliminar_componente_equipo')->name('equipos.eliminar_componente_equipo');
+        Route::post('equipos/datatables_componentes_equipo','EquiposController@datatables_componentes_equipo')->name('equipos.datatables_componentes_equipo');
+
+        Route::post('equipos/asignar_equipo','EquiposController@asignar_equipo')->name('equipos.asignar_equipo');
+        Route::post('equipos/datatables_asignar_equipo','EquiposController@datatables_asignar_equipo')->name('equipos.datatables_asignar_equipo');
+
+        Route::post('equipos/datatables','EquiposController@datatables')->name('equipos.datatables');
+        Route::resource('equipos', 'EquiposController')->parameters([
+            'equipos'  => 'equipo'
+        ]);
+
+        # SUCURSALES
+        Route::post('sucursales/select2',"SucursalController@select2")->name('sucursal.select2');
+        Route::post('sucursales/datatables',"SucursalController@datatables")->name('sucursales.datatables');
+        Route::resource('sucursales', 'SucursalController')->parameters([
+            'sucursales'  => 'sucursal'
+        ])->except('show');
+
+        # PERSONAL
+        Route::post('personal/actualizar_cuenta/{cuenta}',"PersonalController@actualizar_cuenta")->name('personal.actualizar_cuenta');
+        Route::post('personal/eliminar_cuenta/{cuenta}',"PersonalController@eliminar_cuenta")->name('personal.eliminar_cuenta');
+        Route::post('personal/listar_cuentas',"PersonalController@listar_cuentas")->name('personal.listar_cuentas');
+        Route::post('personal/agregar_cuenta',"PersonalController@agregar_cuenta")->name('personal.agregar_cuenta');
+        Route::post('personal/select2',"PersonalController@select2")->name('personal.select2');
+        Route::post('personal/datatables',"PersonalController@datatables")->name('personal.datatables');
+        Route::resource('personal', 'PersonalController')->parameters([
+            'personal'  => 'personal'
+        ]);
+
+
+        # REPORTE IMPRESORAS
+        Route::get('reporte-impresoras', [
+            'as'            => 'impresoras.index',
+            'uses'          => 'ImpresorasController@index'
+        ]);
+
+        Route::post('reporte-impresoras', [
+            'as'            => 'impresoras.calcular',
+            'uses'          => 'ImpresorasController@calcular'
         ]);
     }
 );
@@ -204,17 +276,6 @@ Route::group([
         Route::get('barcode/download', [
             'as'            => 'barcode.download',
             'uses'          => 'BarcodeController@download'
-        ]);
-
-        # REPORTE IMPRESORAS
-        Route::get('reporte-impresoras', [
-            'as'            => 'impresoras.index',
-            'uses'          => 'ImpresorasController@index'
-        ]);
-
-        Route::post('reporte-impresoras', [
-            'as'            => 'impresoras.calcular',
-            'uses'          => 'ImpresorasController@calcular'
         ]);
     }
 );
