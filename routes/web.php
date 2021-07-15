@@ -124,7 +124,7 @@ Route::group([
         # EQUIPOS
         Route::post('equipos/buscar_componente_equipo/{componenteEquipo}','EquiposController@buscar_componente_equipo')->name('equipos.buscar_componente_equipo');
         Route::post('equipos/agregar_componente_equipo','EquiposController@agregar_componente_equipo')->name('equipos.agregar_componente_equipo');
-        Route::put('equipos/actualizar_componente_equipo','EquiposController@actualizar_componente_equipo')->name('equipos.actualizar_componente_equipo');
+        Route::put('equipos/actualizar_componente_equipo/{componenteEquipo}','EquiposController@actualizar_componente_equipo')->name('equipos.actualizar_componente_equipo');
         Route::delete('equipos/eliminar_componente_equipo/{componenteEquipo}','EquiposController@eliminar_componente_equipo')->name('equipos.eliminar_componente_equipo');
         Route::post('equipos/datatables_componentes_equipo','EquiposController@datatables_componentes_equipo')->name('equipos.datatables_componentes_equipo');
 

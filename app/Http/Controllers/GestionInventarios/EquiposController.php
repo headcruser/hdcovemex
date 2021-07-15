@@ -78,7 +78,7 @@ class EquiposController extends Controller
         $equipo->save();
 
         return redirect()
-            ->route('gestion-inventarios.equipos.index')
+            ->route('gestion-inventarios.equipos.show',$equipo)
             ->with(['message' => 'Equipo editado correctamente']);
     }
 
@@ -175,6 +175,25 @@ class EquiposController extends Controller
         return response()->json([
             'success' => 'true',
             'message' => 'agregar_componente_equipo',
+        ]);
+    }
+
+    public function actualizar_componente_equipo(Request $request, ComponenteEquipo $componenteEquipo)
+    {
+        $data = $request->validate([
+            'id_hardware'   => 'required',
+            'id_equipo'     => 'required',
+            'observacion'   => 'nullable',
+        ]);
+
+        $componenteEquipo->fill($data);
+
+        $componenteEquipo->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Componente actualizado correctamente',
+            'data'    => $componenteEquipo
         ]);
     }
 

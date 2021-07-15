@@ -86,9 +86,9 @@ class HardwareController extends Controller
 
         $results = Hardware::query()
             ->where(function($q) use($term){
-                $q->where('descripcion', 'like', '%' . $term . '%')
-                ->where('no_serie','like', '%' . $term . '%')
-                ->where('marca','like', '%' . $term . '%');
+                $q->orWhere('descripcion', 'like', '%' . $term . '%')
+                ->orWhere('no_serie','like', '%' . $term . '%')
+                ->orWhere('marca','like', '%' . $term . '%');
             })
             ->when($request->input('no_asignado'),function($q){
                 $q->where('asignado',0);

@@ -2,12 +2,14 @@
 
 namespace HelpDesk\Entities\Inventario;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Collective\Html\Eloquent\FormAccessible;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Equipo extends Model
 {
-    use HasFactory;
+    use HasFactory, FormAccessible;
 
     /**
      * The table associated with the model.
@@ -42,5 +44,16 @@ class Equipo extends Model
     public function historial_asignaciones()
     {
         return $this->hasMany(EquipoAsignado::class, 'id_equipo', 'id');
+    }
+
+    #NOTE: Form Model Accessors (Laravel Collective) https://laravelcollective.com/docs/5.4/html
+
+    public function formFechaEquipoAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        return Carbon::parse($value)->format('Y-m-d');
     }
 }

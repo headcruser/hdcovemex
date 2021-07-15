@@ -16,7 +16,7 @@
     <li class="breadcrumb-item"> <a href="#">
        Gestión de inventarios </a>
     </li>
-    <li class="breadcrumb-item"> <a href="{{ route('gestion-inventarios.personal.index') }}">
+    <li class="breadcrumb-item"> <a href="{{ route('gestion-inventarios.equipos.index') }}">
         Equipo </a>
      </li>
     <li class="breadcrumb-item active">Detalle equipo</li>
@@ -33,12 +33,12 @@
               <p class="text-muted text-center">{{ $equipo->descripcion }}</p>
 
               <ul class="list-group list-group-unbordered mb-3">
-                <li class="list-group-item">
-                  <b>Fecha de creación</b> <a class="float-right">{{ $equipo->fecha_equipo->format('d-m-Y') }}</a>
-                </li>
-                <li class="list-group-item">
-                    <b>Estatus</b> <a class="float-right">{{ $equipo->status }}</a>
-                  </li>
+                    <li class="list-group-item">
+                        <b>Fecha de creación</b> <a class="float-right">{{ $equipo->fecha_equipo->format('d-m-Y') }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Estatus</b> <a class="float-right">{{ $equipo->status }}</a>
+                    </li>
               </ul>
 
               <a href="{{ route('gestion-inventarios.equipos.edit',$equipo) }}" class="btn btn-primary btn-block">Editar</a>
@@ -52,7 +52,7 @@
             <div class="card-header">
                 <h3 class="card-title">Componentes del equipo</h3>
                 <div class="card-tools">
-                    <button class="btn btn-primary" id="btn-agregar">Agregar componente</button>
+                    <button class="btn btn-primary" id="btn-agregar-compoentes-equipo">Agregar componente</button>
                 </div>
             </div>
             <div class="card-body" id="lista-info">
@@ -111,7 +111,7 @@
        </div>
    </div>
 
-  <div class="modal fade" id="modal-equipo" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
+  <div class="modal fade" id="modal-componentes-equipo" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
     <div class="modal-dialog modal-lg">
       <div class="modal-content ">
         <div class="modal-header">
@@ -120,7 +120,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        {!! Form::open(['id' => 'form-equipo', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
+        {!! Form::open(['id' => 'form-componentes-equipo', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('id_hardware', 'Hardware:*') !!}
@@ -132,6 +132,7 @@
                 {!! Form::textarea('observacion',null, ['id' => 'ta-observacion' ,'class' => 'form-control','rows' => 3]) !!}
                 <small data-help class="form-text text-muted"></small>
             </div>
+            <div id="d-errors-componentes-equipo" class="form-group"></div>
             {!! Form::hidden('id_equipo', $equipo->id) !!}
         </div>
         <div class="modal-footer justify-content-between">
@@ -171,6 +172,7 @@
                 {!! Form::textarea('observaciones',null, ['class' => 'form-control','rows' => 3,'required' => true, 'placeholder' => 'Motivo de entrega']) !!}
                 <small data-help class="form-text text-muted"></small>
             </div>
+            <div id="d-errors-asignar-equipo" class="form-group"></div>
             {!! Form::hidden('id_equipo', $equipo->id) !!}
         </div>
         <div class="modal-footer justify-content-between">
@@ -196,20 +198,20 @@
         const m_equipos = (function(){
             const dom =  {
                 contenedor_info:$("#contenedor-info-personal"),
-                modal_equipo: $("#modal-equipo"),
-                modal_asignar:$("#modal-asignar-equipo"),
-                btn_agregar:$("#btn-agregar"),
-                btn_asignar: $("#btn-asignar-equipo"),
                 tb_componentes_equipo: $("#tb-componentes-equipo"),
-                form_equipo: $("#form-equipo"),
-                form_asignar_equipo: $("#form-asignar-equipo"),
+                modal_componentes_equipo: $("#modal-componentes-equipo"),
+                form_componentes_equipo: $("#form-componentes-equipo"),
+                btn_agregar_compoentes_equipo:$("#btn-agregar-compoentes-equipo"),
 
+                btn_asignar_equipo: $("#btn-asignar-equipo"),
+                modal_asignar_equipo:$("#modal-asignar-equipo"),
+                form_asignar_equipo: $("#form-asignar-equipo"),
                 tb_historial_asignacion: $("#tb-historial-asignacion"),
             }
 
             // GESTION DE COMPONENTES DEL EQUIPO
             $('#select-id_hardware').select2({
-                dropdownParent: dom.modal_equipo,
+                dropdownParent: dom.modal_componentes_equipo,
                 languaje: "es",
                 placeholder: "Selecciona el hardware",
                 ajax: {
@@ -233,20 +235,27 @@
                 escapeMarkup: function (markup) { return markup; },
                 minimumInputLength: 3,
                 templateResult: function(option){
-                    return option.descripcion||option.text;
+                    if (option.loading) {
+                        return option.text;
+                    }
+
+                    if (!option.descripcion || !option.no_serie|| !option.marca||!option.proveedor){
+                        return option.text;
+                    }
+
+                    return `${option.descripcion} || ${option.no_serie} || ${option.marca} || ${option.proveedor}`;
                 },
-                templateSelection:function(option){
-                    return option.descripcion||option.text;
+                templateSelection:function(option) {
+                    if (option.loading) {
+                        return option.text;
+                    }
+
+                    if (!option.descripcion || !option.no_serie|| !option.marca||!option.proveedor){
+                        return option.text;
+                    }
+
+                    return `${option.descripcion} || ${option.no_serie} || ${option.marca} || ${option.proveedor}`;
                 }
-            });
-
-            dom.btn_agregar.click(function(e){
-                dom.modal_equipo.modal('show');
-                dom.modal_equipo.data('url',"{{ route('gestion-inventarios.equipos.agregar_componente_equipo') }}")
-                dom.modal_equipo.data('metodo',"POST");
-
-                dom.form_equipo.trigger('reset');
-                $('#select-id_hardware').val(null).trigger('change');
             });
 
             var dt = dom.tb_componentes_equipo.DataTable({
@@ -301,42 +310,14 @@
                 },
             });
 
-            dom.form_equipo.submit(function(e){
-                e.preventDefault();
-                dom.modal_equipo.modal('hide');
-                var url = dom.modal_equipo.data('url');
-                var method = dom.modal_equipo.data('metodo')
-                var formData = new FormData(this);
+            dom.btn_agregar_compoentes_equipo.click(function(e){
+                dom.modal_componentes_equipo.modal('show');
+                dom.modal_componentes_equipo.data('url',"{{ route('gestion-inventarios.equipos.agregar_componente_equipo') }}")
+                dom.modal_componentes_equipo.data('metodo',"POST");
+                dom.modal_componentes_equipo.find("#d-errors-componentes-equipo").html(null);
 
-                $.ajax({
-                    method: method,
-                    url: url,
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json'
-                })
-                .done(function(response) {
-                    dt.ajax.reload( function(){
-                        Swal.fire({
-                            position: 'top-end',
-                            type: 'success',
-                            title: response.message || 'Componente agregado correctamente',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    }, false );
-                }).fail(function(error) {
-                    const errors = error.responseJSON.errors || {}
-
-                    for (const key in errors) {
-                        if (Object.hasOwnProperty.call(errors, key)) {
-                            dom.form_equipo.find(`[name=${key}]`).next().html(errors[key])
-                        }
-                    }
-
-                    dom.modal_equipo.modal('show');
-                })
+                dom.form_componentes_equipo.trigger('reset');
+                $('#select-id_hardware').val(null).trigger('change');
             });
 
             dom.tb_componentes_equipo.on('click',"a[data-action='destroy']",function(e){
@@ -360,23 +341,17 @@
                             data: {},
                             success: function (response){
                                 dt.ajax.reload( function(){
-                                    Swal.fire({
-                                        position: 'top-end',
+                                    Toast.fire({
                                         type: 'success',
                                         title: response.message || 'Registro eliminado correctamente',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    })
+                                    });
                                 }, false )
                             },
                             fail:function(error){
-                                Swal.fire({
-                                    position: 'top-end',
+                                Toast.fire({
                                     type: 'error',
                                     title: 'Ups, hubo un error en el servidor',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
+                                });
                             }
                         });
                     }
@@ -386,30 +361,78 @@
             dom.tb_componentes_equipo.on('click',"a[data-action='update']",function(e){
                 e.preventDefault();
 
-                const url = $(this).attr('href');
+                dom.modal_componentes_equipo.find("#d-errors-componentes-equipo").html(null);
+
+                const url_buscar = $(this).attr('href');
+                const url_actualizar = $(this).data('update');
 
                 $.ajax({
-                    url: url,
+                    url: url_buscar,
                     type: 'POST',
                     data: {},
                     success: function (response){
-                       console.log(response);
-                       dom.modal_equipo.modal('show');
-                       dom.modal_equipo.find('#form-equipo [name="observacion"]').val(response.data.observacion);
+                        dom.modal_componentes_equipo.data('url',url_actualizar)
+                        dom.modal_componentes_equipo.data('metodo',"PUT");
 
-                       var newOption = new Option(response.data.hardware.descripcion, response.data.id_hardware, false, false);
+                        dom.modal_componentes_equipo.modal('show');
+                        dom.modal_componentes_equipo.find('#form-componentes-equipo [name="observacion"]').val(response.data.observacion);
+
+                       var result = `${response.data.hardware.descripcion} || ${response.data.hardware.no_serie} || ${response.data.hardware.marca} || ${response.data.hardware.proveedor}`;
+                       var newOption = new Option(result, response.data.id_hardware, false, false);
                        $('#select-id_hardware').empty().append(newOption).trigger('change');
                     },
                     fail:function(error){
-                        Swal.fire({
-                            position: 'top-end',
+                        Toast.fire({
                             type: 'error',
                             title: 'Ups, hubo un error en el servidor',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
+                        });
                     }
                 });
+            });
+
+            dom.form_componentes_equipo.submit(function(e){
+                e.preventDefault();
+                dom.modal_componentes_equipo.modal('hide');
+
+                var url = dom.modal_componentes_equipo.data('url');
+                var method = dom.modal_componentes_equipo.data('metodo');
+
+                var formData = new FormData(this);
+
+                if (method == 'PUT'){
+                    formData.append('_method',method);
+                }
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json'
+                })
+                .done(function(response) {
+                    dt.ajax.reload( function(){
+                        Toast.fire({
+                            type: 'success',
+                            title: response.message || 'Componente agregado correctamente'
+                        })
+                    }, false );
+                }).fail(function(error) {
+                    const errors = error.responseJSON;
+
+                    if (errors) {
+                        for (const key in errors) {
+                            if (Object.hasOwnProperty.call(errors, key)) {
+                                dom.form_componentes_equipo.find(`[name=${key}]`).next().html(errors[key])
+                            }
+                        }
+                    }else{
+                        dom.modal_componentes_equipo.find("#d-errors-componentes-equipo").addClass('text-danger').html('Error al enviar la información');
+                    }
+
+                    dom.modal_componentes_equipo.modal('show');
+                })
             });
 
             // ASIGNACION DE EQUIPO
@@ -464,7 +487,7 @@
             });
 
             $('#select-id_personal').select2({
-                dropdownParent: dom.modal_asignar,
+                dropdownParent: dom.modal_asignar_equipo,
                 languaje: "es",
                 placeholder: "Selecciona el personal",
                 ajax: {
@@ -488,21 +511,29 @@
                 escapeMarkup: function (markup) { return markup; },
                 minimumInputLength: 3,
                 templateResult: function(option){
+                    if (option.loading) {
+                        return option.text;
+                    }
+
                     return option.nombre||option.text;
                 },
                 templateSelection:function(option){
+                    if(option.loading) {
+                        return option.text;
+                    }
+
                     return option.nombre||option.text;
                 }
             });
 
-            dom.btn_asignar.click(function(e){
-                dom.modal_asignar.modal('show');
+            dom.btn_asignar_equipo.click(function(e){
+                dom.modal_asignar_equipo.modal('show');
             });
 
             dom.form_asignar_equipo.submit(function(e){
                 e.preventDefault();
 
-                dom.modal_asignar.modal('hide');
+                dom.modal_asignar_equipo.modal('hide');
 
                 var formData = new FormData(this);
 
@@ -515,13 +546,12 @@
                     dataType: 'json'
                 })
                 .done(function(response) {
-                    Swal.fire({
-                        position: 'top-end',
-                        type: 'success',
-                        title: response.message || 'Equipo asignado correctamente',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+                    dt_historial_asignacion.ajax.reload( function(){
+                        Toast.fire({
+                            type: 'success',
+                            title: response.message || 'Equipo asignado correctamente',
+                        });
+                    }, false );
                 }).fail(function(error) {
                     const errors = error.responseJSON.errors || {}
 
@@ -530,10 +560,8 @@
                             dom.form_asignar_equipo.find(`[name=${key}]`).next().html(errors[key])
                         }
                     }
-
-                    dom.modal_asignar.modal('show');
-                })
-
+                    dom.modal_asignar_equipo.modal('show');
+                });
             });
         })();
     </script>
