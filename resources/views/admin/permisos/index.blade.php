@@ -24,6 +24,11 @@
                         title="Crear">
                         Crear <i class="fas fa-plus-circle"></i>
                     </a>
+                    <a href="{{ route('admin.permisos.asignar') }}"
+                        class="btn btn-default btn-sm"
+                        title="Crear">
+                        Asignar Permisos <i class="fas fa-check-circle"></i>
+                </a>
                 </div>
             </div>
 

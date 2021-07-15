@@ -73,6 +73,9 @@ Route::group([
         ]);
 
         # PERMISOS
+        Route::get('permisos/asignar','PermisosController@asignar')->name('permisos.asignar');
+        Route::post('permisos/guardar_permiso','PermisosController@guardar_permiso')->name('permisos.guardar-permiso');
+        Route::post('permisos/traer_permisos','PermisosController@traer_permisos')->name('permisos.traer-permisos');
         Route::resource('permisos', 'PermisosController')->parameters([
             'permisos' => 'model'
         ]);
