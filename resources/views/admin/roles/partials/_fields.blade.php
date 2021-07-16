@@ -33,7 +33,7 @@
     </select>
 
     <div class="help-block with-errors">
-        @error('')
+        @error('permisos[]')
         <span>{{ $errors->first('display_name') }}</span>
         @enderror
     </div>
@@ -49,3 +49,26 @@
         @enderror
     </div>
 </div>
+
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const $span_all = document.querySelector('.select-all');
+        const $span_delete = document.querySelector('.deselect-all');
+        const $select = document.getElementById('select-permisos');
+
+        const selection = function($select,checked){
+            const list = Array.from($select.options);
+
+            list.forEach(option => {
+                option.selected = (checked)? 'selected': '';
+            });
+        }
+
+        $span_all.addEventListener('click',function(e){
+            selection($select,true);
+        });
+        $span_delete.addEventListener('click',function(e){
+            selection($select,false);
+        });
+    });
+</script>

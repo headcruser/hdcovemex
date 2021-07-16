@@ -98,6 +98,7 @@ Route::group([
         ])->only(['index','show','destroy']);
 
         # OPERADORES
+        Route::post('operadores/datatables','OperatorsController@datatables')->name('operadores.datatables');
         Route::resource('operadores', 'OperatorsController')->parameters([
             'operadores'  => 'operador'
         ]);

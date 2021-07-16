@@ -1,6 +1,7 @@
 <div class="form-group @error('nombre') has-error @enderror">
     <label for="input-nombre">Nombre*</label>
     <input type="text" id="input-nombre" name="nombre" class="form-control" value="{{ old('nombre', $model->nombre) }}"
+        placeholder="Nombre del empleado"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('nombre')
@@ -12,6 +13,7 @@
 <div class="form-group @error('usuario') has-error @enderror">
     <label for="input-usuario">Usuario*</label>
     <input type="text" id="input-usuario" name="usuario" class="form-control" value="{{ old('usuario', $model->usuario) }}"
+        placeholder="Cuenta de usuario"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('usuario')
@@ -23,6 +25,7 @@
 <div class="form-group @error('email') has-error @enderror">
     <label for="input-email">Correo electronico*</label>
     <input type="email" id="input-email" name="email" class="form-control" value="{{ old('email', $model->email) }}"
+        placeholder="Correo electrónico"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('email')
@@ -35,7 +38,9 @@
 <div class="form-group @error('password') has-error @enderror">
     <label for="input-password">Contraseña*</label>
     <input type="password" id="input-password" name="password" class="form-control"
-        value="{{ old('password', '') }}" autocomplete="off"  @if($view_name == 'create')required @endif >
+        value="{{ old('password', '') }}" autocomplete="off"
+        placeholder="Escribe una contraseña para el usuario"
+        @if($view_name == 'create')required @endif >
     <div class="help-block with-errors">
         @error('password')
         <span>{{ $errors->first('password') }}</span>
@@ -56,7 +61,7 @@
     <label for="roles">Roles*
     <span class="btn btn-info btn-xs select-all">Seleccionar todo</span>
     <span class="btn btn-info btn-xs deselect-all">Desmarcar todo</span></label>
-    <select name="roles[]" id="input-roles" class="form-control select2" multiple="multiple">
+    <select name="roles[]" id="input-roles" class="form-control select2" multiple="multiple" required>
         @foreach($roles as $id => $roles)
             <option value="{{ $id }}"
                 {{ (in_array($id, old('roles', [])) || $model->roles->contains($id)) ? 'selected' : '' }}>{{ $roles }}
@@ -83,3 +88,27 @@
         @enderror
     </div>
 </div>
+
+
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const $span_all = document.querySelector('.select-all');
+        const $span_delete = document.querySelector('.deselect-all');
+        const $select_permisos = document.getElementById('input-roles');
+
+        const selection = function($select,checked){
+            const list = Array.from($select.options);
+
+            list.forEach(option => {
+                option.selected = (checked)? 'selected': '';
+            });
+        }
+
+        $span_all.addEventListener('click',function(e){
+            selection($select_permisos,true);
+        });
+        $span_delete.addEventListener('click',function(e){
+            selection($select_permisos,false);
+        });
+    });
+</script>

@@ -5,6 +5,7 @@
         id="input-nombre"
         name="nombre"
         class="form-control"
+        placeholder="Nombre del operador"
         value="{{ old('nombre', optional($model->usuario)->nombre) }}"
         autocomplete="off"
         required>
@@ -18,7 +19,11 @@
 
 <div class="form-group @error('usuario') has-error @enderror">
     <label for="input-usuario">Usuario*</label>
-    <input type="text" id="input-usuario" name="usuario" class="form-control" value="{{ old('usuario', $model->usuario->usuario) }}"
+    <input type="text" id="input-usuario"
+        name="usuario"
+        class="form-control"
+        value="{{ old('usuario', $model->usuario->usuario) }}"
+        placeholder="Cuenta del operador"
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('usuario')
@@ -35,6 +40,7 @@
         name="email"
         class="form-control"
         value="{{ old('email', optional($model->usuario)->email) }}"
+        placeholder="Correo electronico"
         autocomplete="off"
         required>
 
@@ -45,11 +51,13 @@
     </div>
 </div>
 
-
 <div class="form-group @error('password') has-error @enderror">
     <label for="input-password">Contraseña*</label>
     <input type="password" id="input-password" name="password" class="form-control"
-        value="{{ old('password', '') }}" autocomplete="off"  @if($view_name == 'create')required @endif >
+        placeholder="Contraseña"
+        value="{{ old('password', '') }}"
+        autocomplete="off"
+        @if($view_name == 'create')required @endif >
     <div class="help-block with-errors">
         @error('password')
         <span>{{ $errors->first('password') }}</span>
@@ -114,3 +122,27 @@
         </div>
     </div>
   </div>
+
+
+  <script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const $span_all = document.querySelector('.select-all');
+        const $span_delete = document.querySelector('.deselect-all');
+        const $select_permisos = document.getElementById('input-roles');
+
+        const selection = function($select,checked){
+            const list = Array.from($select.options);
+
+            list.forEach(option => {
+                option.selected = (checked)? 'selected': '';
+            });
+        }
+
+        $span_all.addEventListener('click',function(e){
+            selection($select_permisos,true);
+        });
+        $span_delete.addEventListener('click',function(e){
+            selection($select_permisos,false);
+        });
+    });
+</script>

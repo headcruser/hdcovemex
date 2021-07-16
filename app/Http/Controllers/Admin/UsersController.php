@@ -25,7 +25,9 @@ class UsersController extends Controller
 
     public function datatables()
     {
-        $query = User::query()->with(['roles.perms','departamento']);
+        $query = User::query()->whereHas('roles',function($q){
+            $q->whereIn('name',['empleado']);
+        })->with(['roles.perms','departamento']);
 
         return DataTables::eloquent($query)
             ->addColumn('roles',function($model){
@@ -47,8 +49,8 @@ class UsersController extends Controller
         abort_unless(Entrust::can('user_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('admin.users.create', [
-            'roles'         => Role::all()->pluck('name', 'id'),
-            'departamentos' => Departamento::all()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
+            'roles'         => Role::query()->whereIn('name',['empleado'])->pluck('name', 'id'),
+            'departamentos' => Departamento::query()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
             'model'          => new User()
         ]);
     }
@@ -86,8 +88,8 @@ class UsersController extends Controller
         $model->load('roles');
 
         return view('admin.users.edit', [
-            'roles'         => Role::all()->pluck('name', 'id'),
-            'departamentos' => Departamento::all()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
+            'roles'         => Role::query()->whereIn('name',['empleado']),
+            'departamentos' => Departamento::query()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
             'model'         => $model
         ]);
     }
