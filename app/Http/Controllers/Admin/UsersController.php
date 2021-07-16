@@ -4,14 +4,15 @@ namespace HelpDesk\Http\Controllers\Admin;
 
 use Entrust;
 
-use HelpDesk\Entities\Admin\{Role, User, Departamento};
-use HelpDesk\Http\Controllers\Controller;
-use HelpDesk\Http\Requests\Admin\User\{CreateUserRequest, UpdateUserRequest};
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use HelpDesk\Notifications\DatosAcceso;
+use Yajra\DataTables\Facades\DataTables;
+use HelpDesk\Http\Controllers\Controller;
+use HelpDesk\Entities\Admin\{Role, User, Departamento};
 
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
+use HelpDesk\Http\Requests\Admin\User\{CreateUserRequest, UpdateUserRequest};
 
 class UsersController extends Controller
 {
@@ -27,6 +28,25 @@ class UsersController extends Controller
         return view('admin.users.index', [
             'collection' =>  $usuarios
         ]);
+    }
+
+    public function datatables()
+    {
+        $query = User::query()->with(['roles.perms','departamento']);
+
+        return DataTables::eloquent($query)
+            ->addColumn('roles',function($model){
+                $span = '<span class="badge badge-warning"> Sin Roles</span>';
+
+                if ($model->roles->isNotEmpty()) {
+                    $span = '<span class="badge badge-info">'.$model->roles->pluck('display_name')->implode(',') .'</span>';
+                }
+
+                return $span;
+            })
+            ->addColumn('buttons', 'admin.users.datatables._buttons')
+            ->rawColumns(['buttons','roles'])
+            ->make(true);
     }
 
     public function create()
@@ -49,6 +69,9 @@ class UsersController extends Controller
             DB::commit();
 
             # TODO Envio de correo al usuario
+            if ($request->filled('enviar_datos')) {
+                $user->notify(new DatosAcceso($request->password));
+            }
 
             return redirect()->route('admin.usuarios.index')
                 ->with(['message' => 'Usuario Creado Correctamente']);

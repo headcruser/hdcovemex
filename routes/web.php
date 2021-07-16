@@ -63,6 +63,7 @@ Route::group([
     'middleware'    => ['auth']],
     function () {
         # USUARIOS
+        Route::post('usuarios/datatables','UsersController@datatables')->name('usuarios.datatables');
         Route::resource('usuarios', 'UsersController')->parameters([
             'usuarios'  => 'model'
         ]);

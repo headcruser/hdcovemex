@@ -43,6 +43,14 @@
     </div>
 </div>
 
+<div class="form-group">
+     <div class="form-group" id="div_enviar_datos" @if ($model->exists) style="display:none" @endif>
+        <label>
+            <input type="checkbox" class="i-checks" name="enviar_datos"> Enviar datos por correo
+        </label>
+    </div>
+</div>
+
 
 <div class="form-group @error('roles') has-error @enderror">
     <label for="roles">Roles*
