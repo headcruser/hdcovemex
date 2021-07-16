@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use HelpDesk\Entities\Admin\Role;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Admin\Permission;
+use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use HelpDesk\Http\Requests\Admin\Permisos\{CreatePermisoRequest, UpdatePermisoRequest};
@@ -17,7 +18,17 @@ class PermisosController extends Controller
     {
         abort_unless(Entrust::can('permission_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('admin.permisos.index', ['collection' => Permission::paginate()]);
+        return view('admin.permisos.index');
+    }
+
+    public function datatables()
+    {
+        $query = Permission::query();
+
+        return DataTables::eloquent($query)
+            ->addColumn('buttons', 'admin.permisos.datatables._buttons')
+            ->rawColumns(['buttons'])
+            ->make(true);
     }
 
     public function create()
@@ -82,11 +93,20 @@ class PermisosController extends Controller
         return view('admin.permisos.show', ['model' => $model]);
     }
 
-    public function destroy(Permission $model)
+    public function destroy(Request $request,Permission $model)
     {
-        abort_unless(Entrust::can('permission_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $model->delete();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success'   => true,
+                'message'   => "El permiso se elimino con éxito",
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message'   => "El permiso se elimino con éxito",
+        ]);
 
         return back();
     }
