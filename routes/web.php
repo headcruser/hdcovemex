@@ -69,6 +69,7 @@ Route::group([
         ]);
 
         # ROLES
+        Route::post('roles/datatables','RolesController@datatables')->name('roles.datatables');
         Route::resource('roles', 'RolesController')->parameters([
             'roles' => 'model'
         ]);

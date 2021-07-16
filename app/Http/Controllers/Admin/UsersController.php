@@ -20,14 +20,7 @@ class UsersController extends Controller
     {
         abort_unless(Entrust::can('user_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        $usuarios = User::query()
-            ->select(['id','nombre','email','telefono','departamento_id','usuario'])
-            ->activos()
-            ->with(['departamento', 'roles','media'])->paginate();
-
-        return view('admin.users.index', [
-            'collection' =>  $usuarios
-        ]);
+        return view('admin.users.index');
     }
 
     public function datatables()
@@ -142,13 +135,17 @@ class UsersController extends Controller
         return view('admin.users.show', ['model' => $model]);
     }
 
-    public function destroy(User $model)
+    public function destroy(User $model,Request $request)
     {
-        abort_unless(Entrust::can('user_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $model->roles()->sync([]);
-        $model->deleted_at = now();
-        $model->save();
+        $model->delete();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success'   => true,
+                'message'   => "El usuario se eliminó con éxito",
+            ]);
+        }
 
         return redirect()->back()->with([
             'message' => 'Usuario Eliminado Correctamente'

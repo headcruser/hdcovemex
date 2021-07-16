@@ -6,7 +6,7 @@ use Entrust;
 use HelpDesk\Entities\Admin\{Role, Permission};
 use HelpDesk\Http\Controllers\Controller;
 use HelpDesk\Http\Requests\Admin\Role\{CreateRoleRequest, UpdateRoleRequest};
-
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +18,18 @@ class RolesController extends Controller
     {
         abort_unless(Entrust::can('role_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('admin.roles.index', ['collection' => Role::paginate()]);
+        return view('admin.roles.index');
+    }
+
+
+    public function datatables()
+    {
+        $query = Role::query();
+
+        return DataTables::eloquent($query)
+            ->addColumn('buttons', 'admin.roles.datatables._buttons')
+            ->rawColumns(['buttons', 'roles'])
+            ->make(true);
     }
 
     public function create()
@@ -76,7 +87,6 @@ class RolesController extends Controller
             return  redirect()
                 ->route('admin.roles.index')
                 ->with(['message' => 'Rol actualizado correctamento']);
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -91,16 +101,23 @@ class RolesController extends Controller
     {
         abort_unless(Entrust::can('role_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('admin.roles.show',['model' => $model]);
+        return view('admin.roles.show', ['model' => $model]);
     }
 
-    public function destroy(Role $model)
+    public function destroy(Request $request, Role $model)
     {
-        abort_unless(Entrust::can('role_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $model->delete();
 
-        return back();
+        if ($request->ajax()) {
+            return response()->json([
+                'success'   => true,
+                'message'   => "El rol se eliminó con éxito",
+            ]);
+        }
+
+        return back()->with([
+            'message' => "El rol se eliminó con éxito"
+        ]);
     }
 
     public function massDestroy(Request $request)
