@@ -347,10 +347,10 @@
                                     });
                                 }, false )
                             },
-                            fail:function(error){
+                            error:function(error){
                                 Toast.fire({
                                     type: 'error',
-                                    title: 'Ups, hubo un error en el servidor',
+                                    title: 'Ups, hubo un error en el servidor'
                                 });
                             }
                         });
@@ -381,10 +381,10 @@
                        var newOption = new Option(result, response.data.id_hardware, false, false);
                        $('#select-id_hardware').empty().append(newOption).trigger('change');
                     },
-                    fail:function(error){
+                    error:function(error){
                         Toast.fire({
                             type: 'error',
-                            title: 'Ups, hubo un error en el servidor',
+                            title: 'Ups, hubo un error en el servidor'
                         });
                     }
                 });

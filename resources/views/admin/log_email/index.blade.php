@@ -142,7 +142,7 @@
                                     });
                                 }, false )
                             },
-                            fail:function(error){
+                            error:function(error){
                                 Toast.fire({
                                     type: 'error',
                                     title: 'Ups, hubo un error en el servidor'
@@ -177,7 +177,7 @@
                                     });
                                 }, false )
                             },
-                            fail:function(error){
+                            error:function(error){
                                 Toast.fire({
                                     type: 'error',
                                     title: 'Ups, hubo un error en el servidor'

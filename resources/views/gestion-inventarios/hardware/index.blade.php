@@ -140,23 +140,17 @@
                             data: {},
                             success: function (response){
                                 dt.ajax.reload( function(){
-                                    Swal.fire({
-                                        position: 'top-end',
+                                    Toast.fire({
                                         type: 'success',
                                         title: response.message || 'Registro eliminado correctamente',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    })
+                                    });
                                 }, false )
                             },
-                            fail:function(error){
-                                Swal.fire({
-                                    position: 'top-end',
+                            error:function(error){
+                                Toast.fire({
                                     type: 'error',
-                                    title: 'Ups, hubo un error en el servidor',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
+                                    title: 'Ups, hubo un error en el servidor'
+                                });
                             }
                         });
                     }
