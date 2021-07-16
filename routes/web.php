@@ -92,7 +92,7 @@ Route::group([
 
         # LOG EMAIL
         Route::delete('log-email/destroy', 'LogEmailController@massDestroy')->name('log-email.masive-destroy');
-
+        Route::post('log-email/datatables','LogEmailController@datatables')->name('log-email.datatables');
         Route::resource('log-email', 'LogEmailController')->parameters([
             'log-email' => 'logEmail'
         ])->only(['index','show','destroy']);
