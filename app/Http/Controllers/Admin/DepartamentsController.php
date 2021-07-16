@@ -5,12 +5,13 @@ namespace HelpDesk\Http\Controllers\Admin;
 use Entrust;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Entities\Admin\Departamento;
 use HelpDesk\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
+
 use HelpDesk\Http\Requests\Admin\Departamentos\CreateDepartamentoRequest;
 use HelpDesk\Http\Requests\Admin\Departamentos\UpdateDepartamentoRequest;
-
-use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class DepartamentsController extends Controller
 {
@@ -18,7 +19,17 @@ class DepartamentsController extends Controller
     {
         abort_unless(Entrust::can('departament_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('admin.departaments.index', ['collection' => Departamento::paginate()]);
+        return view('admin.departaments.index');
+    }
+
+    public function datatables()
+    {
+        $query = Departamento::query();
+
+        return DataTables::eloquent($query)
+            ->addColumn('buttons', 'admin.departaments.datatables._buttons')
+            ->rawColumns(['buttons'])
+            ->make(true);
     }
 
     public function create()
@@ -87,15 +98,21 @@ class DepartamentsController extends Controller
         return view('admin.departaments.show', ['model' => $model]);
     }
 
-    public function destroy(Departamento $model)
+    public function destroy(Request $request,Departamento $model)
     {
-        abort_unless(Entrust::can('departament_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $model->delete();
 
-        return redirect()
-            ->back()
-            ->with(['message' => 'Departamento eliminado correctamente']);
+        if ($request->ajax()) {
+            return response()->json([
+                'success'   => true,
+                'message'   => "El departamento se elimino con éxito",
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message'   => "El departamento se elimino con éxito",
+        ]);
+
     }
 
     public function massDestroy(Request $request)

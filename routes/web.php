@@ -84,9 +84,8 @@ Route::group([
         ]);
 
         # DEPARTAMENTOS
-        Route::post('departamentos/select2', 'DepartamentsController@select2')
-            ->name('departamentos.select2');
-
+        Route::post('departamentos/datatables','DepartamentsController@datatables')->name('departamentos.datatables');
+        Route::post('departamentos/select2', 'DepartamentsController@select2')->name('departamentos.select2');
         Route::resource('departamentos', 'DepartamentsController')->parameters([
             'departamentos'  => 'model'
         ]);
