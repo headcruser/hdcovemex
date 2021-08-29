@@ -1,12 +1,13 @@
 <?php
 
-namespace HelpDesk\Http\Controllers\Config;
+namespace HelpDesk\Http\Controllers\Admin;
 
 use Entrust;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Config\Status;
 use HelpDesk\Http\Controllers\Controller;
+use Yajra\DataTables\Facades\DataTables;
 
 use HelpDesk\Http\Requests\Config\Statuses\CreateStatusRequest;
 use HelpDesk\Http\Requests\Config\Statuses\UpdateStatusRequest;
@@ -17,16 +18,27 @@ class StatusesController extends Controller
 {
     public function index()
     {
-        abort_unless(Entrust::can('status_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
+        return view('admin.statuses.index');
+    }
 
-        return view('config.statuses.index', ['collection' => Status::paginate()]);
+    public function datatables()
+    {
+        $query = Status::query();
+
+        return DataTables::eloquent($query)
+            ->editColumn('color',function($model){
+                return "<div style='background-color: {$model->color};border:darkgray 1px solid; width:1rem;height:1rem;display:inline-block;'></div> {$model->color}";
+            })
+            ->addColumn('buttons', 'admin.statuses.datatables._buttons')
+            ->rawColumns(['buttons','color'])
+            ->make(true);
     }
 
     public function create()
     {
         abort_unless(Entrust::can('status_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.statuses.create', [
+        return view('admin.statuses.create', [
             'model' => new Status(),
         ]);
     }
@@ -40,7 +52,7 @@ class StatusesController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('config.estatus.index')
+                ->route('admin.estatus.index')
                 ->with(['message' => 'Estatus creado Correctamente']);
 
         } catch (\Exception $e) {
@@ -57,7 +69,7 @@ class StatusesController extends Controller
     {
         abort_unless(Entrust::can('status_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.statuses.edit', [
+        return view('admin.statuses.edit', [
             'model' => $model,
         ]);
     }
@@ -72,7 +84,7 @@ class StatusesController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('config.estatus.index')
+                ->route('admin.estatus.index')
                 ->with(['message' => 'Estatus actualizado correctamente']);
 
         } catch (\Exception $e) {
@@ -89,7 +101,7 @@ class StatusesController extends Controller
     {
         abort_unless(Entrust::can('status_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.statuses.show', ['model' => $model]);
+        return view('admin.statuses.show', ['model' => $model]);
     }
 
     public function destroy(Status $model)

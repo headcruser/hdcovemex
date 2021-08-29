@@ -7,8 +7,8 @@
     <li class="breadcrumb-item"> <a href="{{ route('home') }}">
         <i class="fas fa-home"></i> Inicio </a>
     </li>
-    <li class="breadcrumb-item">Configuración</li>
-    <li class="breadcrumb-item"><a href="{{ route('config.atributos.index') }}">Atributos</a></li>
+    <li class="breadcrumb-item">Administracion</li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.atributos.index') }}">Atributos</a></li>
     <li class="breadcrumb-item active">Atributo #{{ $model->id }}</li>
 </ol>
 @endsection
@@ -49,7 +49,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <a style="margin-top:20px;" class="btn btn-default" href="{{ route('config.atributos.index') }}">
+                <a style="margin-top:20px;" class="btn btn-default" href="{{ route('admin.atributos.index') }}">
                     <i class="fas fa-arrow-left"></i> Regresar
                 </a>
             </div>

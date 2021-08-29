@@ -102,6 +102,18 @@ Route::group([
         Route::resource('operadores', 'OperatorsController')->parameters([
             'operadores'  => 'operador'
         ]);
+
+        # ATRIBUTOS
+        Route::post('atributos/datatables','AttributesController@datatables')->name('atributos.datatables');
+        Route::resource('atributos', 'AttributesController')->parameters([
+            'atributos' => 'model'
+        ]);
+
+        # ESTATUS
+        Route::post('estatus/datatables','StatusesController@datatables')->name('estatus.datatables');
+        Route::resource('estatus', 'StatusesController')->parameters([
+            'estatus' => 'model'
+        ]);
     }
 );
 
@@ -200,25 +212,6 @@ Route::group([
         Route::post('tickets/comentarios/{model}',[
             'as'            => 'tickets.storeComentario',
             'uses'          => 'TicketController@storeComment'
-        ]);
-    }
-);
-
-# CONFIGURACION
-Route::group([
-    'prefix'        => 'configuracion',
-    'as'            => 'config.',
-    'namespace'     => 'Config',
-    'middleware'    => ['auth']],
-    function () {
-        # ATRIBUTOS
-        Route::resource('atributos', 'AttributesController')->parameters([
-            'atributos' => 'model'
-        ]);
-
-        # ESTATUS
-        Route::resource('estatus', 'StatusesController')->parameters([
-            'estatus' => 'model'
         ]);
     }
 );

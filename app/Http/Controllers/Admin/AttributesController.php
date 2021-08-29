@@ -1,17 +1,18 @@
 <?php
 
-namespace HelpDesk\Http\Controllers\Config;
+namespace HelpDesk\Http\Controllers\Admin;
 
 use Entrust;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Config\Attribute;
+use Yajra\DataTables\Facades\DataTables;
+
 use HelpDesk\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 use HelpDesk\Http\Requests\Config\Attribute\CreateAttributeRequest;
 use HelpDesk\Http\Requests\Config\Attribute\UpdateAttributeRequest;
-
-use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class AttributesController extends Controller
 {
@@ -19,14 +20,23 @@ class AttributesController extends Controller
     {
         abort_unless(Entrust::can('attribute_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.attributes.index', ['collection' => Attribute::orderBy('attribute')->paginate()]);
+        return view('admin.attributes.index');
+    }
+
+    public function datatables(){
+        $query = Attribute::query();
+
+        return DataTables::eloquent($query)
+            ->addColumn('buttons', 'admin.attributes.datatables._buttons')
+            ->rawColumns(['buttons'])
+            ->make(true);
     }
 
     public function create()
     {
         abort_unless(Entrust::can('attribute_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.attributes.create', [
+        return view('admin.attributes.create', [
             'model'         => new Attribute(),
             'categorias'    => Attribute::categories()
         ]);
@@ -40,7 +50,7 @@ class AttributesController extends Controller
 
             DB::commit();
 
-            return redirect()->route('config.atributos.index')
+            return redirect()->route('admin.atributos.index')
                 ->with(['message' => 'Attibuto Creado Correctamente']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -56,7 +66,7 @@ class AttributesController extends Controller
     {
         abort_unless(Entrust::can('attribute_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.attributes.edit', [
+        return view('admin.attributes.edit', [
             'model'         => $model,
             'categorias'    => Attribute::categories()
         ]);
@@ -71,7 +81,7 @@ class AttributesController extends Controller
 
             DB::commit();
 
-            return redirect()->route('config.atributos.index')
+            return redirect()->route('admin.atributos.index')
                 ->with(['message' => 'Attibuto actualizado correctamente']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -87,7 +97,7 @@ class AttributesController extends Controller
     {
         abort_unless(Entrust::can('attribute_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        return view('config.attributes.show', ['model' => $model]);
+        return view('admin.attributes.show', ['model' => $model]);
     }
 
     public function destroy(Attribute $model)

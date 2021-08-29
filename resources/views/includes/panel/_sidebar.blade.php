@@ -70,7 +70,6 @@
                             </li>
                             @endpermission
 
-
                             @permission('departament_access')
                             <li class="nav-item">
                                 <a  href="{{ route('admin.departamentos.index') }}" class="nav-link {{ routeIs(['admin.departamentos.index','admin.departamentos.*']) }}">
@@ -98,6 +97,28 @@
                             </li>
                             @endpermission
 
+                            {{-- <!-- CONFIGURACION-->
+                            @permission('user_config_access')
+                                <li class="nav-header">Configuración</li> --}}
+                            {{-- @endpermission --}}
+
+                            @permission('attribute_access')
+                                <li class="nav-item" >
+                                    <a href="{{ route('admin.atributos.index') }}" class="nav-link {{ routeIs(['admin.atributos.index','admin.atributos.*']) }}">
+                                        <i class="nav-icon fas fa-check-square"></i>
+                                        <p>Atributos</p>
+                                    </a>
+                                </li>
+                            @endpermission
+
+                            @permission('status_access')
+                                <li class="nav-item" >
+                                    <a href="{{ route('admin.estatus.index') }}" class="nav-link {{ routeIs(['admin.estatus.index','admin.estatus.*']) }}">
+                                        <i class="nav-icon fas fa-info-circle"></i>
+                                        <p>Estatus</p>
+                                    </a>
+                                </li>
+                            @endpermission
                         </ul>
                     </li>
                 @endpermission
@@ -193,28 +214,7 @@
                 </li>
                 @endpermission
 
-                <!-- CONFIGURACION-->
-                @permission('user_config_access')
-                    <li class="nav-header">Configuración</li>
 
-                    @permission('attribute_access')
-                        <li class="nav-item" >
-                            <a href="{{ route('config.atributos.index') }}" class="nav-link {{ routeIs(['config.atributos.index','config.atributos.*']) }}">
-                                <i class="nav-icon fas fa-check-square"></i>
-                                <p>Atributos</p>
-                            </a>
-                        </li>
-                    @endpermission
-
-                    @permission('status_access')
-                        <li class="nav-item" >
-                            <a href="{{ route('config.estatus.index') }}" class="nav-link {{ routeIs(['config.estatus.index','config.estatus.*']) }}">
-                                <i class="nav-icon fas fa-info-circle"></i>
-                                <p>Estatus</p>
-                            </a>
-                        </li>
-                    @endpermission
-                @endpermission
 
                 <!-- REPORTES -->
                 @ability('admin,ti', 'report_access')
