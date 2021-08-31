@@ -15,7 +15,7 @@ class ReporteImpresionesController extends Controller
         $today = today();
 
         $ids_impresiones = Impresion::query()->where('anio',$today->year)->pluck('id');
-        $impresionesDetalles = ImpresionDetalle::where('id_impresiones',$ids_impresiones)->with(['impresion'])->get();
+        $impresionesDetalles = ImpresionDetalle::whereIn('id_impresiones',$ids_impresiones)->with(['impresion'])->get();
 
         $impresiones_por_id_impresion = $impresionesDetalles->groupBy('id_impresion');
         $lista_personal = Personal::query()
@@ -65,7 +65,7 @@ class ReporteImpresionesController extends Controller
         });
 
         $impresiones_por_departamento = ImpresionDetalle::query()
-            ->where('id_impresiones',$ids_impresiones)
+            ->whereIn('id_impresiones',$ids_impresiones)
             ->with(['personal.departamento'])
             ->get()
             ->groupBy(function($impresiones){
