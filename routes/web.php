@@ -175,6 +175,7 @@ Route::group([
 
         # IMPRESIONES
         Route::post('impresiones/datatables','ImpresionesController@datatables')->name('impresiones.datatables');
+        Route::post('impresiones/{impresion}/importar','ImpresionesController@importar')->name('impresiones.importar');
         Route::post('impresiones/{impresion}/agregar-registro-impresiones','ImpresionesController@agregar_registro_impresiones')->name('impresiones.agregar-registro-impresiones');
         Route::delete('impresoras/{impresion}/eliminar-registros-impresiones','ImpresionesController@eliminar_registros_impresiones')->name('impresiones.eliminar-registros-impresiones');
         Route::resource('impresiones', 'ImpresionesController')->parameters([

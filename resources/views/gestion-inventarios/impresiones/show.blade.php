@@ -13,31 +13,50 @@
 </ol>
 @endsection
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/dropify/dist/css/dropify.min.css') }}">
+@endsection
+
 @section('content')
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
-                <h3 class="profile-username text-center">Reporte del mes de {{ $impresion->nombre_mes }}</h3>
+                    <h3 class="profile-username text-center">Reporte del mes de {{ $impresion->nombre_mes }}</h3>
 
-                <p class="text-muted text-center">{{ $impresion->anio }}</p>
+                    <p class="text-muted text-center">{{ $impresion->anio }}</p>
 
-                <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                        <b>Fecha de creación</b> <a class="float-right">{{ optional($impresion->fecha)->format('d-m-Y') }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Negro</b> <a class="float-right">{{ $impresion->negro }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Color</b> <a class="float-right">{{ $impresion->color }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Total</b> <a class="float-right">{{ $impresion->total }}</a>
-                    </li>
-                </ul>
+                    <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                            <b>Fecha de creación</b> <a class="float-right">{{ optional($impresion->fecha)->format('d-m-Y') }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Creador por</b> <a class="float-right">{{ $impresion->usuario->nombre }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Negro</b> <a class="float-right">{{ $impresion->negro }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Color</b> <a class="float-right">{{ $impresion->color }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Total</b> <a class="float-right">{{ $impresion->total }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-6">
 
-                <button id="btn-agregar-reporte" class="btn btn-primary btn-block">Agregar reporte</button>
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    <h3 class="profile-username text-center">Opciones de importación</h3>
+
+                    <p class="text-muted text-center">Selecciona una de las opciones para cargar los registros de impresión</p>
+
+                    <button id="btn-agregar-reporte" class="btn btn-primary btn-block">Importar con registros de impresion</button>
+                    <button id="btn-importar-impresiones" class="btn btn-secondary btn-block">Importar mediante archivo excel</button>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -168,6 +187,7 @@
                         {!! Form::label('id_impresora', 'Impresora') !!}
                         {!! Form::select('id_impresora', $impresoras, null, ['class' => 'form-control','data-impresora' => '','required' => true]) !!}
                     </div>
+
                     <div class="form-group @error('info') has-error @enderror">
                         {!! Form::label('info', 'Ingresa la información de la impresora') !!}
                         {!! Form::textarea('info', null, ['class' => 'form-control','cols' => '30','rows' => '15','title' => 'Información Impresiones','data-impresora' => '','required' => true]) !!}
@@ -177,6 +197,7 @@
                             @enderror
                         </div>
                     </div>
+
                     <div id="d-errors-asignar-equipo" class="form-group"></div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -189,9 +210,52 @@
         </div>
     </div>
 
+
+    <div class="onboarding-modal modal fade animated" id="modal-importar-impresiones" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">Importar registros de Impresion</b></h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+
+                {!! Form::open(['id' => 'form-importar-impresiones', 'route' => ['gestion-inventarios.impresiones.importar',$impresion], 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                    <div class="modal-body">
+                        <p>Adjunta el archivo de importación Masiva con el siguiente formato</p>
+
+                        <table class="table table-bordered table-sm">
+                            <tbody>
+                                <tr class="text-center">
+                                    <td>id_impresion</td>
+                                    <td>impresora</td>
+                                    <td>negro</td>
+                                    <td>color</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div id="errores-importar-impresiones"></div>
+
+                        <input class="dropify"
+                            type="file"
+                            name="impresiones"
+                            data-allowed-file-extensions="xlsx xls"
+                            data-max-file-size-preview="2M"
+                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            required>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary dim float-right" type="submit"><i class="fas fa-upload"></i> Importar</button>
+                    </div>
+                {!! Form::close()!!}
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('vendor/dropify/dist/js/dropify.min.js') }}"></script>
     <script type="text/javascript">
         $(function(){
             const dom = {
@@ -200,6 +264,12 @@
                     modal_agregar: $('#modal-agregar-registro-impresiones'),
                     form_agregar: $('#form-asignar-registro-impresiones'),
                     tab_content_impresoras : $("#tab-content-impresoras")
+                },
+                importar_impresiones:{
+                    button: $("#btn-importar-impresiones"),
+                    form: $("#form-importar-impresiones"),
+                    modal:$("#modal-importar-impresiones"),
+                    errors:$("#errores-importar-impresiones")
                 }
             }
 
@@ -251,6 +321,56 @@
                     }
                 })
             })
+
+            var m_importar_impresiones = (function(d){
+                const templates = {
+                    errors : `<div class="alert alert-danger" role="alert">:message</div>`
+                };
+
+                var drEvent = $('.dropify').dropify({
+                    messages: {
+                        default: 'Arrastre o pulse para seleccionar un archivo',
+                        replace: 'Arrastre o pulse para reemplazar archivo',
+                        remove: 'Quitar',
+                        error: 'Ups, ha ocurrido un error inesperado'
+                    }
+                });
+
+                var abrir_modal = function(e){
+                    d.form[0].reset();
+                    d.errors.html('')
+                    d.modal.modal('show');
+                    $(".dropify-clear").trigger("click");
+                }
+
+                var importar = function(e){
+
+                    d.modal.modal('hide');
+
+                    Swal.fire({
+                        title: 'Procesando',
+                        html: 'Espere un momento por favor.',
+                        allowEscapeKey:false,
+                        allowOutsideClick:false,
+                        allowEnterKey:false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading();
+                        },
+                    })
+
+
+                };
+
+                var dropify_after_clear = function(event, element){
+                    d.errors.html('');
+                };
+
+                // EVENTOS
+                d.form.submit(importar);
+                d.button.click(abrir_modal);
+                drEvent.on('dropify.afterClear', dropify_after_clear);
+            })(dom.importar_impresiones);
+
         })
     </script>
 @endsection

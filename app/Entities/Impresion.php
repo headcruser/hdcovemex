@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Entities;
 
+use HelpDesk\Entities\Admin\User;
 use HelpDesk\Enums\Meses;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,14 @@ class Impresion extends Model
     public function detalles()
     {
         return $this->hasMany(ImpresionDetalle::class, 'id_impresiones', 'id');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'creado_por', 'id')
+            ->withDefault([
+                'nombre' => '',
+            ]);
     }
 
     public function getNombreMesAttribute()

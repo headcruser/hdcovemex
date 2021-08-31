@@ -9,8 +9,11 @@ use HelpDesk\Enums\Meses;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Http\Controllers\Controller;
+use HelpDesk\Imports\ImpresionImport;
 use HelpDesk\Services\PrinterCanon;
-use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Validators\ValidationException;
+
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class ImpresionesController extends Controller
 {
@@ -140,6 +143,39 @@ class ImpresionesController extends Controller
         return redirect()->route('gestion-inventarios.impresiones.index')->with([
             'message' => 'Registro eliminado correctamente'
         ]);
+    }
+
+    public function importar(Request $request, Impresion $impresion)
+    {
+        $this->validate($request, [
+            'impresiones' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $archivo = $request->file('impresiones');
+
+         try {
+            DB::beginTransaction();
+
+            $import = new ImpresionImport($impresion);
+            $import->import($archivo);
+
+            DB::commit();
+
+            return back()->with([
+                'message'   => 'Impresiones Importadas correctamente',
+            ]);
+
+        } catch (ValidationException $e) {
+            DB::rollback();
+
+            $failures = $e->failures();
+
+            return back()->with([
+                'error'     => 'Error al importar las impresiones',
+                'details'   => optional($failures[0])->errors()
+            ],HTTPMessages::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
     }
 
     public function agregar_registro_impresiones(Impresion $impresion,Request $request,PrinterCanon $printer)
