@@ -10,8 +10,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "browner12/helpers": "^3.0",
         "bensampo/laravel-enum": "^3.3",
+        "browner12/helpers": "^3.0",
+        "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.0",
         "gghughunishvili/entrust": "^4.0",
         "guzzlehttp/guzzle": "^7.0.1",
