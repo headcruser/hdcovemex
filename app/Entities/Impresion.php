@@ -46,6 +46,6 @@ class Impresion extends Model
             return '';
         }
 
-        return Str::ucfirst(Meses::getKey($this->mes));
+        return Str::ucfirst(Meses::getKey((int)$this->mes));
     }
 }
