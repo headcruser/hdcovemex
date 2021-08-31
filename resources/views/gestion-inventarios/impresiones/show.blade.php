@@ -1,0 +1,257 @@
+@extends('layouts.panel')
+
+@section('title','Panel de impresiones')
+
+@section('breadcrumb')
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+        <i class="fas fa-home"></i> Inicio </a>
+    </li>
+    <li class="breadcrumb-item">Gestion Inventarios</li>
+    <li class="breadcrumb-item"><a href="{{ route('gestion-inventarios.impresiones.index') }}">Impresiones</a></li>
+    <li class="breadcrumb-item active">Panel Impresiones #{{ $impresion->nombre_mes }}</li>
+</ol>
+@endsection
+
+@section('content')
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                <h3 class="profile-username text-center">Reporte del mes de {{ $impresion->nombre_mes }}</h3>
+
+                <p class="text-muted text-center">{{ $impresion->anio }}</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Fecha de creación</b> <a class="float-right">{{ optional($impresion->fecha)->format('d-m-Y') }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Negro</b> <a class="float-right">{{ $impresion->negro }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Color</b> <a class="float-right">{{ $impresion->color }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Total</b> <a class="float-right">{{ $impresion->total }}</a>
+                    </li>
+                </ul>
+
+                <button id="btn-agregar-reporte" class="btn btn-primary btn-block">Agregar reporte</button>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+
+    @if($detalles_por_impresora->count())
+        <div class="row">
+            <div class="col-12 col-sm-12 col-lg-12">
+                <div class="card card-primary card-tabs">
+                <div class="card-header p-0 pt-1">
+                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                        @foreach ($detalles_por_impresora as $impresora => $detalles)
+                            <li class="nav-item">
+                                <a class="nav-link @if ($loop->first) active @endif" id="custom-tabs-impresiones-{{ $loop->index }}" data-toggle="pill" href="#tab-impresiones-{{ $loop->index }}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">{{ $impresora }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="tab-content-impresoras">
+                        @foreach ($detalles_por_impresora as $impresora => $detalles)
+                            <div class="tab-pane fade  @if ($loop->first) active show @endif" id="tab-impresiones-{{ $loop->index }}" role="tabpanel" aria-labelledby="custom-tabs-impresiones-{{ $loop->index }}">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3 col-6">
+                                      <!-- small box -->
+                                      <div class="small-box bg-black">
+                                        <div class="inner">
+                                          <h3>{{ $detalles->sum('negro') }}</h3>
+
+                                          <p>Total Impresiones Negro</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-lg-3 col-6">
+                                      <!-- small box -->
+                                      <div class="small-box bg-success">
+                                        <div class="inner">
+                                          <h3>{{ $detalles->sum('color') }}</h3>
+                                          <p>Total Impresiones Color</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-lg-3 col-6">
+                                      <!-- small box -->
+                                      <div class="small-box bg-warning">
+                                        <div class="inner">
+                                          <h3>{{ $detalles->sum('total') }}</h3>
+
+                                          <p>Total Impresiones</b></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12 my-2">
+                                        @if($impresoras_registradas->contains($detalles->first()->id_impresora))
+                                            <form class="btn btn-xs btn-danger" data-impresora="{{ $impresora }}" data-action="eliminacion-registros-impresiones" action="{{ route('gestion-inventarios.impresiones.eliminar-registros-impresiones',$impresion) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                {!! Form::hidden('id_impresora', $detalles->first()->id_impresora) !!}
+                                                <button type="submit" class="btn btn-xs text-white" title="Eliminar"><i class="fas fa-trash-alt"></i> Eliminar Registros de {{ $impresora }}</button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Personal</th>
+                                            <th># Impresión</th>
+                                            <th>Negro</th>
+                                            <th>Color</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach ($detalles->groupBy(function($detalle){return $detalle->personal->departamento->nombre ?? 'S/Depto';})->sortKeys() as $departamento => $detalles_por_departamento)
+                                        <tbody>
+                                            <tr class="bg-gray-light text-center">
+                                                <td colspan="5">{{ $departamento }}</td>
+                                            </tr>
+                                            @foreach ($detalles_por_departamento as $detalle)
+                                                <tr>
+                                                    <td>{{ $detalle->personal->nombre }}</td>
+                                                    <td>{{ $detalle->id_impresion }}</td>
+                                                    <td>{{ $detalle->negro }}</td>
+                                                    <td>{{ $detalle->color }}</td>
+                                                    <td>{{ $detalle->total }}</td>
+                                                </tr>
+                                            @endforeach
+                                            <tr class="text-bold">
+                                                <td  colspan="2">Total: {{ $departamento }}</td>
+                                                <td>{{ $detalles_por_departamento->sum('negro') }}</td>
+                                                <td>{{ $detalles_por_departamento->sum('color') }}</td>
+                                                <td>{{ $detalles_por_departamento->sum('total') }}</td>
+                                            </tr>
+                                        </tbody>
+                                    @endforeach
+                                </table>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="modal fade" id="modal-agregar-registro-impresiones" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content ">
+            <div class="modal-header">
+              <h4 class="modal-title">Agregar Registro de Impresones</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            {!! Form::open(['id' => 'form-asignar-registro-impresiones','route' =>['gestion-inventarios.impresiones.agregar-registro-impresiones', $impresion], 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!! Form::label('id_impresora', 'Impresora') !!}
+                        {!! Form::select('id_impresora', $impresoras, null, ['class' => 'form-control','data-impresora' => '','required' => true]) !!}
+                    </div>
+                    <div class="form-group @error('info') has-error @enderror">
+                        {!! Form::label('info', 'Ingresa la información de la impresora') !!}
+                        {!! Form::textarea('info', null, ['class' => 'form-control','cols' => '30','rows' => '15','title' => 'Información Impresiones','data-impresora' => '','required' => true]) !!}
+                        <div class="help-block with-errors">
+                            @error('info')
+                                <span>{{ $errors->first('info') }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div id="d-errors-asignar-equipo" class="form-group"></div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            {!! Form::close() !!}
+          </div>
+          <!-- /.modal-content -->
+        </div>
+    </div>
+
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+        $(function(){
+            const dom = {
+                impresiones: {
+                    btn_agregar: $('#btn-agregar-reporte'),
+                    modal_agregar: $('#modal-agregar-registro-impresiones'),
+                    form_agregar: $('#form-asignar-registro-impresiones'),
+                    tab_content_impresoras : $("#tab-content-impresoras")
+                }
+            }
+
+            dom.impresiones.btn_agregar.click(function() {
+                dom.impresiones.modal_agregar.modal('show');
+            })
+
+            dom.impresiones.form_agregar.submit(function(e){
+                dom.impresiones.modal_agregar.modal('hide');
+
+                Swal.fire({
+                    title: 'Procesando',
+                    html: 'Espere un momento por favor.',
+                    allowEscapeKey:false,
+                    allowOutsideClick:false,
+                    allowEnterKey:false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                })
+            })
+
+            dom.impresiones.tab_content_impresoras.on('submit','form',function(e){
+                e.preventDefault();
+
+                Swal.fire({
+                    title: `¿Deseas eliminar todos los registros de la impresora ${$(this).data('impresora')}?`,
+                    text: "Una vez eliminado, no podrá recuperarse",
+                    type: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Eliminar',
+                }).then((result) => {
+                    if (result.value) {
+                        Swal.fire({
+                            title: 'Procesando',
+                            html: 'Espere un momento por favor.',
+                            allowEscapeKey:false,
+                            allowOutsideClick:false,
+                            allowEnterKey:false,
+                            onBeforeOpen: () => {
+                                Swal.showLoading()
+                            },
+                        })
+
+                       e.target.submit();
+                    }
+                })
+            })
+        })
+    </script>
+@endsection
+

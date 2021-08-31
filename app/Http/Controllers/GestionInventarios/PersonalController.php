@@ -2,11 +2,15 @@
 
 namespace HelpDesk\Http\Controllers\GestionInventarios;
 
-use HelpDesk\Entities\Inventario\CuentaPersonal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use HelpDesk\Imports\PersonalImport;
 use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Http\Controllers\Controller;
 use HelpDesk\Entities\Inventario\Personal;
+use HelpDesk\Entities\Inventario\CuentaPersonal;
+use Maatwebsite\Excel\Validators\ValidationException;
+use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 class PersonalController extends Controller
 {
@@ -18,7 +22,7 @@ class PersonalController extends Controller
     public function datatables(Request $request)
     {
         $query = Personal::query()
-            ->select('id', 'nombre', 'id_sucursal', 'id_departamento', 'id_usuario')
+            ->select('id','id_impresion' ,'nombre', 'id_sucursal', 'id_departamento', 'id_usuario')
             ->with(['sucursal', 'departamento']);
 
         return DataTables::eloquent($query)
@@ -170,5 +174,37 @@ class PersonalController extends Controller
                 "more" => $morePages
             ]
         ]);
+    }
+
+    public function importar(Request $request)
+    {
+        $this->validate($request, [
+            'personal' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $archivo = $request->file('personal');
+
+         try {
+            DB::beginTransaction();
+
+            $import = new PersonalImport;
+            $import->import($archivo);
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Personal Importado correctamente',
+            ]);
+        } catch (ValidationException $e) {
+            DB::rollback();
+            $failures = $e->failures();
+
+            return response()->json([
+                'success'   => false,
+                'error'     => 'Error al importar el personal',
+                'details'   => optional($failures[0])->errors()
+            ],HTTPMessages::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 }

@@ -2,27 +2,124 @@
 
 namespace HelpDesk\Http\Controllers\GestionInventarios;
 
-use HelpDesk\Http\Controllers\Controller;
-use HelpDesk\Services\PrinterCanon;
 use Illuminate\Http\Request;
+use HelpDesk\Entities\Impresora;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use HelpDesk\Http\Controllers\Controller;
 
 class ImpresorasController extends Controller
 {
+
     public function index()
     {
         return view('gestion-inventarios.impresoras.index');
     }
 
-    public function calcular(Request $request, PrinterCanon $printer)
+    public function datatables()
+    {
+        $query = Impresora::query();
+
+        return DataTables::eloquent($query)
+            ->editColumn('ip',function($model){
+                return "<a href='{$model->ip}' target='_blank' class='btn-link'>{$model->ip}</a>";
+            })
+            ->addColumn('buttons', 'gestion-inventarios.impresoras.datatables._buttons')
+            ->rawColumns(['ip','buttons' ])
+            ->make(true);
+    }
+
+    public function show(Impresora $impresora)
+    {
+        return view('gestion-inventarios.impresoras.show', ['impresora' => $impresora]);
+    }
+
+    public function create()
+    {
+        return view('gestion-inventarios.impresoras.create', [
+            'model' => new Impresora(),
+        ]);
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
-            'info' => 'required'
+            'nombre'        => 'required',
+            'descripcion'   => 'required',
+            'nip'           => 'required',
+            'ip'           => 'required',
         ]);
 
-        $printer->read($request->input('info'));
+        DB::beginTransaction();
 
-        return redirect()->route('gestion-inventarios.impresoras.index')->with([
-            'tb_printer' =>  $printer->render()
+        try {
+            Impresora::create($request->all());
+
+            DB::commit();
+
+            return redirect()
+                ->route('gestion-inventarios.impresoras.index')
+                ->with(['message' => 'Impresora creada Correctamente']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()
+                ->with([
+                    'error' => "Error Servidor: {$e->getMessage()}",
+                ])->withInput();
+        }
+    }
+
+    public function edit(Impresora $impresora)
+    {
+        return view('gestion-inventarios.impresoras.edit', [
+            'impresora' => $impresora,
+        ]);
+    }
+
+    public function update(Request $request, Impresora $impresora)
+    {
+        $request->validate([
+            'nombre'        => 'required',
+            'descripcion'   => 'required',
+            'nip'           => 'required',
+            'ip'           => 'required',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+
+            $impresora->update($request->all());
+
+            DB::commit();
+
+            return redirect()
+                ->route('gestion-inventarios.impresoras.index')
+                ->with(['message' => 'Estatus actualizado correctamente']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()
+                ->with([
+                    'error' => "Error Servidor: {$e->getMessage()}",
+                ])->withInput();
+        }
+    }
+
+    public function destroy(Request $request, Impresora $impresora)
+    {
+        $impresora->delete();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success'   => true,
+                'message'   => "La impresora se elimino con éxito",
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message'   => "La impresora se elimino con éxito",
         ]);
     }
 }

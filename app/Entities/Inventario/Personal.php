@@ -44,7 +44,9 @@ class Personal extends Model
 
     public function departamento()
     {
-        return $this->belongsTo(Departamento::class, 'id_departamento')->withDefault();
+        return $this->belongsTo(Departamento::class, 'id_departamento')->withDefault([
+            'nombre' => '',
+        ]);
     }
 
     public function cuentas()

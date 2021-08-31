@@ -2,6 +2,8 @@
 
 namespace HelpDesk\Services;
 
+use Illuminate\Support\Collection;
+
 final class PrinterCanon
 {
     private const CONDITIONAL_BW = 6;
@@ -30,6 +32,39 @@ final class PrinterCanon
                 $this->cleanSlash_Color($this->_data)
             );
         }
+    }
+
+    public function toCollection(): Collection
+    {
+        if (empty($this->_data)) {
+            return '';
+        }
+
+        $impresiones = null;
+
+        if ($this->validatedBW($this->_data)) {
+            $registros = $this->cleanBnN($this->_data);
+
+            $registros_en_negro = $registros->map(function($registro){
+                return (object)[
+                    'id'    => $registro->id,
+                    'negro' => $registro->total,
+                    'color' => 0,
+                    'total' => $registro->total,
+                ];
+            });
+
+            $impresiones = $registros_en_negro;
+        }
+
+        $impresiones = $this->cleanSlash_Color($this->_data);
+
+
+        $impresiones_filtradas = $impresiones->filter(function($impresion){
+            return $impresion->total > 0;
+        });
+
+        return $impresiones_filtradas;
     }
 
     private function validatedBW(string $data)

@@ -1,11 +1,18 @@
 @extends('layouts.panel')
 
-@section('title','Reporte Impresoras')
+@section('title','Impresoras')
+
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+@endsection
 
 @section('breadcrumb')
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Herramientas </a>
+        <i class="fas fa-home"></i> Inicio </a>
+    </li>
+    <li class="breadcrumb-item">
+        Gestión Inventarios
     </li>
     <li class="breadcrumb-item active">Impresoras</li>
 </ol>
@@ -13,79 +20,139 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Genera Reporte de impresoras</h3>
-                @if(session('tb_printer'))
-                <div class="card-tools">
-                    <div class="input-group input-group-sm">
-                      <div class="input-group-append">
-                        <button id="btn-report" type="button" class="btn btn-primary" title="Imprimir">Imprimir Reporte</button>
-                        <a class="btn btn-default" href="{{ route('gestion-inventarios.impresoras.index') }}">Regresar</a>
-                      </div>
-                    </div>
-                </div>
-                @endif
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        @if (!session('tb_printer'))
-                            <form class="form" action="{{ route('gestion-inventarios.impresoras.calcular') }}" method="POST">
-                                @csrf
-                                <div class="form-group @error('info') has-error @enderror">
-                                    <label>Ingresa la informacion de la impresora</label>
-                                    <textarea id="info" class="form-control" name="info" cols="30" rows="15" required title="Información Impresiones">{{ old('info','') }}</textarea>
-                                    <div class="help-block with-errors">
-                                        @error('info')
-                                            <span>{{ $errors->first('info') }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <input class="btn btn-primary" type="submit" value="Generar">
-                            </form>
-                        @endif
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        @if (session('tb_printer'))
-                            {!! session('tb_printer') !!}
-                        @endif
-                    </div>
-                </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Gestion de impresoras</h3>
+            <div class="card-tools">
+                <a href="{{ route('gestion-inventarios.impresoras.create') }}" class="btn btn-success btn-sm" title="Crear">
+                    Crear <i class="fas fa-plus-circle"></i>
+                </a>
             </div>
         </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tb-equipos" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>IP</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
     </div>
-
-</div>
+    <!-- /.col -->
+  </div>
 @endsection
 
+
 @section('scripts')
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
-    @if(session('tb_printer'))
-        <script src="{{ mix('js/vendor/table-html/table-html.js') }}"></script>
-        <script type="text/javascript">
-            $(function () {
-                const d = document;
-                const date = new Date().toLocaleDateString().replaceAll('/','-');
-                const filename = `reporte_impresiones_${date}.xls`;
+    <script type="text/javascript">
+        $(function() {
+            const dom = {
+                table: $('#tb-equipos'),
+            };
 
-                const dom = {
-                    btn_report: $('#btn-report'),
-                    tb_report: $("#tbImpr"),
-                };
+            var dt = dom.table.DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                pageLength: 10,
+                ajax: {
+                    url: "{{ route('gestion-inventarios.impresoras.datatables') }}",
+                    type: "POST",
+                    data: function (d) {
+                    },
+                    beforeSend: function(xhr,type) {
+                    if (!type.crossDomain) {
+                            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+                        }
+                    },
+                    complete: function() {
+                    },
+                },
+                pageLength: 10,
+                responsive: true,
+                columns: [
+                    {data: 'id',name: 'id'},
+                    {data: 'nombre',name: 'nombre'},
+                    {data: 'descripcion',name: 'descripcion'},
+                    {data: 'ip',name: 'ip'},
+                    {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
+                ],
+                order: [[ 0, "desc" ]],
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                    "zeroRecords": "No se encontro ningún registro",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(Filtrado de un total de _MAX_ registros)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Última",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                },
+                drawCallback: function (settings) {
+                    $("[data-toggle='tooltip']").tooltip();
+                },
+            });
 
-                d.addEventListener('click',function(e) {
-                    if (e.target === dom.btn_report[0]) {
-                        dom.tb_report.table2excel({
-                            filename: filename
+            dom.table.on('click',"a[data-action='destroy']",function(e){
+                e.preventDefault();
+                const url = $(this).attr('href');
+
+                Swal.fire({
+                    title: '¿Desesas eliminar este registro?',
+                    text: "Una vez eliminado, no podrá recuperarse",
+                    type: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Eliminar',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            data: {},
+                            success: function (response){
+                                dt.ajax.reload( function(){
+                                    Toast.fire({
+                                        type: 'success',
+                                        title: response.message || 'Registro eliminado correctamente',
+                                    });
+                                }, false )
+                            },
+                            error:function(error){
+                                Toast.fire({
+                                    type: 'error',
+                                    title: 'Ups, hubo un error en el servidor'
+                                });
+                            }
                         });
                     }
-                });
-            });
-        </script>
-    @endif
+                })
+            })
+
+        })
+    </script>
 @endsection
 

@@ -24,7 +24,7 @@ class DepartamentoTableSeeder extends Seeder
             ],
             [
                 #'id'        => 3,
-                'nombre'    => 'Contabilidad-Compras',
+                'nombre'    => 'Contabilidad',
             ],
             [
                 #'id'        => 4,
@@ -32,7 +32,7 @@ class DepartamentoTableSeeder extends Seeder
             ],
             [
                 #'id'        => 5,
-                'nombre'    => 'Tecnólogias de la Información',
+                'nombre'    => 'Tecnologías de la Información',
             ],
             [
                 #'id'        => 6,
@@ -40,7 +40,7 @@ class DepartamentoTableSeeder extends Seeder
             ],
             [
                 #'id'        => 7,
-                'nombre'    => 'Embarques y Logística',
+                'nombre'    => 'Logística',
             ],
             [
                 #'id'        => 8,
@@ -50,8 +50,43 @@ class DepartamentoTableSeeder extends Seeder
                 #'id'        => 9,
                 'nombre'    => 'TGAB',
             ],
+            [
+                #'id'        => 10,
+                'nombre'    => 'Almacén',
+            ],
+            [
+                #'id'        => 11,
+                'nombre'    => 'Materia Prima',
+            ],
+            [
+                #'id'        => 12,
+                'nombre'    => 'Ventas',
+            ],
+            [
+                #'id'        => 13,
+                'nombre'    => 'Compras',
+            ],
+            [
+                #'id'        => 14,
+                'nombre'    => 'Monitoreo',
+            ],
+            [
+                #'id'        => 15,
+                'nombre'    => 'Mantenimiento',
+            ],
+            [
+                #'id'        => 16,
+                'nombre'    => 'Almacén',
+            ],
         ];
 
-        Departamento::insert($departamentos);
+        foreach ($departamentos as $departamento) {
+            Departamento::updateOrCreate(
+                ['nombre'         =>  $departamento['nombre'] ],
+                []
+            );
+        }
+
+        // Departamento::insert($departamentos);
     }
 }

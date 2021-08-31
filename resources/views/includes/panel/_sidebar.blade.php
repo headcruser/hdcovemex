@@ -164,7 +164,6 @@
                             </a>
                         </li>
 
-
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.personal.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.personal.*']) }}">
                                 <i class="nav-icon fas fa-user-friends"></i>
@@ -174,8 +173,22 @@
 
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.impresoras.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresoras.index','gestion-inventarios.impresoras.*']) }}">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>Impresoras</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.impresiones.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresiones.index','gestion-inventarios.impresiones.*']) }}">
                                 <i class="nav-icon fas fa-print"></i>
-                                <p>Reporte Impresiones</p>
+                                <p>Impresiones</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ route('gestion-inventarios.reporte-impresiones.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.reporte-impresiones.index','gestion-inventarios.reporte-impresiones.*']) }}" >
+                                <i class="nav-icon fas fa-chart-pie"></i>
+                                <p>Reporte Anual</p>
                             </a>
                         </li>
                     </ul>

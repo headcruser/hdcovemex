@@ -162,6 +162,7 @@ Route::group([
         ])->except('show');
 
         # PERSONAL
+        Route::post('personal/importar',"PersonalController@importar")->name('personal.importar');
         Route::post('personal/actualizar_cuenta/{cuenta}',"PersonalController@actualizar_cuenta")->name('personal.actualizar_cuenta');
         Route::post('personal/eliminar_cuenta/{cuenta}',"PersonalController@eliminar_cuenta")->name('personal.eliminar_cuenta');
         Route::post('personal/listar_cuentas',"PersonalController@listar_cuentas")->name('personal.listar_cuentas');
@@ -172,16 +173,30 @@ Route::group([
             'personal'  => 'personal'
         ]);
 
-
-        # REPORTE IMPRESORAS
-        Route::get('reporte-impresoras', [
-            'as'            => 'impresoras.index',
-            'uses'          => 'ImpresorasController@index'
+        # IMPRESIONES
+        Route::post('impresiones/datatables','ImpresionesController@datatables')->name('impresiones.datatables');
+        Route::post('impresiones/{impresion}/agregar-registro-impresiones','ImpresionesController@agregar_registro_impresiones')->name('impresiones.agregar-registro-impresiones');
+        Route::delete('impresoras/{impresion}/eliminar-registros-impresiones','ImpresionesController@eliminar_registros_impresiones')->name('impresiones.eliminar-registros-impresiones');
+        Route::resource('impresiones', 'ImpresionesController')->parameters([
+            'impresiones'  => 'impresion'
         ]);
 
-        Route::post('reporte-impresoras', [
-            'as'            => 'impresoras.calcular',
-            'uses'          => 'ImpresorasController@calcular'
+        # IMPRESORAS
+        Route::post('impresoras/datatables','ImpresorasController@datatables')->name('impresoras.datatables');
+        Route::resource('impresoras', 'ImpresorasController')->parameters([
+            'impresoras'  => 'impresora'
+        ]);
+
+
+        # REPORTE IMPRESIONES
+        Route::get('reporte-impresiones', [
+            'as'            => 'reporte-impresiones.index',
+            'uses'          => 'ReporteImpresionesController@index'
+        ]);
+
+        Route::post('reporte-impresiones', [
+            'as'            => 'reporte-impresiones.calcular',
+            'uses'          => 'ReporteImpresionesController@calcular'
         ]);
     }
 );

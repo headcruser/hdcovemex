@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             OperatorSeeders::class,
             TipoHardwareSeeder::class,
             SucursalSeeder::class,
+            ImpresoraSeeder::class,
         ]);
     }
 }
