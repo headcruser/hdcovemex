@@ -39,7 +39,6 @@ class UsuarioImport implements
      */
     public function collection(Collection $collection)
     {
-        dd('aguanta');
         $rol_empleado = Role::where('name','Empleado')->pluck('id')->toArray();
 
         foreach ($collection as $row) {
