@@ -70,14 +70,10 @@ class PersonalImport implements
     public function rules(): array
     {
         return [
-            // 'nombre'                => 'required',
-            // '*.nombre'              => 'required',
-            // 'id_impresion'          => 'required',
-            // '*.id_impresion'        => 'required',
-            // 'id_sucursal'           => 'required',
-            // '*.id_sucursal'         => 'required',
-            // 'id_departamento'       => 'required',
-            // '*.id_departamento'     => 'required',
+            'nombre'        => 'required',
+            'id_impresion'  => 'required',
+            'sucursal'      => 'required',
+            'departamento'  => 'required',
         ];
     }
 

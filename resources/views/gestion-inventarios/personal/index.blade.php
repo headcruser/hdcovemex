@@ -276,40 +276,52 @@
                         processData: false,
                     })
                     .done(function(response) {
-                        d.form[0].reset();
-                        $(".dropify-clear").trigger("click");
 
-                        dt.ajax.reload( function(){
-                            Swal.close();
+                        if(response.success){
+                            d.form[0].reset();
+                            $(".dropify-clear").trigger("click");
 
-                            Toast.fire({
-                                type: 'success',
-                                title: 'Registro eliminado correctamente',
-                            });
-                        }, false );
+                            dt.ajax.reload( function(){
+                                Swal.close();
+
+                                Toast.fire({
+                                    type: 'success',
+                                    title: response.message || 'Archivo Importado correctamente',
+                                });
+                            }, false );
+                        }
                     })
                     .fail(function(error){
                         setTimeout(() => {
-                            var message = error.responseJSON.error || 'Error Al Importar al personal';
-                            var errors = error.responseJSON.details || []
+                            const response = error.responseJSON;
+                            let lista_errores = '';
+                            let mensaje_error = '';
 
-                            if(errors) {
-                                var display_erorrs = errors.map((e)=>`<li class="text-white font-weight-bold">${e}</li>`).join('');
-                                d.errors.html(templates.errors.replace(':message',`
-                                    <ul>
-                                        ${display_erorrs}
-                                    </ul>
-                                `));
+                            if (response) {
+                                if (response.error) {
+                                    let errors = response.details || [];
+                                    lista_errores = errors.map((e)=>`<li class="text-white font-weight-bold">${e}</li>`).join('');
+
+                                    mensaje_error =  response.error || 'Error al Importar el archivo';
+                                }else{
+                                    mensaje_error = response.message || 'Error al importar el archivo'
+                                }
                             }else{
-                                d.errors.html(templates.errors.replace(':message',`
-                                    <ul>
-                                        ${error.responseJSON.message || 'Error al importar el personal'}
-                                    </ul>
-                                `));
+                                mensaje_error = 'Error al obtener la respuesta del servidor'
                             }
+
+
+                            d.errors.html(templates.errors.replace(':message',`
+                                <p class='py-2'>${mensaje_error}</p>
+
+                                <ul>
+                                    ${lista_errores}
+                                </ul>
+                            `));
 
                             Swal.close();
                             d.modal.modal('show');
+
                         }, 250);
                     })
                 };
