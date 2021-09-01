@@ -61,6 +61,22 @@
                 </div>
                 <!-- /.card-body -->
             </div>
+
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    <h3 class="profile-username text-center">Herramientas</h3>
+
+                    <p class="text-muted text-center">Verifica la salida de impresiones antes de precargarlo a base de datos</p>
+
+                    <a href="{{ route('gestion-inventarios.impresiones.visualizar-impresiones') }}"
+                        class="btn btn-dark btn-block btn-sm"
+                        title="Visualizar impresiones">
+                        Visualizar impresiones
+                    </a>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
         </div>
     </div>
 

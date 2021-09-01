@@ -177,6 +177,8 @@ Route::group([
         ]);
 
         # IMPRESIONES
+        Route::get('impresiones/visualizar-impresiones','ImpresionesController@visualizar_impresiones')->name('impresiones.visualizar-impresiones');
+        Route::post('impresiones/calcular-impresiones','ImpresionesController@calcular_impresiones')->name('impresiones.calcular-impresiones');
         Route::post('impresiones/datatables','ImpresionesController@datatables')->name('impresiones.datatables');
         Route::post('impresiones/{impresion}/importar','ImpresionesController@importar')->name('impresiones.importar');
         Route::post('impresiones/{impresion}/agregar-registro-impresiones','ImpresionesController@agregar_registro_impresiones')->name('impresiones.agregar-registro-impresiones');

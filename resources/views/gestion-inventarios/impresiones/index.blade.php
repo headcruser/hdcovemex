@@ -28,6 +28,12 @@
                         title="Crear">
                         Crear <i class="fas fa-plus-circle"></i>
                     </a>
+
+                    <a href="{{ route('gestion-inventarios.impresiones.visualizar-impresiones') }}"
+                        class="btn btn-secondary btn-sm"
+                        title="Visualizar impresiones">
+                        Visualizar impresiones
+                    </a>
                 </div>
             </div>
 

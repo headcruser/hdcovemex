@@ -238,4 +238,23 @@ class ImpresionesController extends Controller
             ->route('gestion-inventarios.impresiones.show', $impresion)
             ->with(['message' => 'Registros eliminados correctamente']);
     }
+
+    public function visualizar_impresiones()
+    {
+        return view('gestion-inventarios.impresiones.visualizar_impresiones');
+    }
+
+    public function calcular_impresiones(Request $request,PrinterCanon $printer)
+    {
+        $request->validate([
+            'info' => 'required'
+        ]);
+
+        $printer->read($request->input('info'));
+
+        return redirect()->route('gestion-inventarios.impresiones.visualizar-impresiones')->with([
+            'tb_printer' =>  $printer->render()
+        ]);
+
+    }
 }
