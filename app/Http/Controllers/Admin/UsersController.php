@@ -13,6 +13,8 @@ use HelpDesk\Entities\Admin\{Role, User, Departamento};
 
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use HelpDesk\Http\Requests\Admin\User\{CreateUserRequest, UpdateUserRequest};
+use HelpDesk\Imports\UsuarioImport;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class UsersController extends Controller
 {
@@ -158,5 +160,37 @@ class UsersController extends Controller
     {
         User::whereIn('id', $request->input('ids'))->delete();
         return response(null, HTTPMessages::HTTP_NO_CONTENT);
+    }
+
+    public function importar(Request $request)
+    {
+        $this->validate($request, [
+            'usuario' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $archivo = $request->file('usuario');
+
+         try {
+            DB::beginTransaction();
+
+            $import = new UsuarioImport;
+            $import->import($archivo);
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Usuarios Importados correctamente',
+            ]);
+        } catch (ValidationException $e) {
+            DB::rollback();
+            $failures = $e->failures();
+
+            return response()->json([
+                'success'   => false,
+                'error'     => 'Error al importar los usuarios',
+                'details'   => optional($failures[0])->errors()
+            ],HTTPMessages::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 }

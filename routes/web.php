@@ -64,6 +64,7 @@ Route::group([
     function () {
         # USUARIOS
         Route::post('usuarios/datatables','UsersController@datatables')->name('usuarios.datatables');
+        Route::post('usuarios/importar','UsersController@importar')->name('usuarios.importar');
         Route::resource('usuarios', 'UsersController')->parameters([
             'usuarios'  => 'model'
         ]);
