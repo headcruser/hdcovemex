@@ -15,6 +15,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/dropify/dist/css/dropify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('content')
@@ -125,11 +126,15 @@
                                                 {!! Form::hidden('id_impresora', $detalles->first()->id_impresora) !!}
                                                 <button type="submit" class="btn btn-xs text-white" title="Eliminar"><i class="fas fa-trash-alt"></i> Eliminar Registros de {{ $impresora }}</button>
                                             </form>
+
+                                            <button class="btn btn-secondary btn-sm" data-impresora="{{ $detalles->first()->id_impresora }}" data-nombre="{{ $impresora }}" >
+                                                <i class="fas fa-file-excel"></i> Descargar Reporte
+                                            </button>
                                         @endif
                                     </div>
                                 </div>
 
-                                <table class="table table-bordered">
+                                <table class="table table-bordered" data-impresora="{{ $detalles->first()->id_impresora }}">
                                     <thead>
                                         <tr>
                                             <th>Personal</th>
@@ -255,7 +260,11 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/dropify/dist/js/dropify.min.js') }}"></script>
+    <script src="{{ mix('js/vendor/table-html/table-html.js') }}"></script>
+
     <script type="text/javascript">
         $(function(){
             const dom = {
@@ -321,6 +330,21 @@
                     }
                 })
             })
+
+            dom.impresiones.tab_content_impresoras.on('click','button[data-impresora]',function(e){
+                const id_impresora = $(this).data('impresora');
+                const nombre_impresora = $(this).data('nombre') || '';
+
+                const date = new Date().toLocaleDateString().replaceAll('/','-');
+                const filename = `reporte_impresiones_${date}_${nombre_impresora}.xls`;
+
+
+                const table = $(`table[data-impresora=${id_impresora}]`);
+
+                table.table2excel({
+                    filename: filename
+                });
+            });
 
             var m_importar_impresiones = (function(d){
                 const templates = {
