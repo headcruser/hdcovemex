@@ -4,6 +4,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/datatables-fixedcolumns/css/fixedColumns.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 
@@ -13,7 +14,10 @@
         <i class="fas fa-home"></i> Inicio </a>
     </li>
     <li class="breadcrumb-item"> Administración </li>
-    <li class="breadcrumb-item active">Permisos</li>
+    <li class="breadcrumb-item">
+        <a href="{{ route('admin.permisos.index') }}">Permisos</a>
+    </li>
+    <li class="breadcrumb-item active">Asignar permisos</li>
 </ol>
 @endsection
 
