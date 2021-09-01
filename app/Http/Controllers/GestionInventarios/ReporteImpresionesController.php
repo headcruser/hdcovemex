@@ -86,17 +86,4 @@ class ReporteImpresionesController extends Controller
             'impresiones_por_departamento'  => $impresiones_por_departamento
         ]);
     }
-
-    // public function calcular(Request $request, PrinterCanon $printer)
-    // {
-    //     $request->validate([
-    //         'info' => 'required'
-    //     ]);
-
-    //     $printer->read($request->input('info'));
-
-    //     return redirect()->route('gestion-inventarios.reporte-impresiones.index')->with([
-    //         'tb_printer' =>  $printer->render()
-    //     ]);
-    // }
 }

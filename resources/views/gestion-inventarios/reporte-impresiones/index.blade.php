@@ -12,209 +12,145 @@
 @endsection
 
 @section('content')
-{{-- <div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Genera Reporte de impresoras</h3>
-                @if(session('tb_printer'))
-                <div class="card-tools">
-                    <div class="input-group input-group-sm">
-                      <div class="input-group-append">
-                        <button id="btn-report" type="button" class="btn btn-primary" title="Imprimir">Imprimir Reporte</button>
-                        <a class="btn btn-default" href="{{ route('gestion-inventarios.reporte-impresiones.index') }}">Regresar</a>
-                      </div>
-                    </div>
+
+    <div class="row">
+        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="card">
+                <div class="card-header d-flex p-0">
+                    <h3 class="card-title p-3"></h3>
+                    <ul class="nav nav-pills ml-auto p-2">
+                        <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Reporte Anual</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Reporte por impresora</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Reporte por departamento</a></li>
+                        <li class="nav-item"></li>
+                    </ul>
                 </div>
-                @endif
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        @if (!session('tb_printer'))
-                            <form class="form" action="{{ route('gestion-inventarios.reporte-impresiones.calcular') }}" method="POST">
-                                @csrf
-                                <div class="form-group @error('info') has-error @enderror">
-                                    <label>Ingresa la informacion de la impresora</label>
-                                    <textarea id="info" class="form-control" name="info" cols="30" rows="15" required title="Información Impresiones">{{ old('info','') }}</textarea>
-                                    <div class="help-block with-errors">
-                                        @error('info')
-                                            <span>{{ $errors->first('info') }}</span>
-                                        @enderror
+
+                <div class="card-body">
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="tab_1">
+                            <button class="btn btn-secondary btn-sm mb-4" id="btn-descargar-excel">
+                                <i class="fas fa-file-excel"></i> Descargar Reporte
+                            </button>
+
+                            <div class="table-responsive" style="height: 70vh">
+                                <table id="tb-reporte-mensual" class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" style="vertical-align: middle;" class="text-center p-3">
+                                                DEPARTAMENTOS
+                                            </th>
+                                            <th rowspan="2" style="vertical-align: middle;" class="text-center">
+                                                NOMBRE
+                                            </th>
+                                            <th rowspan="2" style="vertical-align: middle;" class="text-center">
+                                                ID
+                                            </th>
+                                            @foreach ($meses as $id => $mes)
+                                                <th class="text-center" colspan="3">
+                                                    {{ $mes }}
+                                                </th>
+                                            @endforeach
+                                            <th rowspan=2>TOTAL ANUAL</th>
+                                        </tr>
+
+                                        <tr class="text-bold bg-gray-light">
+                                            @foreach ($meses as $th => $mes)
+                                                <th>Negro</th>
+                                                <th class="text-danger">Color</th>
+                                                <th>Total</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+
+
+
+                                    @foreach ($personal_por_departamento as $departamento => $lista_personal)
+                                        <tbody>
+                                            <tr>
+                                                <td style="vertical-align: middle;" rowspan="{{ $lista_personal->count() + 1 }}" class="text-center bg-purple">{{ $departamento }}</td>
+                                            </tr>
+
+                                            @php
+                                                $total_anual = 0;
+                                            @endphp
+
+                                            @foreach ($lista_personal as $personal)
+                                                <tr>
+                                                    <td class="text-nowrap">{{ $personal->nombre }}</td>
+                                                    <td>{{ $personal->id_impresion }}</td>
+                                                    @php
+                                                        $total_por_personal = 0;
+                                                    @endphp
+                                                    @foreach ($meses as $id => $mes)
+                                                        <td>{{ $reporte[$mes][$personal->id_impresion]['negro'] }}</td>
+                                                        <td>{{ $reporte[$mes][$personal->id_impresion]['color'] }}</td>
+                                                        <td>{{ $reporte[$mes][$personal->id_impresion]['total'] }}</td>
+                                                        @php
+                                                            $total_por_personal += $reporte[$mes][$personal->id_impresion]['total'];
+                                                        @endphp
+                                                    @endforeach
+                                                    <td class="text-bold">{{ $total_por_personal }}</td>
+                                                    @php
+                                                        $total_anual+= $total_por_personal;
+                                                    @endphp
+                                                </tr>
+                                            @endforeach
+
+                                            <tr class="text-bold bg-gray-light">
+                                                <th colspan="3" class="text-center">TOTAL</th>
+                                                @foreach ($meses as $id => $mes)
+                                                    <td>
+                                                        {{ collect($reporte[$mes])->filter(function($item) use($departamento){
+                                                            return $item['departamento'] == $departamento;
+                                                        })->sum('negro') }}
+                                                    </td>
+                                                    <td class="text-danger">
+                                                        {{ collect($reporte[$mes])->filter(function($item) use($departamento){
+                                                            return $item['departamento'] == $departamento;
+                                                        })->sum('color') }}
+                                                    </td>
+                                                    <td>
+                                                        {{ collect($reporte[$mes])->filter(function($item) use($departamento){
+                                                            return $item['departamento'] == $departamento;
+                                                        })->sum('total') }}
+                                                    </td>
+                                                @endforeach
+                                                <td>
+                                                    {{ $total_anual }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab_2">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="chart-total-por-impresora"></div>
                                     </div>
                                 </div>
-                                <input class="btn btn-primary" type="submit" value="Generar">
-                            </form>
-                        @endif
+                        </div>
+
+                        <div class="tab-pane" id="tab_3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="chart-total-por-departamento"></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        @if (session('tb_printer'))
-                            {!! session('tb_printer') !!}
-                        @endif
-                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
-</div> --}}
-
-
-{{--
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Genera Reporte de impresoras</h3>
-
-                <div class="card-tools">
-                    <div class="input-group input-group-sm">
-                      <div class="input-group-append">
-                        <button id="btn-report" type="button" class="btn btn-primary" title="Imprimir">Imprimir Reporte</button>
-                      </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    <div class="col-12">
-        <!-- Custom Tabs -->
-        <div class="card">
-          <div class="card-header d-flex p-0">
-            <h3 class="card-title p-3"></h3>
-            <ul class="nav nav-pills ml-auto p-2">
-              <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Reporte Anual</a></li>
-              <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Reporte por impresora</a></li>
-              <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Reporte por departamento</a></li>
-              <li class="nav-item">
-
-              </li>
-            </ul>
-          </div><!-- /.card-header -->
-          <div class="card-body">
-            <div class="tab-content">
-              <div class="tab-pane active" id="tab_1">
-                    <div class="table-responsive" style="height: 70vh">
-                        <table class="table table-bordered table-sm">
-                            <thead>
-                                <th>
-                                    Nombre
-                                </th>
-                                <th>
-                                    ID
-                                </th>
-                                @foreach ($meses as $id => $mes)
-                                    <th colspan="3">
-                                        {{ $mes }}
-                                    </th>
-                                @endforeach
-                                <th>Total</th>
-                            </thead>
-                            <thead>
-                                <tr class="text-bold bg-gray-light">
-                                    <th colspan="2"></th>
-                                    @foreach ($meses as $th => $mes)
-                                        <th>Negro</th>
-                                        <th class="text-danger">Color</th>
-                                        <th>Total</th>
-                                    @endforeach
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @foreach ($personal_por_departamento as $departamento => $lista_personal)
-                                <tbody>
-                                    <tr>
-                                        <td colspan="39" class="text-center bg-purple">{{ $departamento }}</td>
-                                    </tr>
-
-                                    @php
-                                        $total_anual = 0;
-                                    @endphp
-
-                                    @foreach ($lista_personal as $personal)
-                                        <tr>
-                                            <td class="text-nowrap">{{ $personal->nombre }}</td>
-                                            <td>{{ $personal->id_impresion }}</td>
-                                            @php
-                                                $total_por_personal = 0;
-                                            @endphp
-                                            @foreach ($meses as $id => $mes)
-                                                <td>{{ $reporte[$mes][$personal->id_impresion]['negro'] }}</td>
-                                                <td>{{ $reporte[$mes][$personal->id_impresion]['color'] }}</td>
-                                                <td>{{ $reporte[$mes][$personal->id_impresion]['total'] }}</td>
-                                                @php
-                                                    $total_por_personal += $reporte[$mes][$personal->id_impresion]['total'];
-                                                @endphp
-                                            @endforeach
-                                            <td class="text-bold">{{ $total_por_personal }}</td>
-                                            @php
-                                                $total_anual+= $total_por_personal;
-                                            @endphp
-                                        </tr>
-                                    @endforeach
-                                    <tr class="text-bold bg-gray-light">
-                                        <th colspan="2">TOTAL</th>
-                                        @foreach ($meses as $id => $mes)
-                                            <td>
-                                                {{ collect($reporte[$mes])->filter(function($item) use($departamento){
-                                                    return $item['departamento'] == $departamento;
-                                                })->sum('negro') }}
-                                            </td>
-                                            <td>
-                                                {{ collect($reporte[$mes])->filter(function($item) use($departamento){
-                                                    return $item['departamento'] == $departamento;
-                                                })->sum('color') }}
-                                            </td>
-                                            <td>
-                                                {{ collect($reporte[$mes])->filter(function($item) use($departamento){
-                                                    return $item['departamento'] == $departamento;
-                                                })->sum('total') }}
-                                            </td>
-                                        @endforeach
-                                        <td>
-                                            {{ $total_anual }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            @endforeach
-                        </table>
-                    </div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_2">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="chart-total-por-impresora"></div>
-                        </div>
-                    </div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_3">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="chart-total-por-departamento"></div>
-                    </div>
-                </div>
-              </div>
-              <!-- /.tab-pane -->
-            </div>
-            <!-- /.tab-content -->
-          </div><!-- /.card-body -->
-        </div>
-        <!-- ./card -->
-      </div>
-</div>
 @endsection
 
 @section('scripts')
@@ -222,6 +158,8 @@
     <script src="{{asset('highcharts/code/highcharts.js')}}"></script>
     <script src="{{asset('highcharts/code/modules/exporting.js')}}"></script>
     <script src="{{asset('highcharts/code/modules/export-data.js')}}"></script>
+    <script src="{{ mix('js/vendor/table-html/table-html.js') }}"></script>
+
     <script type="text/javascript">
 
         const langHighChart = {
@@ -357,30 +295,22 @@
                 ]
             });
         })
-    </script>
 
-    {{-- @if(session('tb_printer'))
-        <script src="{{ mix('js/vendor/table-html/table-html.js') }}"></script>
-        <script type="text/javascript">
-            $(function () {
-                const d = document;
+        $(function(){
+            $("#btn-descargar-excel").click(function(e){
+                const id_impresora = $(this).data('impresora');
+
                 const date = new Date().toLocaleDateString().replaceAll('/','-');
-                const filename = `reporte_impresiones_${date}.xls`;
+                const filename = `reporte_anual_${date}.xls`;
 
-                const dom = {
-                    btn_report: $('#btn-report'),
-                    tb_report: $("#tbImpr"),
-                };
 
-                d.addEventListener('click',function(e) {
-                    if (e.target === dom.btn_report[0]) {
-                        dom.tb_report.table2excel({
-                            filename: filename
-                        });
-                    }
+                const table = $("#tb-reporte-mensual");
+
+                table.table2excel({
+                    filename: filename
                 });
             });
-        </script>
-    @endif --}}
+        })
+    </script>
 @endsection
 
