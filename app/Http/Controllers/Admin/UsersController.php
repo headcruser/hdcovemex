@@ -4,17 +4,18 @@ namespace HelpDesk\Http\Controllers\Admin;
 
 use Entrust;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use HelpDesk\Imports\UsuarioImport;
 use HelpDesk\Notifications\DatosAcceso;
 use Yajra\DataTables\Facades\DataTables;
-use HelpDesk\Http\Controllers\Controller;
-use HelpDesk\Entities\Admin\{Role, User, Departamento};
 
+use HelpDesk\Http\Controllers\Controller;
+use Maatwebsite\Excel\Validators\ValidationException;
+use HelpDesk\Entities\Admin\{Role, User, Departamento};
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 use HelpDesk\Http\Requests\Admin\User\{CreateUserRequest, UpdateUserRequest};
-use HelpDesk\Imports\UsuarioImport;
-use Maatwebsite\Excel\Validators\ValidationException;
 
 class UsersController extends Controller
 {
@@ -192,5 +193,36 @@ class UsersController extends Controller
                 'details'   => optional($failures[0])->errors()
             ],HTTPMessages::HTTP_UNPROCESSABLE_ENTITY);
         }
+    }
+
+    public function generar_password()
+    {
+        $password = Str::random(8);
+
+        return response()->json([
+            'password'          => $password,
+            'encrypt_passowrd'  => \Hash::make($password),
+        ], 200);
+    }
+
+    public function enviar_datos_acceso(User $usuario,Request $request)
+    {
+        $request->validate([
+            'password'          => 'required',
+        ]);
+
+        $usuario->update([
+            'password' => \Hash::make($request->input('password'))
+        ]);
+
+        if($request->filled('enviar_datos_acceso')){
+            if($usuario->email){
+                $usuario->notify(new DatosAcceso($request->input('password')));
+            }
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Datos enviados correctamente',
+        ]);
     }
 }

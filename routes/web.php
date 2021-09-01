@@ -63,8 +63,10 @@ Route::group([
     'middleware'    => ['auth']],
     function () {
         # USUARIOS
+        Route::post('usuarios/generar-password','UsersController@generar_password')->name('usuarios.generar-passowrd');
         Route::post('usuarios/datatables','UsersController@datatables')->name('usuarios.datatables');
         Route::post('usuarios/importar','UsersController@importar')->name('usuarios.importar');
+        Route::post('usuarios/{usuario}/enviar-datos-acceso','UsersController@enviar_datos_acceso')->name('usuarios.enviar-datos-acceso');
         Route::resource('usuarios', 'UsersController')->parameters([
             'usuarios'  => 'model'
         ]);
