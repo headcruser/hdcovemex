@@ -3,14 +3,14 @@
 @section('title','Panel de impresiones')
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">Gestion Inventarios</li>
-    <li class="breadcrumb-item"><a href="{{ route('gestion-inventarios.impresiones.index') }}">Impresiones</a></li>
-    <li class="breadcrumb-item active">Panel Impresiones #{{ $impresion->nombre_mes }}</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">Gestion Inventarios</li>
+        <li class="breadcrumb-item"><a href="{{ route('gestion-inventarios.impresiones.index') }}">Impresiones</a></li>
+        <li class="breadcrumb-item active">Panel Impresiones #{{ $impresion->nombre_mes }}</li>
+    </ol>
 @endsection
 
 @section('styles')
@@ -96,54 +96,63 @@
                 <div class="card-body">
                     <div class="tab-content" id="tab-content-impresoras">
                         @foreach ($detalles_por_impresora as $impresora => $detalles)
+
                             <div class="tab-pane fade  @if ($loop->first) active show @endif" id="tab-impresiones-{{ $loop->index }}" role="tabpanel" aria-labelledby="custom-tabs-impresiones-{{ $loop->index }}">
                                 <div class="row justify-content-center">
-                                    <div class="col-lg-3 col-6">
-                                      <!-- small box -->
-                                      <div class="small-box bg-black">
-                                        <div class="inner">
-                                          <h3>{{ $detalles->sum('negro') }}</h3>
+                                    @if ($detalles->sum('negro') > 0)
+                                        <div class="col-lg-3 col-6">
+                                        <!-- small box -->
+                                        <div class="small-box bg-black">
+                                            <div class="inner">
+                                            <h3>{{ $detalles->sum('negro') }}</h3>
 
-                                          <p>Total Impresiones Negro</p>
+                                            <p>Total Impresiones Negro</p>
+                                            </div>
                                         </div>
-                                      </div>
-                                    </div>
-                                    <!-- ./col -->
-                                    <div class="col-lg-3 col-6">
-                                      <!-- small box -->
-                                      <div class="small-box bg-success">
-                                        <div class="inner">
-                                          <h3>{{ $detalles->sum('color') }}</h3>
-                                          <p>Total Impresiones Color</p>
                                         </div>
-                                      </div>
-                                    </div>
-                                    <!-- ./col -->
-                                    <div class="col-lg-3 col-6">
-                                      <!-- small box -->
-                                      <div class="small-box bg-warning">
-                                        <div class="inner">
-                                          <h3>{{ $detalles->sum('total') }}</h3>
 
-                                          <p>Total Impresiones</b></p>
+                                    @endif
+
+                                    @if ($detalles->sum('color') > 0)
+                                        <div class="col-lg-3 col-6">
+                                        <!-- small box -->
+                                        <div class="small-box bg-success">
+                                            <div class="inner">
+                                            <h3>{{ $detalles->sum('color') }}</h3>
+                                            <p>Total Impresiones Color</p>
+                                            </div>
                                         </div>
-                                      </div>
-                                    </div>
-                                    <!-- ./col -->
+                                        </div>
+                                    @endif
+
+                                    @if ($detalles->sum('total') > 0)
+                                        <div class="col-lg-3 col-6">
+                                            <div class="small-box bg-warning">
+                                                <div class="inner">
+                                                <h3>{{ $detalles->sum('total') }}</h3>
+
+                                                <p>Total Impresiones</b></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
 
-
                                 <div class="row">
-                                    <div class="col-md-12 my-2">
+                                    <div class="col-md-12 my-3">
                                         @if($impresoras_registradas->contains($detalles->first()->id_impresora))
+                                            <button class="btn btn-primary btn-sm" data-action="agregar-impresiones" data-impresora="{{ $detalles->first()->id_impresora }}" data-nombre="{{ $impresora }}" >
+                                                <i class="fas fa-plus-circle"></i> Agregar registro
+                                            </button>
+
                                             <form class="btn btn-xs btn-danger" data-impresora="{{ $impresora }}" data-action="eliminacion-registros-impresiones" action="{{ route('gestion-inventarios.impresiones.eliminar-registros-impresiones',$impresion) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 {!! Form::hidden('id_impresora', $detalles->first()->id_impresora) !!}
-                                                <button type="submit" class="btn btn-xs text-white" title="Eliminar"><i class="fas fa-trash-alt"></i> Eliminar Registros de {{ $impresora }}</button>
+                                                <button type="submit" class="btn btn-xs text-white" title="Eliminar"><i class="fas fa-trash-alt"></i> Eliminar Registros</button>
                                             </form>
 
-                                            <button class="btn btn-secondary btn-sm" data-impresora="{{ $detalles->first()->id_impresora }}" data-nombre="{{ $impresora }}" >
+                                            <button class="btn btn-secondary btn-sm" data-action="exportar-excel" data-impresora="{{ $detalles->first()->id_impresora }}" data-nombre="{{ $impresora }}" >
                                                 <i class="fas fa-file-excel"></i> Descargar Reporte
                                             </button>
                                         @endif
@@ -153,17 +162,25 @@
                                 <table class="table table-bordered" data-impresora="{{ $detalles->first()->id_impresora }}">
                                     <thead>
                                         <tr>
-                                            <th>Personal</th>
+                                            <th class="text-center">DEPARTAMENTO</th>
+                                            <th>NOMBRE</th>
                                             <th># Impresión</th>
                                             <th>Negro</th>
-                                            <th>Color</th>
+                                            <th class="text-danger">Color</th>
                                             <th>Total</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    @foreach ($detalles->groupBy(function($detalle){return $detalle->personal->departamento->nombre ?? 'S/Depto';})->sortKeys() as $departamento => $detalles_por_departamento)
+                                    @php
+                                        $personal_por_departamento = $detalles->groupBy(function($detalle){
+                                            return $detalle->personal->departamento->nombre;
+                                        })->sortKeys();
+                                    @endphp
+
+                                    @foreach ($personal_por_departamento as $departamento => $detalles_por_departamento)
                                         <tbody>
-                                            <tr class="bg-gray-light text-center">
-                                                <td colspan="5">{{ $departamento }}</td>
+                                            <tr class="text-center">
+                                                <td class="bg-purple align-middle" rowspan="{{ $detalles_por_departamento->count() + 1 }}">{{ $departamento }}</td>
                                             </tr>
                                             @foreach ($detalles_por_departamento as $detalle)
                                                 <tr>
@@ -172,13 +189,39 @@
                                                     <td>{{ $detalle->negro }}</td>
                                                     <td>{{ $detalle->color }}</td>
                                                     <td>{{ $detalle->total }}</td>
+                                                    <td class="text-center">
+                                                        <div class="btn-group">
+                                                            <button data-impresora="{{ $impresora }}"
+                                                                data-id="{{ $detalle->id }}"
+                                                                data-url="{{ route('gestion-inventarios.impresiones.eliminar-registro-impresiones',$detalle) }}"
+                                                                data-method="POST"
+                                                                data-type="DELETE"
+                                                                data-action="eliminar-impresion"
+                                                                title="Eliminar"
+                                                                class="btn btn-danger btn-sm">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+
+                                                            <button data-impresora="{{ $impresora }}"
+                                                                data-id="{{ $detalle->id }}"
+                                                                data-url="{{ route('gestion-inventarios.impresiones.actualizar-registro-impresiones',$detalle) }}"
+                                                                data-method="POST"
+                                                                data-type="PATCH"
+                                                                data-action="actualizar-impresion"
+                                                                data-object="{{ $detalle }}"
+                                                                class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             @endforeach
-                                            <tr class="text-bold">
-                                                <td  colspan="2">Total: {{ $departamento }}</td>
+                                            <tr class="text-bold bg-gray-light">
+                                                <td  colspan="3" class="text-center text-uppercase">Total</td>
                                                 <td>{{ $detalles_por_departamento->sum('negro') }}</td>
-                                                <td>{{ $detalles_por_departamento->sum('color') }}</td>
+                                                <td class="text-danger">{{ $detalles_por_departamento->sum('color') }}</td>
                                                 <td>{{ $detalles_por_departamento->sum('total') }}</td>
+                                                <td></td>
                                             </tr>
                                         </tbody>
                                     @endforeach
@@ -231,8 +274,7 @@
         </div>
     </div>
 
-
-    <div class="onboarding-modal modal fade animated" id="modal-importar-impresiones" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modal-importar-impresiones" data-keyboard="false"  data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content animated bounceInRight">
                 <div class="modal-header">
@@ -273,6 +315,96 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-agregar-impresiones" data-keyboard="false"  data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar regristro de impresiones</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+
+                {!! Form::open(['id' => 'form-agregar-impresiones', 'route' => ['gestion-inventarios.impresiones.crear-registro-impresiones',$impresion], 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            {!! Form::label('id_impresion','#ID IMPRESION') !!}
+                            {!! Form::text('id_impresion', null, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('id_impresora', null) !!}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('negro','Negro:') !!}
+                                    {!! Form::number('negro', null, ['class' => 'form-control','autocomplete' => 'off','placeholder' => 'Impresiones en negro']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('color','Color:') !!}
+                                    {!! Form::number('color', null, ['class' => 'form-control','autocomplete' => 'off','placeholder' => 'Impresiones en color']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary dim float-right" type="submit">Guardar</button>
+                    </div>
+                {!! Form::close()!!}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-actualizar-impresiones" data-keyboard="false"  data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">actualizar regristro de impresiones</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+
+                {!! Form::open(['id' => 'form-actualizar-impresiones', 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('impresora','Impresora:') !!}
+                                    {!! Form::text('impresora', null, ['class' => 'form-control','autocomplete' => 'off','placeholder' => 'Impresora','disabled' => true]) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('persona','Personal:') !!}
+                                    {!! Form::text('persona', null, ['class' => 'form-control','autocomplete' => 'off','disabled' => true]) !!}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('negro','Negro:') !!}
+                                    {!! Form::number('negro', null, ['id'=> 'update-input-negro','class' => 'form-control','autocomplete' => 'off','placeholder' => 'Impresiones en negro']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('color','Color:') !!}
+                                    {!! Form::number('color', null, ['id'=> 'update-input-color','class' => 'form-control','autocomplete' => 'off','placeholder' => 'Impresiones en color']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary dim float-right" type="submit">Guardar</button>
+                    </div>
+                {!! Form::close()!!}
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
@@ -295,74 +427,136 @@
                     form: $("#form-importar-impresiones"),
                     modal:$("#modal-importar-impresiones"),
                     errors:$("#errores-importar-impresiones")
+                },
+                agregar_impresiones: {
+                    modal:$("#modal-agregar-impresiones"),
+                    form: $("#form-agregar-impresiones"),
+                },
+                actualizar_impresiones: {
+                    modal:$("#modal-actualizar-impresiones"),
+                    form: $("#form-actualizar-impresiones"),
                 }
             }
 
-            dom.impresiones.btn_agregar.click(function() {
-                dom.impresiones.modal_agregar.modal('show');
-            })
-
-            dom.impresiones.form_agregar.submit(function(e){
-                dom.impresiones.modal_agregar.modal('hide');
-
-                Swal.fire({
-                    title: 'Procesando',
-                    html: 'Espere un momento por favor.',
-                    allowEscapeKey:false,
-                    allowOutsideClick:false,
-                    allowEnterKey:false,
-                    onBeforeOpen: () => {
-                        Swal.showLoading()
-                    },
+            const m_impresiones = (function(d){
+                d.btn_agregar.click(function() {
+                    d.modal_agregar.modal('show');
                 })
-            })
 
-            dom.impresiones.tab_content_impresoras.on('submit','form',function(e){
-                e.preventDefault();
+                d.form_agregar.submit(function(e){
+                    d.modal_agregar.modal('hide');
 
-                Swal.fire({
-                    title: `¿Deseas eliminar todos los registros de la impresora ${$(this).data('impresora')}?`,
-                    text: "Una vez eliminado, no podrá recuperarse",
-                    type: 'warning',
-                    showCancelButton: true,
-                    cancelButtonColor: '#d33',
-                    cancelButtonText: 'Cancelar',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Eliminar',
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire({
-                            title: 'Procesando',
-                            html: 'Espere un momento por favor.',
-                            allowEscapeKey:false,
-                            allowOutsideClick:false,
-                            allowEnterKey:false,
-                            onBeforeOpen: () => {
-                                Swal.showLoading()
-                            },
-                        })
-
-                       e.target.submit();
-                    }
+                    Swal.fire({
+                        title: 'Procesando',
+                        html: 'Espere un momento por favor.',
+                        allowEscapeKey:false,
+                        allowOutsideClick:false,
+                        allowEnterKey:false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    })
                 })
-            })
 
-            dom.impresiones.tab_content_impresoras.on('click','button[data-impresora]',function(e){
-                const id_impresora = $(this).data('impresora');
-                const nombre_impresora = $(this).data('nombre') || '';
+                d.tab_content_impresoras.on('submit','form[data-action="eliminacion-registros-impresiones"]',function(e){
+                    e.preventDefault();
 
-                const date = new Date().toLocaleDateString().replaceAll('/','-');
-                const filename = `reporte_impresiones_${date}_${nombre_impresora}.xls`;
+                    Swal.fire({
+                        title: `¿Deseas eliminar todos los registros de la impresora ${$(this).data('impresora')}?`,
+                        text: "Una vez eliminado, no podrá recuperarse",
+                        type: 'warning',
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: 'Cancelar',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Eliminar',
+                    }).then((result) => {
+                        if (result.value) {
+                            Swal.fire({
+                                title: 'Procesando',
+                                html: 'Espere un momento por favor.',
+                                allowEscapeKey:false,
+                                allowOutsideClick:false,
+                                allowEnterKey:false,
+                                onBeforeOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            })
+
+                            e.target.submit();
+                        }
+                    })
+                })
+
+                d.tab_content_impresoras.on('click','button[data-action="exportar-excel"]',function(e){
+                    const id_impresora = $(this).data('impresora');
+                    const nombre_impresora = $(this).data('nombre') || '';
+
+                    const date = new Date().toLocaleDateString().replaceAll('/','-');
+                    const filename = `reporte_impresiones_${date}_${nombre_impresora}.xls`;
 
 
-                const table = $(`table[data-impresora=${id_impresora}]`);
+                    const table = $(`table[data-impresora=${id_impresora}]`);
 
-                table.table2excel({
-                    filename: filename
+                    table.table2excel({
+                        filename: filename
+                    });
                 });
-            });
 
-            var m_importar_impresiones = (function(d){
+                d.tab_content_impresoras.on('click','button[data-action="eliminar-impresion"]',function(e){
+                    const $button = $(this);
+
+                    Swal.fire({
+                        title: `¿Deseas eliminar el registro?`,
+                        text: "Una vez eliminado, no podrá recuperarse",
+                        type: 'warning',
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: 'Cancelar',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Eliminar',
+                    }).then((result) => {
+                        if (result.value) {
+                            Swal.fire({
+                                title: 'Procesando',
+                                html: 'Espere un momento por favor.',
+                                allowEscapeKey:false,
+                                allowOutsideClick:false,
+                                allowEnterKey:false,
+                                onBeforeOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            })
+
+                            const $form = $('<form>', {
+                                'method': $button.data('method'),
+                                'action': $button.data('url'),
+                            });
+
+                            const $token = $('<input>', {
+                                'type': 'hidden',
+                                'name': '_token',
+                                'value': $('meta[name="csrf-token"]').attr('content'),
+                            });
+
+                            const $method = $('<input>', {
+                                'type': 'hidden',
+                                'name': '_method',
+                                'value': 'DELETE'
+                            });
+
+                            $form.append($token)
+                                .append($method)
+                                .appendTo('body');
+
+                            $form[0].submit();
+                        }
+                    })
+                });
+
+            })(dom.impresiones);
+
+            const m_importar_impresiones = (function(d){
                 const templates = {
                     errors : `<div class="alert alert-danger" role="alert">:message</div>`
                 };
@@ -411,7 +605,69 @@
                 drEvent.on('dropify.afterClear', dropify_after_clear);
             })(dom.importar_impresiones);
 
-        })
+            const m_agregar_impresiones = (function(d,di){
+
+                di.tab_content_impresoras.on('click','button[data-action="agregar-impresiones"]',function(e){
+                    const $button = $(this);
+                    const id_impresora = $button.data('impresora');
+
+                    d.form[0].reset();
+                    d.form[0].id_impresora.value = id_impresora;
+
+                    d.modal.modal('show');
+                });
+
+                d.form.submit(function(e){
+                    d.modal.modal('hide');
+
+                    Swal.fire({
+                        title: 'Procesando',
+                        html: 'Espere un momento por favor.',
+                        allowEscapeKey:false,
+                        allowOutsideClick:false,
+                        allowEnterKey:false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    })
+                });
+
+            })(dom.agregar_impresiones,dom.impresiones)
+
+            const m_actualizar_impresiones = (function(d,ai){
+                d.tab_content_impresoras.on('click','button[data-action="actualizar-impresion"]',function(e){
+                    const $button = $(this);
+                    const impresora = $button.data('impresora');
+                    const impresion = $button.data('object');
+
+                    ai.form[0].reset();
+
+                    ai.form[0].negro.value = impresion.negro;
+                    ai.form[0].color.value = impresion.color;
+                    ai.form[0].persona.value = impresion.personal.nombre || '';
+                    ai.form[0].impresora.value = impresora;
+
+                    ai.form.attr('action',$button.data('url'));
+                    ai.modal.modal('show');
+                });
+
+                ai.form.submit(function(e){
+                    ai.modal.modal('hide');
+
+                    Swal.fire({
+                        title: 'Procesando',
+                        html: 'Espere un momento por favor.',
+                        allowEscapeKey:false,
+                        allowOutsideClick:false,
+                        allowEnterKey:false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    })
+                });
+
+            })(dom.impresiones,dom.actualizar_impresiones)
+        });
     </script>
 @endsection
 

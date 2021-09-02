@@ -180,6 +180,11 @@ Route::group([
         Route::get('impresiones/visualizar-impresiones','ImpresionesController@visualizar_impresiones')->name('impresiones.visualizar-impresiones');
         Route::post('impresiones/calcular-impresiones','ImpresionesController@calcular_impresiones')->name('impresiones.calcular-impresiones');
         Route::post('impresiones/datatables','ImpresionesController@datatables')->name('impresiones.datatables');
+
+        Route::delete('impresoras/{impresionDetalle}/eliminar-registro-impresiones','ImpresionesController@eliminar_registro_impresiones')->name('impresiones.eliminar-registro-impresiones');
+        Route::put('impresoras/{impresionDetalle}/actualizar-registro-impresiones','ImpresionesController@actualizar_registro_impresiones')->name('impresiones.actualizar-registro-impresiones');
+
+        Route::post('impresiones/{impresion}/crear-registro-impresiones','ImpresionesController@crear_registro_impresiones')->name('impresiones.crear-registro-impresiones');
         Route::post('impresiones/{impresion}/importar','ImpresionesController@importar')->name('impresiones.importar');
         Route::post('impresiones/{impresion}/agregar-registro-impresiones','ImpresionesController@agregar_registro_impresiones')->name('impresiones.agregar-registro-impresiones');
         Route::delete('impresoras/{impresion}/eliminar-registros-impresiones','ImpresionesController@eliminar_registros_impresiones')->name('impresiones.eliminar-registros-impresiones');

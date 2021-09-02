@@ -4,6 +4,7 @@ namespace HelpDesk\Http\Controllers\GestionInventarios;
 
 use Illuminate\Http\Request;
 use HelpDesk\Entities\Impresion;
+use HelpDesk\Entities\ImpresionDetalle;
 use HelpDesk\Entities\Impresora;
 use HelpDesk\Enums\Meses;
 use Illuminate\Support\Facades\DB;
@@ -43,12 +44,11 @@ class ImpresionesController extends Controller
         $impresion->load(['detalles.impresora']);
 
         $detalles_por_impresora = $impresion->detalles->groupBy(function($detalle){
-            return $detalle->impresora->descripcion;
+            return $detalle->impresora->descripcion ?? 'Sin Impresora';
         });
 
         $ids_impresororas = $impresion->detalles->pluck('id_impresora')->unique()->flatten()->toArray() ?? [];
         $impresoras_registradas = Impresora::find($ids_impresororas);
-        // dd($impresoras_registradas->firstWhere('id',1));
 
         return view('gestion-inventarios.impresiones.show', [
             'impresion'                 => $impresion,
@@ -256,5 +256,72 @@ class ImpresionesController extends Controller
             'tb_printer' =>  $printer->render()
         ]);
 
+    }
+
+    public function crear_registro_impresiones(Impresion $impresion, Request $request)
+    {
+        $impresion->detalles()->create([
+            'id_impresion' => $request->input('id_impresion'),
+            'negro'        => $request->input('negro') ?? 0,
+            'color'        => $request->input('color') ?? 0,
+            'total'        => ($request->input('negro') ?? 0) + ($request->input('color') ?? 0),
+            'id_impresora' => $request->input('id_impresora'),
+        ]);
+
+        $impresion->load('detalles');
+
+        $impresion->negro = $impresion->detalles->sum('negro');
+        $impresion->color = $impresion->detalles->sum('color');
+        $impresion->total = $impresion->detalles->sum('total');
+
+        $impresion->save();
+
+        return redirect()->back()
+            ->with([
+                'message' => 'Registro creado correctamente'
+            ]);
+    }
+
+    public function eliminar_registro_impresiones(ImpresionDetalle $impresionDetalle,Request $request)
+    {
+        $impresion = $impresionDetalle->impresion;
+        $impresionDetalle->delete();
+
+        $impresion->load('detalles');
+
+        $impresion->negro = $impresion->detalles->sum('negro');
+        $impresion->color = $impresion->detalles->sum('color');
+        $impresion->total = $impresion->detalles->sum('total');
+
+        $impresion->save();
+
+        return redirect()->back()
+            ->with([
+                'message' => 'Registro eliminado correctamente'
+            ]);
+    }
+
+    public function actualizar_registro_impresiones(ImpresionDetalle $impresionDetalle,Request $request)
+    {
+        $impresionDetalle->update([
+            'negro' => $request->input('negro'),
+            'color' => $request->input('color'),
+            'total' => (int) $request->input('negro') + (int)$request->input('color') ,
+        ]);
+
+        $impresion = $impresionDetalle->impresion;
+
+        $impresion->load('detalles');
+
+        $impresion->negro = $impresion->detalles->sum('negro');
+        $impresion->color = $impresion->detalles->sum('color');
+        $impresion->total = $impresion->detalles->sum('total');
+
+        $impresion->save();
+
+        return redirect()->back()
+            ->with([
+                'message' => 'Registro actualizado correctamente'
+            ]);
     }
 }
