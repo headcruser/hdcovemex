@@ -137,60 +137,78 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @permission('sucursal_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.sucursales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.sucursales.*']) }}">
                                 <i class="nav-icon far fa-building"></i>
                                 <p>Sucursales</p>
                             </a>
                         </li>
+                        @endpermission
 
+                        @permission('tipo_hardware_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.tipo-hardware.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.tipo-hardware.*']) }}">
                                 <i class="nav-icon fas fa-memory"></i>
                                 <p>Tipo Hardware</p>
                             </a>
                         </li>
+                        @endpermission
+
+
+                        @permission('hardware_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.hardware.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.hardware.*']) }}">
                                 <i class="nav-icon fas fa-microchip"></i>
                                 <p>Hardware</p>
                             </a>
                         </li>
+                        @endpermission
 
+                        @permission('equipos_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.equipos.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.equipos.*']) }}">
                                 <i class="nav-icon fas fa-laptop-code"></i>
                                 <p>Equipos</p>
                             </a>
                         </li>
+                        @endpermission
 
+                        @permission('personal_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.personal.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.personal.*']) }}">
                                 <i class="nav-icon fas fa-user-friends"></i>
                                 <p>Personal</p>
                             </a>
                         </li>
+                        @endpermission
 
+                        @permission('impresoras_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.impresoras.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresoras.index','gestion-inventarios.impresoras.*']) }}">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>Impresoras</p>
                             </a>
                         </li>
+                        @endpermission
 
+                        @permission('impresiones_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.impresiones.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresiones.index','gestion-inventarios.impresiones.*']) }}">
                                 <i class="nav-icon fas fa-print"></i>
                                 <p>Impresiones</p>
                             </a>
                         </li>
+                        @endpermission
 
+                        @permission('reporte_anual_impresiones_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.reporte-impresiones.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.reporte-impresiones.index','gestion-inventarios.reporte-impresiones.*']) }}" >
                                 <i class="nav-icon fas fa-chart-pie"></i>
                                 <p>Reporte Anual</p>
                             </a>
                         </li>
+                        @endpermission
                     </ul>
                 </li>
                 @endpermission
