@@ -35,97 +35,11 @@
                                 <i class="fas fa-file-excel"></i> Descargar Reporte
                             </button>
 
-                            <div class="table-responsive" style="height: 70vh">
-                                <table id="tb-reporte-mensual" class="table table-bordered table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2" style="vertical-align: middle;" class="text-center p-3">
-                                                DEPARTAMENTOS
-                                            </th>
-                                            <th rowspan="2" style="vertical-align: middle;" class="text-center">
-                                                NOMBRE
-                                            </th>
-                                            <th rowspan="2" style="vertical-align: middle;" class="text-center">
-                                                ID
-                                            </th>
-                                            @foreach ($meses as $id => $mes)
-                                                <th class="text-center" colspan="3">
-                                                    {{ $mes }}
-                                                </th>
-                                            @endforeach
-                                            <th rowspan=2>TOTAL ANUAL</th>
-                                        </tr>
+                            <button class="btn btn-default btn-sm mb-4" id="btn-enviar-correo">
+                                <i class="fas fa-mail-bulk"></i> Enviar por correo
+                            </button>
 
-                                        <tr class="text-bold bg-gray-light">
-                                            @foreach ($meses as $th => $mes)
-                                                <th>Negro</th>
-                                                <th class="text-danger">Color</th>
-                                                <th>Total</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-
-
-
-                                    @foreach ($personal_por_departamento as $departamento => $lista_personal)
-                                        <tbody>
-                                            <tr>
-                                                <td style="vertical-align: middle;" rowspan="{{ $lista_personal->count() + 1 }}" class="text-center bg-purple">{{ $departamento }}</td>
-                                            </tr>
-
-                                            @php
-                                                $total_anual = 0;
-                                            @endphp
-
-                                            @foreach ($lista_personal as $personal)
-                                                <tr>
-                                                    <td class="text-nowrap">{{ $personal->nombre }}</td>
-                                                    <td>{{ $personal->id_impresion }}</td>
-                                                    @php
-                                                        $total_por_personal = 0;
-                                                    @endphp
-                                                    @foreach ($meses as $id => $mes)
-                                                        <td>{{ $reporte[$mes][$personal->id_impresion]['negro'] }}</td>
-                                                        <td>{{ $reporte[$mes][$personal->id_impresion]['color'] }}</td>
-                                                        <td>{{ $reporte[$mes][$personal->id_impresion]['total'] }}</td>
-                                                        @php
-                                                            $total_por_personal += $reporte[$mes][$personal->id_impresion]['total'];
-                                                        @endphp
-                                                    @endforeach
-                                                    <td class="text-bold">{{ $total_por_personal }}</td>
-                                                    @php
-                                                        $total_anual+= $total_por_personal;
-                                                    @endphp
-                                                </tr>
-                                            @endforeach
-
-                                            <tr class="text-bold bg-gray-light">
-                                                <th colspan="3" class="text-center">TOTAL</th>
-                                                @foreach ($meses as $id => $mes)
-                                                    <td>
-                                                        {{ collect($reporte[$mes])->filter(function($item) use($departamento){
-                                                            return $item['departamento'] == $departamento;
-                                                        })->sum('negro') }}
-                                                    </td>
-                                                    <td class="text-danger">
-                                                        {{ collect($reporte[$mes])->filter(function($item) use($departamento){
-                                                            return $item['departamento'] == $departamento;
-                                                        })->sum('color') }}
-                                                    </td>
-                                                    <td>
-                                                        {{ collect($reporte[$mes])->filter(function($item) use($departamento){
-                                                            return $item['departamento'] == $departamento;
-                                                        })->sum('total') }}
-                                                    </td>
-                                                @endforeach
-                                                <td>
-                                                    {{ $total_anual }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    @endforeach
-                                </table>
-                            </div>
+                            @include('gestion-inventarios.reporte-impresiones.partials._table')
                         </div>
 
                         <div class="tab-pane" id="tab_2">
@@ -147,6 +61,37 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="onboarding-modal modal fade animated" id="modal-enviar-reporte-anual" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enviar Reporte Anual</b></h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                {!! Form::open(['id' => 'form-enviar-reporte-anual', 'route' => 'gestion-inventarios.reporte-impresiones.enviar-reporte-anual', 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <button id="btn-agregar-cc" type="button" class="btn btn-link float-right"">Agregar CC</button>
+
+                            {!! Form::label('email', 'Correo:*') !!}
+                            {!! Form::email('email', null, ['class' => 'form-control','placeholder' => 'Escribe aqui el correo','title' => 'Correo','required' => true,'autocomplete' => 'off']) !!}
+
+                        </div>
+                        <div id="correos-cc">
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                {!! Form::close()!!}
             </div>
         </div>
     </div>
@@ -311,6 +256,48 @@
                 });
             });
         })
+
+        $(function(){
+            $("#btn-enviar-correo").click(function(e){
+                $("#modal-enviar-reporte-anual").modal('show');
+            });
+
+            $('#btn-agregar-cc').click(function(){
+                $('#correos-cc').append(`
+                    <div class="form-group">
+                        <label for="email_copia[]">CC:</label>
+
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" name="email_copia[]" placeholder="Ingresar Email CC" autocomplete="off" title="Email CC" required/>
+
+                            <div class="input-group-prepend">
+                                <button type="button" data-action="eliminar-cc" class="btn btn-danger">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            $("#correos-cc").on('click','button[data-action="eliminar-cc"]',function(e){
+                $(this).closest('div.form-group').remove();
+            });
+
+            $("#form-enviar-reporte-anual").submit(function(e){
+                $("#modal-enviar-reporte-anual").modal('hide');
+
+                Swal.fire({
+                    title: 'Procesando',
+                    html: 'Espere un momento por favor.',
+                    allowEscapeKey:false,
+                    allowOutsideClick:false,
+                    allowEnterKey:false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
+
+            });
+        });
     </script>
 @endsection
 

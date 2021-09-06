@@ -209,6 +209,11 @@ Route::group([
             'as'            => 'reporte-impresiones.calcular',
             'uses'          => 'ReporteImpresionesController@calcular'
         ]);
+
+        Route::post('reporte-impresiones/enviar-reporte-anual', [
+            'as'            => 'reporte-impresiones.enviar-reporte-anual',
+            'uses'          => 'ReporteImpresionesController@enviar_reporte_anual'
+        ]);
     }
 );
 

@@ -2,11 +2,17 @@
 
 namespace HelpDesk\Http\Controllers\GestionInventarios;
 
-use HelpDesk\Entities\Impresion;
-use HelpDesk\Entities\ImpresionDetalle;
-use HelpDesk\Entities\Inventario\Personal;
 use HelpDesk\Enums\Meses;
+use Illuminate\Http\Request;
+use HelpDesk\Entities\Impresion;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use HelpDesk\Entities\ImpresionDetalle;
 use HelpDesk\Http\Controllers\Controller;
+use HelpDesk\Entities\Inventario\Personal;
+use HelpDesk\Mail\MailReporteImpresionesAnual;
+use HelpDesk\Exports\ReporteImpresionesAnualExport;
 
 class ReporteImpresionesController extends Controller
 {
@@ -84,6 +90,49 @@ class ReporteImpresionesController extends Controller
             'personal_por_departamento'     => $personal_por_departamento,
             'agrupado_por_impresora'        => $agrupado_por_impresora,
             'impresiones_por_departamento'  => $impresiones_por_departamento
+        ]);
+    }
+
+    public function enviar_reporte_anual(Request $request)
+    {
+        $request->validate([
+            'email' => 'required'
+        ]);
+
+        Excel::store(new ReporteImpresionesAnualExport, 'reportes'.DIRECTORY_SEPARATOR.'reporte_anual.xlsx', 'public');
+        $filename = \Storage::disk('public')->path('reportes'.DIRECTORY_SEPARATOR.'reporte_anual.xlsx');
+
+        $mail_to = $request->input('email') ?? '';
+        $mails_cc = $request->input('email_copia') ?? [];
+
+        $mail = Mail::to($mail_to);
+
+        foreach ( $mails_cc as $email) {
+            $mail->cc($email);
+        }
+
+        try {
+            $mail->send(new MailReporteImpresionesAnual($filename));
+            File::delete($filename);
+        } catch(\Swift_TransportException $st){
+            File::delete($filename);
+
+            return redirect()
+                ->back()
+                ->with(['error'=> 'El correo electronico no es válido'])
+                ->withInput();
+        }
+        catch(\Exception $e){
+            File::delete($filename);
+
+            return redirect()
+                ->back()
+                ->with(['error'=> 'Ocurrio un error al enviar el correo electronico'])
+                ->withInput();
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Reporte enviado correctamente'
         ]);
     }
 }
