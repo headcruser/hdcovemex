@@ -19,13 +19,21 @@ class MailReporteImpresionesAnual extends Mailable
     public $filename;
 
     /**
+     * anio
+     *
+     * @var int
+     */
+    public $anio;
+
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($filename)
+    public function __construct($filename,$anio)
     {
         $this->filename = $filename;
+        $this->anio = $anio;
     }
 
     /**
@@ -35,8 +43,10 @@ class MailReporteImpresionesAnual extends Mailable
      */
     public function build()
     {
-        return $this->markdown('vendor.mail.html.reportes.reporte_anual_impresiones')
-            ->subject('Reporte Anual Impresiones')
-            ->attach($this->filename);
+        return $this->markdown('vendor.mail.html.reportes.reporte_anual_impresiones',[
+            'anio' => $this->anio,
+        ])
+        ->subject('Reporte Anual Impresiones '.$this->anio)
+        ->attach($this->filename);
     }
 }

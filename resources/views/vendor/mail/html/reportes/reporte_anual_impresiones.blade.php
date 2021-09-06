@@ -3,4 +3,6 @@
 
 Adjunto en este correo el reporte de impresiones
 
+Saludos.
+
 @endcomponent

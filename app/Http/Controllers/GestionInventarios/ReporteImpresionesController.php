@@ -16,11 +16,11 @@ use HelpDesk\Exports\ReporteImpresionesAnualExport;
 
 class ReporteImpresionesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $today = today();
+        $anio = $request->input('anio') ?? today()->year;
 
-        $ids_impresiones = Impresion::query()->where('anio',$today->year)->pluck('id');
+        $ids_impresiones = Impresion::query()->where('anio',$anio)->pluck('id');
         $impresionesDetalles = ImpresionDetalle::whereIn('id_impresiones',$ids_impresiones)->with(['impresion'])->get();
 
         $impresiones_por_id_impresion = $impresionesDetalles->groupBy('id_impresion');
@@ -84,7 +84,11 @@ class ReporteImpresionesController extends Controller
                 ];
             });
 
+        $anios = Impresion::query()->select('anio')->distinct()->pluck('anio','anio');
+
         return view('gestion-inventarios.reporte-impresiones.index',[
+            'anios'                         => $anios,
+            'anio'                          => $anio,
             'meses'                         => $meses,
             'reporte'                       => $reporte,
             'personal_por_departamento'     => $personal_por_departamento,
@@ -96,10 +100,13 @@ class ReporteImpresionesController extends Controller
     public function enviar_reporte_anual(Request $request)
     {
         $request->validate([
-            'email' => 'required'
+            'email' => 'required',
+            'anio'  => 'required|numeric'
         ]);
 
-        Excel::store(new ReporteImpresionesAnualExport, 'reportes'.DIRECTORY_SEPARATOR.'reporte_anual.xlsx', 'public');
+        $anio = (int) $request->input('anio');
+
+        Excel::store(new ReporteImpresionesAnualExport($anio), 'reportes'.DIRECTORY_SEPARATOR.'reporte_anual.xlsx', 'public');
         $filename = \Storage::disk('public')->path('reportes'.DIRECTORY_SEPARATOR.'reporte_anual.xlsx');
 
         $mail_to = $request->input('email') ?? '';
@@ -112,7 +119,7 @@ class ReporteImpresionesController extends Controller
         }
 
         try {
-            $mail->send(new MailReporteImpresionesAnual($filename));
+            $mail->send(new MailReporteImpresionesAnual($filename,$anio));
             File::delete($filename);
         } catch(\Swift_TransportException $st){
             File::delete($filename);

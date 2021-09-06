@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Reporte Impresoras')
+@section('title','Reporte Impresoras '.$anio)
 
 @section('breadcrumb')
 <ol class="breadcrumb float-sm-right">
@@ -17,7 +17,8 @@
         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="card">
                 <div class="card-header d-flex p-0">
-                    <h3 class="card-title p-3"></h3>
+                    <h3 class="card-title p-3">
+                    </h3>
                     <ul class="nav nav-pills ml-auto p-2">
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Reporte Anual</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Reporte por impresora</a></li>
@@ -31,14 +32,29 @@
                     <div class="tab-content">
 
                         <div class="tab-pane active" id="tab_1">
-                            <button class="btn btn-secondary btn-sm mb-4" id="btn-descargar-excel">
-                                <i class="fas fa-file-excel"></i> Descargar Reporte
-                            </button>
 
-                            <button class="btn btn-default btn-sm mb-4" id="btn-enviar-correo">
-                                <i class="fas fa-mail-bulk"></i> Enviar por correo
-                            </button>
+                            <div class="row pb-2">
+                                <div class="col-md-6">
+                                    {!! Form::open(['id' => 'form-filtrar','method' => 'GET','route' => ['gestion-inventarios.reporte-impresiones.index'], 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                                        <label>Filtro por Año: &nbsp;</label>
+                                        <label>
+                                            {!! Form::select('anio', $anios, $anio, ['class' => 'custom-select custom-select-sm form-control form-control-sm']) !!}
+                                        </label>
+                                        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+                                    {!! Form::close() !!}
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <div>
+                                        <button class="btn btn-secondary btn-sm mb-4" id="btn-descargar-excel">
+                                            <i class="fas fa-file-excel"></i> Descargar Reporte
+                                        </button>
 
+                                        <button class="btn btn-default btn-sm mb-4" id="btn-enviar-correo">
+                                            <i class="fas fa-mail-bulk"></i> Enviar por correo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                             @include('gestion-inventarios.reporte-impresiones.partials._table')
                         </div>
 
@@ -66,7 +82,7 @@
     </div>
 
 
-    <div class="onboarding-modal modal fade animated" id="modal-enviar-reporte-anual" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modal-enviar-reporte-anual" data-keyboard="false"  data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content animated bounceInRight">
                 <div class="modal-header">
@@ -80,7 +96,9 @@
 
                             {!! Form::label('email', 'Correo:*') !!}
                             {!! Form::email('email', null, ['class' => 'form-control','placeholder' => 'Escribe aqui el correo','title' => 'Correo','required' => true,'autocomplete' => 'off']) !!}
-
+                        </div>
+                        <div class="form-group">
+                            {!! Form::hidden('anio', $anio) !!}
                         </div>
                         <div id="correos-cc">
 
@@ -298,6 +316,21 @@
 
             });
         });
+
+        $(function(){
+            $("#form-filtrar").submit(function(){
+                Swal.fire({
+                    title: 'Procesando',
+                    html: 'Espere un momento por favor.',
+                    allowEscapeKey:false,
+                    allowOutsideClick:false,
+                    allowEnterKey:false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
+            });
+        })
     </script>
 @endsection
 

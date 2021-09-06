@@ -13,17 +13,18 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class ReporteImpresionesAnualExport implements FromView,ShouldAutoSize
 {
-    protected $request;
 
-    public function __construct()
+    protected $anio;
+
+    public function __construct(int $anio)
     {
+        $this->anio = $anio;
     }
 
     public function view(): View
     {
-        $today = today();
 
-        $ids_impresiones = Impresion::query()->where('anio',$today->year)->pluck('id');
+        $ids_impresiones = Impresion::query()->where('anio',$this->anio)->pluck('id');
         $impresionesDetalles = ImpresionDetalle::whereIn('id_impresiones',$ids_impresiones)->with(['impresion'])->get();
 
         $impresiones_por_id_impresion = $impresionesDetalles->groupBy('id_impresion');
