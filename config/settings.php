@@ -323,7 +323,7 @@ return [
             'description'   => 'Acceso al catalogo de impresoras'
         ],
         [
-            'name'          => 'impresoras_access',
+            'name'          => 'impresiones_access',
             'display_name'  => 'Acceso Impresoras',
             'description'   => 'Acceso al registro de impresiones'
         ],
