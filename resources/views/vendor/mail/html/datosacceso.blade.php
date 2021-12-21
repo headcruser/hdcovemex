@@ -1,13 +1,13 @@
 @component('mail::message')
-# Hola {{$user->nombres}}
+# Hola {{$user->nombre}}
 
-Se ha creado una cuenta para ti en <b>{{config('app.name')}}</b>:
+Se ha creado una cuenta para ti en <b>{{config('app.name')}}</b> Tus credenciales para accesar son:
 
 @component('mail::table')
-|                   |                   |
-| ------------------|-------------------|
-| **Correo**        | {{$user->email}}  |
-| **Contraseña**    | {{$password}}     |
+|                   |                       |
+| ------------------|-----------------------|
+| **Usuario**       | {{ $user->usuario}}   |
+| **Contraseña**    | {{ $password }}       |
 @endcomponent
 
 
