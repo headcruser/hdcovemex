@@ -37,8 +37,11 @@
 
 <div class="form-group @error('password') has-error @enderror">
     <label for="input-password">Contraseña*</label>
-    <input type="password" id="input-password" name="password" class="form-control"
-        value="{{ old('password', '') }}" autocomplete="off"
+    <input type="password" id="input-password"
+        name="password"
+        class="form-control"
+        value="{{ old('password', '') }}"
+        autocomplete="off"
         placeholder="Escribe una contraseña para el usuario"
         @if($view_name == 'create')required @endif >
     <div class="help-block with-errors">
@@ -49,7 +52,7 @@
 </div>
 
 <div class="form-group">
-     <div class="form-group" id="div_enviar_datos" @if ($model->exists) style="display:none" @endif>
+     <div class="form-group" id="div_enviar_datos"  style="display:none">
         <label>
             <input type="checkbox" class="i-checks" name="enviar_datos"> Enviar datos por correo
         </label>
@@ -109,6 +112,13 @@
         });
         $span_delete.addEventListener('click',function(e){
             selection($select_permisos,false);
+        });
+
+        $('#input-password').keyup(function(){
+            if($(this).val()!='')
+            $('#div_enviar_datos').show();
+            else
+            $('#div_enviar_datos').hide();
         });
     });
 </script>

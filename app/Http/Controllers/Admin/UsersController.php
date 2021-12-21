@@ -66,7 +66,6 @@ class UsersController extends Controller
             $user->roles()->sync($request->input('roles', []));
             DB::commit();
 
-            # TODO Envio de correo al usuario
             if ($request->filled('enviar_datos')) {
                 $user->notify(new DatosAcceso($request->password));
             }
@@ -91,7 +90,7 @@ class UsersController extends Controller
         $model->load('roles');
 
         return view('admin.users.edit', [
-            'roles'         => Role::query()->whereIn('name',['empleado']),
+            'roles'         => Role::query()->whereIn('name',['empleado'])->pluck('name', 'id'),
             'departamentos' => Departamento::query()->pluck('nombre', 'id')->prepend('Selecciona un departamento', ''),
             'model'         => $model
         ]);
@@ -117,6 +116,10 @@ class UsersController extends Controller
             $model->roles()->sync($request->input('roles', []));
 
             DB::commit();
+
+            if ($request->filled('enviar_datos')) {
+                $model->notify(new DatosAcceso($request->input('password')));
+            }
 
             return redirect()
                 ->route('admin.usuarios.index')

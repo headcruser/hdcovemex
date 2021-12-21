@@ -54,7 +54,7 @@
                     <tbody>
                         <tr>
                             <th>
-                                ID
+                                # SOLICITUD
                             </th>
                             <td>
                                 {{ $model->id }}
@@ -105,8 +105,20 @@
 
                         @if( $model->ticket()->exists() )
                         <tr>
+                            <th># TICKET:</th>
+                            <td>{{ $model->ticket_id  }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>ATENDIDO POR:</th>
+                            <td>{{ $model->ticket->operador->nombre  }}</td>
+                        </tr>
+
+                        <tr>
+
+
                             <th>
-                                Comentarios
+                                COMENTARIOS
                             </th>
                             <td>
                                 <div style="height: 300px;overflow-y:auto;overflow-x:hidden">

@@ -189,6 +189,7 @@ return [
         HelpDesk\Providers\BladeServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         # 👉 CUSTOM SERVICE PROVIDERS
         HelpDesk\Providers\CarbonServiceProvider::class,
@@ -245,6 +246,7 @@ return [
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'DNS1D'         => Milon\Barcode\Facades\DNS1DFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

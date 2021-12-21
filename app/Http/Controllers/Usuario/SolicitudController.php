@@ -4,14 +4,14 @@ namespace HelpDesk\Http\Controllers\Usuario;
 use Entrust;
 
 use HelpDesk\Entities\Media;
-use HelpDesk\Entities\Solicitude;
-use HelpDesk\Entities\Config\Status;
-use HelpDesk\Events\CommentEmpleadoEvent;
-use HelpDesk\Events\SolicitudRegistrada;
-use HelpDesk\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
+use HelpDesk\Entities\Solicitude;
 use Illuminate\Support\Facades\DB;
+use HelpDesk\Entities\Config\Status;
+
+use HelpDesk\Events\SolicitudRegistrada;
+use HelpDesk\Events\CommentEmpleadoEvent;
+use HelpDesk\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
 /**
@@ -188,8 +188,8 @@ class SolicitudController extends Controller
 
         abort_if(empty($model->media), HTTPMessages::HTTP_FORBIDDEN, __('No se ha asignado ningun archivo'));
 
-        $pathFile = $model->media->buildMediaFilePath();
+        $url = $model->media->buildMediaFilePath();
 
-        return response()->download($pathFile)->deleteFileAfterSend(true);
+        return response()->download($url)->deleteFileAfterSend(true);
     }
 }

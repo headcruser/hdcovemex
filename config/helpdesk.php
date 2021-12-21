@@ -136,7 +136,7 @@ return [
 
     'mail' => [
         'request_subject'               => 'Aviso: se ingresó la solicitud de soporte #%1%',
-        'alert_ticket_comment_subject'  => 'Aviso: el usuario <(%usuario_id%) - %usuario_nombre%> agregó un comentario al ticket #%ticket_id%"',
+        'alert_ticket_comment_subject'  => 'Aviso: el usuario (%usuario_id%) - %usuario_nombre% agregó un comentario al ticket #%ticket_id%"',
         'alert_comment_subject'         => 'Aviso: se agregó un comentario a su solicitud #%solicitud_id%',
     ],
     'roles' => [

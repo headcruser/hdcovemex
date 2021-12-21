@@ -16,6 +16,7 @@
         "fideloper/proxy": "^4.0",
         "gghughunishvili/entrust": "^4.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "^2.7",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",

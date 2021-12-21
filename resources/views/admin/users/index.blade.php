@@ -206,7 +206,28 @@
                         });
                     }
                 })
-            })
+            });
+
+            var searchWait = 0;
+            var searchWaitInterval;
+
+            $('.dataTables_filter input')
+                .unbind()
+                .bind('input', function(e) {
+                    var item = $(this);
+                    searchWait = 0;
+                    if (!searchWaitInterval) searchWaitInterval = setInterval(function() {
+                        if (searchWait >= 3) {
+                            clearInterval(searchWaitInterval);
+                            searchWaitInterval = '';
+                            searchTerm = $(item).val();
+                            dt.search(searchTerm).draw();
+                            searchWait = 0;
+                        }
+                        searchWait++;
+                    }, 200);
+
+                });
 
             var m_importar = (function(d){
                 const templates = {

@@ -76,6 +76,13 @@
                                             readonly
                                             rows="5"  required>{{ old('incidente', $model->solicitud->incidente) }}</textarea>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label>Adjunto</label>
+                                        <p>
+                                            <a href="{{ route('operador.gestion-solicitudes.archivo',$model->solicitud) }}" target="_blank" class="linked text-sm"><i class="fas fa-link mr-1"></i> {{ $model->solicitud->media->name }} </a>
+                                        </p>
+                                    </div>
                                 </div>
                             </fieldset>
                         @endif

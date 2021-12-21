@@ -1,7 +1,17 @@
 <div class="row">
     <div class="col-md-12 mb-4">
         <div class="card">
-            <div class="card-header">Resumen general</div>
+            <div class="card-header">
+                <div class="card-title">Resumen general</div>
+
+                <div class="card-tools">
+                    @permission('solicitude_create')
+                        <a href="{{ route('solicitudes.create') }}" class="btn btn-primary btn-sm" title="Crear Solicitud">
+                            Crear Solicitud
+                        </a>
+                    @endpermission
+                </div>
+            </div>
 
             <div class="card-body">
                 @if (session('status'))

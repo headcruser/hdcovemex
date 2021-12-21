@@ -26,6 +26,57 @@
             </div>
 
             <div class="card-body">
+
+                @if($model->solicitud)
+                <fieldset class="section-border">
+                    <legend class="section-border">Referencia Solicitud</legend>
+                    <div class="control-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Solicitud <strong>#{{ $model->solicitud->id }}</strong></h4>
+                                <div class="post">
+                                    <div class="user-block">
+                                        <img class="img-circle img-bordered-sm" src="{{ $model->empleado->avatar }}" alt="user_{{ $model->empleado->usuario }}">
+                                        <span class="username">
+                                            <a href="#">{{ $model->empleado->nombre }}</a>
+                                        </span>
+                                        <span class="description"><i class="fas fa-home"></i> {{ $model->empleado->departamento->nombre }} | <i class="fas fa-envelope"></i> {{ $model->empleado->email }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label>Titulo*</label>
+                            <input
+                                type="text"
+                                title="Titulo"
+                                class="form-control"
+                                readonly
+                                aria-describedby="titulo-help"
+                                value="{{ old('titulo',$model->solicitud->titulo) }}"  autocomplete="off" required>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="incidente">Incidente</label>
+                            <textarea
+                                title="Incidente"
+                                class="form-control"
+                                aria-describedby="incidente-help"
+                                readonly
+                                rows="5"  required>{{ old('incidente', $model->solicitud->incidente) }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Adjunto</label>
+                            <p>
+                                <a href="{{ route('operador.gestion-solicitudes.archivo',$model->solicitud) }}" target="_blank" class="linked text-sm"><i class="fas fa-link mr-1"></i> {{ $model->solicitud->media->name }} </a>
+                            </p>
+                        </div>
+                    </div>
+                </fieldset>
+            @endif
+
                 <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>
