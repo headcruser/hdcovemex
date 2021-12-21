@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Http\Controllers\GestionInventarios;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use HelpDesk\Entities\Impresion;
 use HelpDesk\Entities\ImpresionDetalle;
@@ -20,12 +21,24 @@ class ImpresionesController extends Controller
 {
     public function index()
     {
-        return view('gestion-inventarios.impresiones.index');
+        $years = collect(Carbon::getLastYears(3,1))->reverse();
+        $months = collect(Carbon::getMonthsOfYear())->prepend('Todos','');
+
+        return view('gestion-inventarios.impresiones.index',[
+            'years' => $years,
+            'months' => $months
+        ]);
     }
 
-    public function datatables()
+    public function datatables(Request $request)
     {
-        $query = Impresion::query();
+        $query = Impresion::query()->select('impresiones.*')
+            ->when($request->input('mes'),function($q,$mes){
+                $q->where('mes',$mes);
+            })
+            ->when($request->input('anio'),function($q,$anio){
+                $q->where('anio',$anio);
+            })->with(['usuario:id,nombre']);
 
         return DataTables::eloquent($query)
             ->editColumn('mes', function ($model) {
@@ -323,5 +336,39 @@ class ImpresionesController extends Controller
             ->with([
                 'message' => 'Registro actualizado correctamente'
             ]);
+    }
+
+    public function generar_reportes(Request $request)
+    {
+        $meses = collect(Carbon::getMonthsOfYear())->keys();
+
+        $meses_registrados = Impresion::query()->where('anio', $request->input('anio'))->pluck('mes');
+
+        $meses_por_registrar = $meses->diff($meses_registrados);
+
+        $informes = [];
+        $autor = auth()->id();
+        $fecha = today();
+        $anio = $request->input('anio');
+
+        foreach ($meses_por_registrar as $mes) {
+            $informes[] = [
+                'fecha'         => $fecha,
+                'mes'           => $mes,
+                'anio'          => $anio,
+                'negro'         => 0,
+                'color'         => 0,
+                'total'         => 0,
+                'creado_por'    => $autor,
+                'created_at'    => $fecha,
+            ];
+        }
+
+        Impresion::insert($informes);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reportes generados con éxito',
+        ]);
     }
 }

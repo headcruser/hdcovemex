@@ -29,6 +29,13 @@
                         Crear <i class="fas fa-plus-circle"></i>
                     </a>
 
+                    <button type="button"
+                        id="btn-generar-reportes"
+                        class="btn btn-primary btn-sm"
+                        title="Generar Reportes">
+                        Crear Reportes del año
+                    </button>
+
                     <a href="{{ route('gestion-inventarios.impresiones.visualizar-impresiones') }}"
                         class="btn btn-secondary btn-sm"
                         title="Visualizar impresiones">
@@ -38,6 +45,26 @@
             </div>
 
             <div class="card-body">
+                <div class="row">
+                    <div class="col-auto" >
+                        <div class="form-group">
+                            <label>Año:</label>
+                            <label>
+                                {!! Form::select('anio', $years, null, ['id' => 'select-anio','class' => 'custom-select custom-select-sm w-100']) !!}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-auto" >
+                        <div class="form-group">
+                            <label>Mes:</label>
+                            <label>
+                                {!! Form::select('mes', $months, null, ['id' => 'select-mes','class' => 'custom-select custom-select-sm w-100']) !!}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
                 <table id="tb-impresiones" class=" table table-bordered table-striped table-hover datatable datatable-User">
                     <thead>
                         <tr>
@@ -47,6 +74,7 @@
                             <th>NEGRO </th>
                             <th>COLOR </th>
                             <th>TOTAL</th>
+                            <th>AUTOR</th>
                             <th>ACCIONES</th>
                         </tr>
                     </thead>
@@ -68,7 +96,14 @@
         $(function() {
             const dom = {
                 table: $('#tb-impresiones'),
+                filters: {
+                    anio: $("#select-anio"),
+                    mes: $("#select-mes"),
+                },
+                btn_generar_reportes: $("#btn-generar-reportes"),
             };
+
+            dom.filters.anio.val(moment().year());
 
             var dt = dom.table.DataTable({
                 processing: true,
@@ -80,6 +115,8 @@
                     url: "{{ route('gestion-inventarios.impresiones.datatables') }}",
                     type: "POST",
                     data: function (d) {
+                        d.anio = dom.filters.anio.val();
+                        d.mes = dom.filters.mes.val();
                     },
                     beforeSend: function(xhr,type) {
                     if (!type.crossDomain) {
@@ -92,15 +129,16 @@
                 pageLength: 10,
                 responsive: true,
                 columns: [
-                    {data: 'id',name: 'id'},
+                    {data: 'id',name: 'id',visible:false},
                     {data: 'mes',name: 'mes'},
                     {data: 'fecha',name: 'fecha'},
                     {data: 'negro',name: 'negro'},
                     {data: 'color',name: 'color'},
                     {data: 'total',name: 'total'},
+                    {data: 'usuario.nombre',name: 'usuario.nombre'},
                     {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
                 ],
-                order: [[ 0, "desc" ]],
+                order: [[ 1, "desc" ]],
                 language: {
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",
                     "zeroRecords": "No se encontro ningún registro",
@@ -158,8 +196,63 @@
                         });
                     }
                 })
-            })
+            });
 
+            dom.filters.anio.change(function(){
+                dt.draw();
+            });
+
+            dom.filters.mes.change(function(){
+                dt.draw();
+            });
+
+            dom.btn_generar_reportes.click(function(e){
+                Swal.fire({
+                    title: 'Crear Informes del año',
+                    html:`
+                        <p class="text-muted">Unicamente se daran de alta los informes que no hayan sido creados</p>
+                        <div class="form-group">
+                            <input type="number" id="input-reporte-anio" class="form-control" min="1900" max="2099" step="1" value="{{ now()->addYear()->year }}"/>
+                        </div>
+                    `,
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText:'Aceptar',
+                    confirmButtonAriaLabel: 'Aceptar',
+                    cancelButtonText:'Cancelar',
+                    cancelButtonAriaLabel: 'Cancelar'
+                })
+                .then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: "{{ route('gestion-inventarios.impresiones.generar-reportes') }}",
+                            type: 'POST',
+                            data: {
+                                anio: $("#input-reporte-anio").val(),
+                            },
+                            success: function (response){
+                                if(response.success){
+                                    dt.ajax.reload( function(){
+                                        Toast.fire({
+                                            type: 'success',
+                                            title: response.message || 'Registro eliminado correctamente',
+                                        });
+                                    }, false )
+                                }
+                            },
+                            error:function(error){
+                                Toast.fire({
+                                    type: 'error',
+                                    title: 'Ups, hubo un error en el servidor'
+                                });
+                            }
+                        });
+
+
+                    }
+                });
+            })
         })
     </script>
 @endsection

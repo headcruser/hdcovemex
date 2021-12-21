@@ -189,6 +189,9 @@ return [
         HelpDesk\Providers\BladeServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+
+        # 👉 CUSTOM SERVICE PROVIDERS
+        HelpDesk\Providers\CarbonServiceProvider::class,
     ],
 
     /*
