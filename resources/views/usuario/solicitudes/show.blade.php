@@ -89,7 +89,7 @@
                             </td>
                         </tr>
 
-                        @isset($model->media)
+                        @if($model->media->exists)
                             <tr>
                                 <th>
                                     ARCHIVO ADJUNTO
@@ -101,7 +101,7 @@
 
                                 </td>
                             </tr>
-                        @endisset
+                        @endif
 
                         @if( $model->ticket()->exists() )
                         <tr>

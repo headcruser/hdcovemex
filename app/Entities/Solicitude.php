@@ -93,7 +93,7 @@ class Solicitude extends Model
      */
     public function media()
     {
-        return $this->morphOne(Media::class, 'media');
+        return $this->morphOne(Media::class, 'media')->withDefault();
     }
 
 
