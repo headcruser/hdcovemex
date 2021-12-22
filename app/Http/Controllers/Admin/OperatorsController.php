@@ -122,7 +122,6 @@ class OperatorsController extends Controller
 
     public function update(UpdateOperatorRequest $request, Operador $operador)
     {
-        DB::beginTransaction();
         try {
             $usuario = $operador->usuario;
 

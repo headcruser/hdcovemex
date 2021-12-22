@@ -22,22 +22,21 @@
             <div class="card-header">
                 <h3 class="card-title">Información del operador</h3>
             </div>
-            <div class="card-body">
-                <form id="form-editar-operador" action="{{ route("admin.operadores.update", $model) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-
+            {!! Form::model($model ,[
+                'route'             => ['admin.operadores.update',$model],
+                'method'            => 'PUT',
+                'accept-charset'    => 'UTF-8',
+                'enctype'           =>'multipart/form-data']) !!}
+                <div class="card-body">
                     @include('admin.operators.partials._fields')
-                    <div>
-                        <a class="btn btn-default" href="{{ route('admin.operadores.index') }}">
-                            <i class="fas fa-arrow-left"></i> Regresar
-                        </a>
+                </div>
+
+                <div class="card-footer">
+                    <div class="text-right">
                         <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> Guardar</button>
                     </div>
-
-                </form>
-
-            </div>
+                </div>
+            {!! Form::close() !!}
         </div>
     </div>
 

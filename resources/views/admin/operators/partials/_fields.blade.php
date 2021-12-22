@@ -12,7 +12,7 @@
 
     <div class="help-block with-errors">
         @error('nombre')
-        <span>{{ $errors->first('nombre') }}</span>
+        <span class="text-danger">{{ $errors->first('nombre') }}</span>
         @enderror
     </div>
 </div>
@@ -27,7 +27,7 @@
         autocomplete="off" required>
     <div class="help-block with-errors">
         @error('usuario')
-        <span>{{ $errors->first('usuario') }}</span>
+        <span class="text-danger">{{ $errors->first('usuario') }}</span>
         @enderror
     </div>
 </div>
@@ -46,7 +46,7 @@
 
     <div class="help-block with-errors">
         @error('email')
-        <span>{{ $errors->first('email') }}</span>
+        <span class="text-danger">{{ $errors->first('email') }}</span>
         @enderror
     </div>
 </div>
@@ -60,7 +60,7 @@
         @if($view_name == 'create')required @endif >
     <div class="help-block with-errors">
         @error('password')
-        <span>{{ $errors->first('password') }}</span>
+        <span class="text-danger">{{ $errors->first('password') }}</span>
         @enderror
     </div>
 </div>
@@ -105,8 +105,7 @@
             class="custom-control-input"
             type="checkbox"
             id="notificar_solicitud"
-            @if($model->notificar_solicitud) checked @endif>
-
+            @if(old('notificar_solicitud',$model->notificar_solicitud)) checked @endif>
           <label for="notificar_solicitud" class="custom-control-label">Notificar Solicitud</label>
         </div>
     </div>
@@ -116,8 +115,7 @@
             type="checkbox"
             id="notificar_asignacion"
             name="notificar_asignacion"
-            @if($model->notificar_asignacion) checked @endif>
-
+            @if(old('notificar_solicitud',$model->notificar_asignacion)) checked @endif>
           <label for="notificar_asignacion" class="custom-control-label">Notificar Asignacion Ticket</label>
         </div>
     </div>
