@@ -1,6 +1,7 @@
 <?php
 namespace HelpDesk\Http\Controllers\Usuario;
 
+use Carbon\Carbon;
 use Entrust;
 
 use HelpDesk\Entities\Media;
@@ -13,6 +14,7 @@ use HelpDesk\Events\SolicitudRegistrada;
 use HelpDesk\Events\CommentEmpleadoEvent;
 use HelpDesk\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
+use Yajra\DataTables\Facades\DataTables;
 
 /**
  * Genera una solicitud por parte de los empleados
@@ -30,25 +32,51 @@ class SolicitudController extends Controller
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        $solicitudes = Solicitude::auth()
-            ->with(['status', 'empleado'])
-            ->search($request->input('search'))
-            ->from($request->input('from'))
-            ->to($request->input('to'))
-            ->byStatus($request->input('status'))
-            ->orderByDesc('created_at')
-            ->paginate();
+        // $solicitudes = Solicitude::auth()
+        //     ->with(['status', 'empleado'])
+        //     ->search($request->input('search'))
+        //     ->from($request->input('from'))
+        //     ->to($request->input('to'))
+        //     ->byStatus($request->input('status'))
+        //     ->orderByDesc('created_at')
+        //     ->paginate();
 
-        $solicitudes->appends([
-            'search'    => $request->input('search'),
-            'from'      => $request->input('from'),
-            'to'        => $request->input('to')
-        ]);
+        // $solicitudes->appends([
+        //     'search'    => $request->input('search'),
+        //     'from'      => $request->input('from'),
+        //     'to'        => $request->input('to')
+        // ]);
 
         return view('usuario.solicitudes.index', [
-            'collection'    => $solicitudes,
-            'statuses'      => Status::pluck('display_name', 'id'),
+            'statuses'      => Status::pluck('display_name', 'id')->prepend('Todos',''),
         ]);
+    }
+
+    public function datatables(Request $request)
+    {
+        $query = Solicitude::query()->select('solicitudes.*')
+            ->auth()
+            ->when($request->input('status'),function($q,$status){
+                $q->where('estatus_id',$status);
+            })
+            ->when($request->filled(['from','to']),function($q) use($request){
+                $formatFrom = Carbon::parse($request->input('from'));
+                $formatTo  = Carbon::parse($request->input('to'));
+
+                $q->whereBetween('fecha',[$formatFrom,$formatTo]);
+            })->with(['status']);
+
+        return DataTables::eloquent($query)
+            ->editColumn('fecha',function($model){
+                return $model->fecha->format('d/m/Y H:i a');
+            })
+            ->addColumn('label_status',function($model){
+                return "<span class='badge badge-primary text-sm'style='background-color:{$model->status->color}'>{$model->status->display_name}</span>";
+            })
+            ->addColumn('buttons', 'usuario.solicitudes.datatables._buttons')
+            ->rawColumns(['buttons','label_status'])
+            ->make(true);
+
     }
 
     /**

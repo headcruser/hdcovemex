@@ -3,13 +3,15 @@
 namespace HelpDesk\Http\Controllers\Operador;
 
 use Entrust;
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use HelpDesk\Entities\Solicitude;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Config\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Yajra\DataTables\Facades\DataTables;
+use HelpDesk\Entities\Admin\Departamento;
 use HelpDesk\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
@@ -26,41 +28,42 @@ class SolicitudesController extends Controller
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        // $validator = Validator::make($request->all(), [
-        //     'search'    => 'filled',
-        //     'status'    =>  Rule::exists('statuses', 'id')->whereNull('deleted_at'),
-        //     'from'      => 'date_format:d/m/Y',
-        //     'to'        => 'date_format:d/m/Y',
-        // ]);
-
-        $defaultStatus = optional(Status::pendientes()->first())->id;
-
-        if ($request->has('status')) {
-            $status = $request->input('status');
-        } else {
-            $status = $defaultStatus;
-        }
-
-        $solicitudes = Solicitude::with(['status', 'empleado', 'empleado.departamento'])
-            ->search($request->input('search'))
-            ->from($request->input('from'))
-            ->to($request->input('to'))
-            ->byStatus($status)
-            ->orderByDesc('created_at')
-            ->paginate();
-
-        $solicitudes->appends([
-            'search'    => $request->input('search'),
-            'from'      => $request->input('from'),
-            'to'        => $request->input('to'),
-            'status'    => $defaultStatus,
-        ]);
-
         return view('operador.solicitudes.index', [
-            'collection'    => $solicitudes,
-            'statuses'      => Status::pluck('display_name', 'id'),
-            'status'        => $status
+            'statuses'           => Status::pluck('display_name', 'id')->prepend('Todos',''),
+            'departamentos'      => Departamento::pluck('nombre', 'id')->prepend('Todos',''),
         ]);
+    }
+
+    public function datatables(Request $request)
+    {
+        $query = Solicitude::query()->select('solicitudes.*')
+            ->when($request->input('status'),function($q,$status){
+                $q->where('estatus_id',$status);
+            })
+            ->when($request->input('departamento'),function($q,$departamento){
+                $q->whereHas('empleado',function($q) use($departamento){
+                    $q->where('departamento_id',$departamento);
+                });
+            })
+            ->when($request->filled(['from','to']),function($q) use($request){
+                $formatFrom = Carbon::parse($request->input('from'));
+                $formatTo  = Carbon::parse($request->input('to'));
+
+                $q->whereBetween('fecha',[$formatFrom,$formatTo]);
+            })
+            ->with('empleado.departamento','status');
+
+        return DataTables::eloquent($query)
+            ->editColumn('fecha',function($model){
+                return $model->fecha->format('d/m/Y H:i a');
+            })
+            ->addColumn('label_status',function($model){
+                return "<span class='badge badge-primary text-sm'style='background-color:{$model->status->color}'>{$model->status->display_name}</span>";
+            })
+            ->addColumn('buttons', 'operador.solicitudes.datatables._buttons')
+            ->rawColumns(['buttons','label_status'])
+            ->make(true);
+
     }
 
     public function edit(Solicitude $model)
@@ -169,16 +172,8 @@ class SolicitudesController extends Controller
 
     public function destroy(Solicitude $model)
     {
-        $userAuth = Auth::user();
-
-        $verifyAccess = (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_delete');
-
-        abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $model->estatus_id = optional(Status::canceladas()->first())->id;
         $model->save();
-
-        $model->delete();
 
         return back();
     }

@@ -228,16 +228,19 @@ Route::group([
     'middleware'    => ['auth']],
     function () {
 
-        # SOLICITUDES
+        # SOLICITUDES OPERADOR
+        Route::prefix('gestion-solicitudes')->name('gestion-solicitudes.')->group(function () {
+            Route::post('datatables','SolicitudesController@datatables')->name('datatables');
+
+            Route::get('{model}/archivo', [
+                'as'            => 'archivo',
+                'uses'          => 'SolicitudesController@archivo'
+            ]);
+        });
         Route::resource('gestion-solicitudes', 'SolicitudesController')->parameters([
             'gestion-solicitudes' => 'model'
         ]);
 
-        # ARCHIVO ADJUNTO SOLICITUD
-        Route::get('gestion-solicitudes/{model}/archivo', [
-            'as'            => 'gestion-solicitudes.archivo',
-            'uses'          => 'SolicitudesController@archivo'
-        ]);
 
         # TICKETS
         Route::resource('tickets', 'TicketController')->parameters([
@@ -257,16 +260,19 @@ Route::group([
     'middleware'    => ['auth'],
 ],function () {
 
-    # SOLICITUDES (EMPLEADO)
+    # 👉 SOLICITUDES (EMPLEADO)
+    Route::prefix('solicitudes')->name('solicitudes.')->group(function () {
+        Route::post('datatables','SolicitudController@datatables')->name('datatables');
+
+        # ARCHIVO ADJUNTO SOLICITUD
+        Route::get('{model}/archivo','SolicitudController@archivo')->name('archivo');
+    });
+
     Route::resource('solicitudes', 'SolicitudController')->parameters([
         'solicitudes' => 'model'
     ])->except(['edit','update','destroy']);
 
-    # ARCHIVO ADJUNTO SOLICITUD
-    Route::get('solicitudes/{model}/archivo', [
-        'as'            => 'solicitudes.archivo',
-        'uses'          => 'SolicitudController@archivo'
-    ]);
+
 
     # COMENTARIO SOLICITUD
     Route::post('solicitudes/{model}/comentario', [
