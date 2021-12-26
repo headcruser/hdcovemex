@@ -13,7 +13,7 @@
     {!! Form::label('usuario', 'Inicio de sesión:') !!}
 
     <div class="input-group mb-3">
-        {!! Form::text('usuario',null, ['class' => 'form-control','placeholder' => 'Escribe aqui el inicio de sesion','title' => 'Inicio de sesión','autocomplete' => 'off','required' => true]) !!}
+        {!! Form::text('usuario',null, ['class' => 'form-control','placeholder' => 'Escribe aqui el inicio de sesion','title' => 'Inicio de sesión','autocomplete' => 'off']) !!}
         <span class="input-group-append">
             <button id="btn-usuario-clipboard" type="button" class="btn btn-default btn-flat">
               <i class="fa fa-clipboard"></i>
@@ -32,7 +32,7 @@
 
     <label for="contrasenia">Contraseña: <span id="btn-toogle-password"><i class="fa fa-eye"></i></span></label>
     <div class="input-group mb-3">
-        {!! Form::input('password', 'contrasenia', old('credencial',$credencial->contrasenia) , ['id' => 'contrasenia','class' => 'form-control','autocomplete' => 'off','title' => 'Contraseña','placeholder' =>'Escribe aqui la contraseña','autocomplete' => 'new-password','required' => true]); !!}
+        {!! Form::input('password', 'contrasenia', old('credencial',$credencial->contrasenia) , ['id' => 'contrasenia','class' => 'form-control','autocomplete' => 'off','title' => 'Contraseña','placeholder' =>'Escribe aqui la contraseña','autocomplete' => 'new-password']); !!}
         <span class="input-group-append">
             <button id="btn-contrasenia-clipboard" type="button" class="btn btn-default btn-flat">
               <i class="fa fa-clipboard"></i>
@@ -49,7 +49,7 @@
 
 <div class="form-group @error('url') has-error @enderror">
     {!! Form::label('url', 'URL:') !!}
-    {!! Form::url('url',null, ['class' => 'form-control','autocomplete' => 'off','title','placeholder' => 'Escribe la URL','required' => true]) !!}
+    {!! Form::text('url',null, ['class' => 'form-control','autocomplete' => 'off','title','placeholder' => 'Escribe la URL']) !!}
 
     <div class="help-block with-errors">
         @error('url')
@@ -60,7 +60,7 @@
 
 <div class="form-group @error('nota') has-error @enderror">
     {!! Form::label('nota', 'Nota:') !!}
-    {!! Form::textarea('nota',null, ['class' => 'form-control','autocomplete' => 'off','title','placeholder' => 'Nota','required' => true]) !!}
+    {!! Form::textarea('nota',null, ['class' => 'form-control','autocomplete' => 'off','title','placeholder' => 'Nota']) !!}
 
     <div class="help-block with-errors">
         @error('nota')
