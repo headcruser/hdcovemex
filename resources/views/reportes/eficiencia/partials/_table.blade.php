@@ -59,7 +59,7 @@
 
                     @endphp
 
-                    {{ $finalizadosPersonal * 100 / $finalizados }} %
+                    {{ ($finalizados == 0)? 0: $finalizadosPersonal * 100 / $finalizados }} %
                 @else
                     0 %
                 @endif
@@ -78,7 +78,7 @@
 
                     @endphp
 
-                    {{ $remotoFinalizados * 100 / $finalizados }} %
+                    {{ ($finalizados == 0)?0: $remotoFinalizados * 100 / $finalizados }} %
                 @else
                     0 %
                 @endif

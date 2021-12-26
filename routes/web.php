@@ -234,6 +234,50 @@ Route::group([
     }
 );
 
+# 👉 GESTION DE IMPRESIONES
+
+Route::group([
+    'prefix'        => 'gestion-impresiones',
+    'as'            => 'gestion-impresiones.',
+    'namespace'     => 'GestionImpresiones',
+    'middleware'    => ['auth']],
+    function () {
+        # 👉 IMPRESIONES
+        Route::prefix('impresiones')->name('impresiones.')->group(function () {
+            Route::get('visualizar-impresiones','ImpresionesController@visualizar_impresiones')->name('visualizar-impresiones');
+            Route::post('calcular-impresiones','ImpresionesController@calcular_impresiones')->name('calcular-impresiones');
+            Route::post('generar-reportes','ImpresionesController@generar_reportes')->name('generar-reportes');
+            Route::post('datatables','ImpresionesController@datatables')->name('datatables');
+            Route::delete('{impresionDetalle}/eliminar-registro-impresiones','ImpresionesController@eliminar_registro_impresiones')->name('eliminar-registro-impresiones');
+            Route::put('{impresionDetalle}/actualizar-registro-impresiones','ImpresionesController@actualizar_registro_impresiones')->name('actualizar-registro-impresiones');
+            Route::post('{impresion}/crear-registro-impresiones','ImpresionesController@crear_registro_impresiones')->name('crear-registro-impresiones');
+            Route::post('{impresion}/importar','ImpresionesController@importar')->name('importar');
+            Route::post('{impresion}/agregar-registro-impresiones','ImpresionesController@agregar_registro_impresiones')->name('agregar-registro-impresiones');
+            Route::delete('{impresion}/eliminar-registros-impresiones','ImpresionesController@eliminar_registros_impresiones')->name('eliminar-registros-impresiones');
+        });
+        Route::resource('impresiones', 'ImpresionesController')->parameters([
+            'impresiones'  => 'impresion'
+        ]);
+
+
+        # 👉 REPORTE IMPRESIONES
+        Route::get('reporte-impresiones', [
+            'as'            => 'reporte-impresiones.index',
+            'uses'          => 'ReporteImpresionesController@index'
+        ]);
+
+        Route::post('reporte-impresiones', [
+            'as'            => 'reporte-impresiones.calcular',
+            'uses'          => 'ReporteImpresionesController@calcular'
+        ]);
+
+        Route::post('reporte-impresiones/enviar-reporte-anual', [
+            'as'            => 'reporte-impresiones.enviar-reporte-anual',
+            'uses'          => 'ReporteImpresionesController@enviar_reporte_anual'
+        ]);
+    }
+);
+
 # OPERADOR
 Route::group([
     'as'            => 'operador.',

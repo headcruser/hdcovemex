@@ -6,10 +6,10 @@
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item">
         <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Herramientas </a>
+        <i class="fas fa-home"></i> Inicio</a>
     </li>
-    <li class="breadcrumb-item">Gestion Inventarios</li>
-    <li class="breadcrumb-item"><a href="{{ route('gestion-inventarios.impresiones.index') }}">Impresiones</a></li>
+    <li class="breadcrumb-item">Gestion Impresiones</li>
+    <li class="breadcrumb-item"><a href="{{ route('gestion-impresiones.impresiones.index') }}">Impresiones</a></li>
     <li class="breadcrumb-item active">Visualizar impresiones</li>
 </ol>
 @endsection

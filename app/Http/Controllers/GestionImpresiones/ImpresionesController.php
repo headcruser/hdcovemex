@@ -1,6 +1,6 @@
 <?php
 
-namespace HelpDesk\Http\Controllers\GestionInventarios;
+namespace HelpDesk\Http\Controllers\GestionImpresiones;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ class ImpresionesController extends Controller
         $years = collect(Carbon::getLastYears(3,1))->reverse();
         $months = collect(Carbon::getMonthsOfYear())->prepend('Todos','');
 
-        return view('gestion-inventarios.impresiones.index',[
+        return view('gestion-impresiones.impresiones.index',[
             'years' => $years,
             'months' => $months
         ]);
@@ -47,7 +47,7 @@ class ImpresionesController extends Controller
             ->editColumn('fecha', function ($model) {
                 return optional($model->fecha)->format('d-m-Y');
             })
-            ->addColumn('buttons', 'gestion-inventarios.impresiones.datatables._buttons')
+            ->addColumn('buttons', 'gestion-impresiones.impresiones.datatables._buttons')
             ->rawColumns(['buttons'])
             ->make(true);
     }
@@ -63,7 +63,7 @@ class ImpresionesController extends Controller
         $ids_impresororas = $impresion->detalles->pluck('id_impresora')->unique()->flatten()->toArray() ?? [];
         $impresoras_registradas = Impresora::find($ids_impresororas);
 
-        return view('gestion-inventarios.impresiones.show', [
+        return view('gestion-impresiones.impresiones.show', [
             'impresion'                 => $impresion,
             'impresoras'                => Impresora::query()->pluck('descripcion', 'id')->prepend('Selecciona una impresora', ''),
             'impresoras_registradas'    => $impresoras_registradas,
@@ -73,7 +73,7 @@ class ImpresionesController extends Controller
 
     public function create()
     {
-        return view('gestion-inventarios.impresiones.create', [
+        return view('gestion-impresiones.impresiones.create', [
             'impresion'         => new Impresion(),
             'impresoras'        => Impresora::query()->pluck('descripcion', 'id')->prepend('Selecciona una impresora', ''),
             'meses'             => collect(Meses::asSelectArray())->prepend('Selecciona un mes', '')
@@ -128,7 +128,7 @@ class ImpresionesController extends Controller
 
             DB::commit();
 
-            return redirect()->route('gestion-inventarios.impresiones.show', $impresion)
+            return redirect()->route('gestion-impresiones.impresiones.show', $impresion)
                 ->with(['message' => 'Reporte Impresion Creado correctamente']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -153,7 +153,7 @@ class ImpresionesController extends Controller
             ]);
         }
 
-        return redirect()->route('gestion-inventarios.impresiones.index')->with([
+        return redirect()->route('gestion-impresiones.impresiones.index')->with([
             'message' => 'Registro eliminado correctamente'
         ]);
     }
@@ -227,7 +227,7 @@ class ImpresionesController extends Controller
 
 
         return redirect()
-            ->route('gestion-inventarios.impresiones.show', $impresion)
+            ->route('gestion-impresiones.impresiones.show', $impresion)
             ->with(['message' => 'Reporte Impresion agregado correctamente']);
     }
 
@@ -248,13 +248,13 @@ class ImpresionesController extends Controller
         $impresion->save();
 
         return redirect()
-            ->route('gestion-inventarios.impresiones.show', $impresion)
+            ->route('gestion-impresiones.impresiones.show', $impresion)
             ->with(['message' => 'Registros eliminados correctamente']);
     }
 
     public function visualizar_impresiones()
     {
-        return view('gestion-inventarios.impresiones.visualizar_impresiones');
+        return view('gestion-impresiones.impresiones.visualizar_impresiones');
     }
 
     public function calcular_impresiones(Request $request,PrinterCanon $printer)
@@ -265,7 +265,7 @@ class ImpresionesController extends Controller
 
         $printer->read($request->input('info'));
 
-        return redirect()->route('gestion-inventarios.impresiones.visualizar-impresiones')->with([
+        return redirect()->route('gestion-impresiones.impresiones.visualizar-impresiones')->with([
             'tb_printer' =>  $printer->render()
         ]);
 

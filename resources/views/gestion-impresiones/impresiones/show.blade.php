@@ -5,11 +5,11 @@
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-            <i class="fas fa-home"></i> Inicio </a>
+            <i class="fas fa-home"></i>  </a>
         </li>
         <li class="breadcrumb-item">Gestion Inventarios</li>
-        <li class="breadcrumb-item"><a href="{{ route('gestion-inventarios.impresiones.index') }}">Impresiones</a></li>
-        <li class="breadcrumb-item active">Panel Impresiones #{{ $impresion->nombre_mes }}</li>
+        <li class="breadcrumb-item"><a href="{{ route('gestion-impresiones.impresiones.index') }}">Impresiones</a></li>
+        <li class="breadcrumb-item active">Ver #{{ $impresion->nombre_mes }}</li>
     </ol>
 @endsection
 
@@ -68,7 +68,7 @@
 
                     <p class="text-muted text-center">Verifica la salida de impresiones antes de precargarlo a base de datos</p>
 
-                    <a href="{{ route('gestion-inventarios.impresiones.visualizar-impresiones') }}"
+                    <a href="{{ route('gestion-impresiones.impresiones.visualizar-impresiones') }}"
                         class="btn btn-dark btn-block btn-sm"
                         title="Visualizar impresiones">
                         Visualizar impresiones
@@ -145,7 +145,7 @@
                                                 <i class="fas fa-plus-circle"></i> Agregar registro
                                             </button>
 
-                                            <form class="btn btn-xs btn-danger" data-impresora="{{ $impresora }}" data-action="eliminacion-registros-impresiones" action="{{ route('gestion-inventarios.impresiones.eliminar-registros-impresiones',$impresion) }}" method="POST" style="display: inline-block;">
+                                            <form class="btn btn-xs btn-danger" data-impresora="{{ $impresora }}" data-action="eliminacion-registros-impresiones" action="{{ route('gestion-impresiones.impresiones.eliminar-registros-impresiones',$impresion) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 {!! Form::hidden('id_impresora', $detalles->first()->id_impresora) !!}
@@ -193,7 +193,7 @@
                                                         <div class="btn-group">
                                                             <button data-impresora="{{ $impresora }}"
                                                                 data-id="{{ $detalle->id }}"
-                                                                data-url="{{ route('gestion-inventarios.impresiones.eliminar-registro-impresiones',$detalle) }}"
+                                                                data-url="{{ route('gestion-impresiones.impresiones.eliminar-registro-impresiones',$detalle) }}"
                                                                 data-method="POST"
                                                                 data-type="DELETE"
                                                                 data-action="eliminar-impresion"
@@ -204,7 +204,7 @@
 
                                                             <button data-impresora="{{ $impresora }}"
                                                                 data-id="{{ $detalle->id }}"
-                                                                data-url="{{ route('gestion-inventarios.impresiones.actualizar-registro-impresiones',$detalle) }}"
+                                                                data-url="{{ route('gestion-impresiones.impresiones.actualizar-registro-impresiones',$detalle) }}"
                                                                 data-method="POST"
                                                                 data-type="PATCH"
                                                                 data-action="actualizar-impresion"
@@ -245,7 +245,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            {!! Form::open(['id' => 'form-asignar-registro-impresiones','route' =>['gestion-inventarios.impresiones.agregar-registro-impresiones', $impresion], 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
+            {!! Form::open(['id' => 'form-asignar-registro-impresiones','route' =>['gestion-impresiones.impresiones.agregar-registro-impresiones', $impresion], 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
                 <div class="modal-body">
                     <div class="form-group">
                         {!! Form::label('id_impresora', 'Impresora') !!}
@@ -282,7 +282,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 </div>
 
-                {!! Form::open(['id' => 'form-importar-impresiones', 'route' => ['gestion-inventarios.impresiones.importar',$impresion], 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                {!! Form::open(['id' => 'form-importar-impresiones', 'route' => ['gestion-impresiones.impresiones.importar',$impresion], 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
                     <div class="modal-body">
                         <p>Adjunta el archivo de importación Masiva con el siguiente formato</p>
 
@@ -323,7 +323,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 </div>
 
-                {!! Form::open(['id' => 'form-agregar-impresiones', 'route' => ['gestion-inventarios.impresiones.crear-registro-impresiones',$impresion], 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                {!! Form::open(['id' => 'form-agregar-impresiones', 'route' => ['gestion-impresiones.impresiones.crear-registro-impresiones',$impresion], 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
                     <div class="modal-body">
                         <div class="form-group">
                             {!! Form::label('id_impresion','#ID IMPRESION') !!}

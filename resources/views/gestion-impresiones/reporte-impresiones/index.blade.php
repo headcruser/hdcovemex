@@ -35,7 +35,7 @@
 
                             <div class="row pb-2">
                                 <div class="col-md-6">
-                                    {!! Form::open(['id' => 'form-filtrar','method' => 'GET','route' => ['gestion-inventarios.reporte-impresiones.index'], 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                                    {!! Form::open(['id' => 'form-filtrar','method' => 'GET','route' => ['gestion-impresiones.reporte-impresiones.index'], 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
                                         <label>Filtro por Año: &nbsp;</label>
                                         <label>
                                             {!! Form::select('anio', $anios, $anio, ['class' => 'custom-select custom-select-sm form-control form-control-sm']) !!}
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @include('gestion-inventarios.reporte-impresiones.partials._table')
+                            @include('gestion-impresiones.reporte-impresiones.partials._table')
                         </div>
 
                         <div class="tab-pane" id="tab_2">
@@ -89,7 +89,7 @@
                     <h4 class="modal-title">Enviar Reporte Anual</b></h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 </div>
-                {!! Form::open(['id' => 'form-enviar-reporte-anual', 'route' => 'gestion-inventarios.reporte-impresiones.enviar-reporte-anual', 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
+                {!! Form::open(['id' => 'form-enviar-reporte-anual', 'route' => 'gestion-impresiones.reporte-impresiones.enviar-reporte-anual', 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
                     <div class="modal-body">
                         <div class="form-group">
                             <button id="btn-agregar-cc" type="button" class="btn btn-link float-right"">Agregar CC</button>

@@ -128,15 +128,24 @@
                 @permission('inventory_management')
                 <li class="nav-header">Inventario</li>
 
-                <li class="nav-item has-treeview {{ active('gestion-inventarios/*', 'menu-open') }} ">
-                    <a href="#" class="nav-link {{ active('gestion-inventarios/*') }}">
+                <li class="nav-item has-treeview {{ routeIs(['gestion-inventarios.*'],'menu-open') }}">
+                    <a href="#" class="nav-link {{ routeIs(['gestion-inventarios.*']) }}">
                         <i class="nav-icon fas fa-warehouse"></i>
                         <p>
-                            Gestión de inventarios
+                            Gestión inventarios
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @permission('credenciales_access')
+                            <li class="nav-item ">
+                                <a href="{{ route('gestion-inventarios.credenciales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.credenciales.*']) }}" >
+                                    <i class="nav-icon fas fa-key"></i>
+                                    <p>Credenciales</p>
+                                </a>
+                            </li>
+                        @endpermission
+
                         @permission('sucursal_access')
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.sucursales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.sucursales.*']) }}">
@@ -192,40 +201,44 @@
                         </li>
                         @endpermission
 
+                    </ul>
+                </li>
+
+
+                <li class="nav-item has-treeview {{ routeIs(['gestion-impresiones.*'],'menu-open') }} ">
+                    <a href="#" class="nav-link {{ routeIs(['gestion-impresiones.*']) }}">
+                        <i class="nav-icon fas fa-clone"></i>
+                        <p>
+                            Gestión impresiones
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
                         @permission('impresiones_access')
-                        <li class="nav-item ">
-                            <a href="{{ route('gestion-inventarios.impresiones.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresiones.index','gestion-inventarios.impresiones.*']) }}">
-                                <i class="nav-icon fas fa-print"></i>
-                                <p>Impresiones</p>
-                            </a>
-                        </li>
+                            <li class="nav-item ">
+                                <a href="{{ route('gestion-impresiones.impresiones.index') }}" class="nav-link {{ routeIs(['gestion-impresiones.impresiones.*']) }}">
+                                    <i class="nav-icon fas fa-print"></i>
+                                    <p>Impresiones</p>
+                                </a>
+                            </li>
                         @endpermission
 
                         @permission('reporte_anual_impresiones_access')
-                        <li class="nav-item ">
-                            <a href="{{ route('gestion-inventarios.reporte-impresiones.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.reporte-impresiones.index','gestion-inventarios.reporte-impresiones.*']) }}" >
-                                <i class="nav-icon fas fa-chart-pie"></i>
-                                <p>Reporte Anual</p>
-                            </a>
-                        </li>
+                            <li class="nav-item ">
+                                <a href="{{ route('gestion-impresiones.reporte-impresiones.index') }}" class="nav-link {{ routeIs(['gestion-impresiones.reporte-impresiones.*']) }}" >
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>Reporte Anual</p>
+                                </a>
+                            </li>
                         @endpermission
 
-                        @permission('credenciales_access')
-                        <li class="nav-item ">
-                            <a href="{{ route('gestion-inventarios.credenciales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.credenciales.*']) }}" >
-                                <i class="nav-icon fas fa-key"></i>
-                                <p>Credenciales</p>
-                            </a>
-                        </li>
-                        @endpermission
                     </ul>
                 </li>
                 @endpermission
 
 
                 <!-- GESTION -->
-                <li class="nav-header">Gestión</li>
-
+                <li class="nav-header">Gestión de solicitudes</li>
 
                 @if( (\Entrust::hasRole(['admin']) || auth()->user()->isOperador() ) && auth()->user()->can('solicitude_show'))
                     <li class="nav-item">
@@ -252,63 +265,25 @@
                         <p>Tickets</p>
                     </a>
                 </li>
-                @endpermission
 
 
-
-                <!-- REPORTES -->
-                @ability('admin,ti', 'report_access')
-                    <li class="nav-header">Reportes</li>
-
-                    @permission('report_efficiency')
+                @permission('report_efficiency')
                     <li class="nav-item">
                         <a href="{{ route('reporte.eficiencia') }}" class="nav-link {{ routeIs(['reporte.eficiencia']) }}">
-                            <i class="nav-icon fas fa-plus-circle"></i>
+                            <i class="nav-icon fas fa-clock"></i>
                             <p>Eficiencia</p>
                         </a>
                     </li>
-                    @endpermission
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-clock nav-icon"></i>
-                            <p>Pendientes</p>
-                        </a>
-                    </li>
-                @endability
+                @endpermission
 
-                 {{--
-                @permission('tools_access')
-                 <li class="nav-header">Utilerias</li>
-
-                 <li class="nav-item has-treeview {{ active('herramientas/*', 'menu-open') }} ">
-                     <a href="#" class="nav-link {{ active('herramientas/*') }}">
-                         <i class="nav-icon fas fa-users-cog"></i>
-                         <p>
-                             Herramientas
-                             <i class="fas fa-angle-left right"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview">
-                         @permission('barcode_access')
-                             <li class="nav-item ">
-                                 <a href="{{ route('herramientas.barcode.index') }}" class="nav-link {{ routeIs(['herramientas.barcode.index','herramientas.barcode.*']) }}">
-                                     <i class="nav-icon fas fa-barcode"></i>
-                                     <p>Codigo de barras</p>
-                                 </a>
-                             </li>
-                         @endpermission
-                     </ul>
-                 </li>
-                @endpermission --}}
-
-                <!-- OPCIONES -->
-                <li class="nav-header">Opciones</li>
-                <li class="nav-item">
-                    <a href="{{ route('perfil') }}" class="nav-link {{ routeIs(['perfil','perfil.*']) }}">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>Perfil</p>
+                {{-- <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-clock nav-icon"></i>
+                        <p>Pendientes</p>
                     </a>
-                </li>
+                </li> --}}
+
+                @endpermission
             </ul>
         </nav>
         <!-- END SIDEBAR MENU -->

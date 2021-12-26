@@ -53,7 +53,10 @@
                                     <tbody>
                                         @foreach ($permisos as $permiso)
                                             <tr>
-                                                <td class="bg-primary text-white" nowrap>{{$permiso->display_name}}</td>
+                                                <td class="bg-primary text-white">
+                                                    {{$permiso->display_name}}
+                                                    <p class="p-0 m-0 font-weight-bold">{{ $permiso->description }}</p>
+                                                </td>
                                                 @foreach ($roles as $role)
                                                     <td style="font-size:14px; font-weight:bold" class="toggle_permiso text-center text-danger" id="celda_{{$role->id}}_{{$permiso->id}}" data-role="{{$role->id}}" data-permission="{{$permiso->id}}"></td>
                                                 @endforeach

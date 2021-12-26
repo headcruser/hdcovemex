@@ -1,6 +1,6 @@
 <?php
 
-namespace HelpDesk\Http\Controllers\GestionInventarios;
+namespace HelpDesk\Http\Controllers\GestionImpresiones;
 
 use HelpDesk\Enums\Meses;
 use Illuminate\Http\Request;
@@ -86,7 +86,7 @@ class ReporteImpresionesController extends Controller
 
         $anios = Impresion::query()->select('anio')->distinct()->pluck('anio','anio');
 
-        return view('gestion-inventarios.reporte-impresiones.index',[
+        return view('gestion-impresiones.reporte-impresiones.index',[
             'anios'                         => $anios,
             'anio'                          => $anio,
             'meses'                         => $meses,

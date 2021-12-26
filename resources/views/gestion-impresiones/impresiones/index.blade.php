@@ -23,7 +23,7 @@
             <div class="card-header">
                 <h3 class="card-title">Lista de reportes de impresiones</h3>
                 <div class="card-tools">
-                    <a href="{{ route('gestion-inventarios.impresiones.create') }}"
+                    <a href="{{ route('gestion-impresiones.impresiones.create') }}"
                         class="btn btn-success btn-sm"
                         title="Crear">
                         Crear <i class="fas fa-plus-circle"></i>
@@ -36,7 +36,7 @@
                         Crear Reportes del año
                     </button>
 
-                    <a href="{{ route('gestion-inventarios.impresiones.visualizar-impresiones') }}"
+                    <a href="{{ route('gestion-impresiones.impresiones.visualizar-impresiones') }}"
                         class="btn btn-secondary btn-sm"
                         title="Visualizar impresiones">
                         Visualizar impresiones
@@ -112,7 +112,7 @@
                 pageLength: 10,
                 dom: "<'row'<'col-6 d-flex align-items-center'l><'col-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-7'i><'col-5 align-self-end d-flex justify-content-end'p>>",
                 ajax: {
-                    url: "{{ route('gestion-inventarios.impresiones.datatables') }}",
+                    url: "{{ route('gestion-impresiones.impresiones.datatables') }}",
                     type: "POST",
                     data: function (d) {
                         d.anio = dom.filters.anio.val();
@@ -226,7 +226,7 @@
                 .then((result) => {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ route('gestion-inventarios.impresiones.generar-reportes') }}",
+                            url: "{{ route('gestion-impresiones.impresiones.generar-reportes') }}",
                             type: 'POST',
                             data: {
                                 anio: $("#input-reporte-anio").val(),

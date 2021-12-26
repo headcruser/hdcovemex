@@ -9,7 +9,7 @@
         </li>
         <li class="breadcrumb-item">Gestion Inventario </li>
         <li class="breadcrumb-item">
-            <a href="{{ route('gestion-inventarios.impresiones.index') }}">Impresiones</a>
+            <a href="{{ route('gestion-impresiones.impresiones.index') }}">Impresiones</a>
         </li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
@@ -27,7 +27,7 @@
                 <p>En esta sección puedes crear un nuevo repore donde podrás llevar el control de las impresiones</p>
                 {!! Form::open([
                     'id'                => 'form-crear-impresiones',
-                    'route'             => 'gestion-inventarios.impresiones.store',
+                    'route'             => 'gestion-impresiones.impresiones.store',
                     'method'            => 'POST',
                     'accept-charset'    => 'UTF-8',
                     'enctype'           =>'multipart/form-data']) !!}

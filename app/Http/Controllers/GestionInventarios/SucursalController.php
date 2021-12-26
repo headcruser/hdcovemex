@@ -72,7 +72,7 @@ class SucursalController extends Controller
         }
 
         return redirect()
-            ->route('gestion-inventarios.equipos.index')
+            ->route('gestion-inventarios.sucursales.index')
             ->with(['message' => 'Sucursal eliminada correctamente']);
     }
 
