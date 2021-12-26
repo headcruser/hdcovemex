@@ -218,6 +218,19 @@ Route::group([
             'as'            => 'reporte-impresiones.enviar-reporte-anual',
             'uses'          => 'ReporteImpresionesController@enviar_reporte_anual'
         ]);
+
+
+        # 👉 CREDENCIALE
+        Route::prefix('credenciales')->name('credenciales.')->group(function () {
+            Route::post('datatables', [
+                'as'            => 'datatables',
+                'uses'          => 'CredencialesController@datatables'
+            ]);
+        });
+
+        Route::resource('credenciales', 'CredencialesController')->parameters([
+            'credenciales'  => 'credencial'
+        ])->middleware('permission:credenciales_access');
     }
 );
 

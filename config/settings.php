@@ -332,5 +332,27 @@ return [
             'display_name'  => 'Acceso reporte anual impresiones',
             'description'   => 'Permite visualizar el reporte de impresiones'
         ],
+
+        # 👉CREDENCIALES
+        [
+            'name'          => 'credenciales_access',
+            'display_name'  => 'Acceso a ver credenciales',
+            'description'   => 'Permite visualizar las credenciales'
+        ],
+        [
+            'name'          => 'credenciales_create',
+            'display_name'  => 'Crear credencial',
+            'description'   => 'Permite crear una credencial'
+        ],
+        [
+            'name'          => 'credenciales_edit',
+            'display_name'  => 'Editar credencial',
+            'description'   => 'Permite editar una credencial'
+        ],
+        [
+            'name'          => 'credenciales_delete',
+            'display_name'  => 'Eliminar credencial',
+            'description'   => 'Permite eliminar una credencial'
+        ],
     ],
 ];
