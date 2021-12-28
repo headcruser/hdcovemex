@@ -380,7 +380,7 @@ class TicketController extends Controller
                 'valor_anterior'    => $originalTicketData['estado'],
                 'valor_actual'      => config('helpdesk.tickets.estado.alias.FIN'),
                 'comentario'        => '',
-                'privado'           => true,
+                'privado'           => 'N',
             ]);
 
             $ticket->sigoTicket()->create([
@@ -390,7 +390,7 @@ class TicketController extends Controller
                 'valor_anterior'    => $originalTicketData['proceso'],
                 'valor_actual'      => config('helpdesk.tickets.proceso.alias.FIN'),
                 'comentario'        => '',
-                'privado'           => true,
+                'privado'           => 'N',
             ]);
 
             if ($request->filled('comentario')) {
