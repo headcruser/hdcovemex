@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <label class="form-label-sm">Estado:</label>&nbsp;
                     <div class="btn-group">
-                        {!! Form::select('status', $statuses , null, ['id' => 'select-status' , 'class' => 'custom-select custom-select-sm']) !!}
+                        {!! Form::select('status', $statuses , 1, ['id' => 'select-status' , 'class' => 'custom-select custom-select-sm']) !!}
                     </div>
                 </div>
                 &nbsp;

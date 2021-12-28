@@ -42,11 +42,8 @@ class TicketController extends Controller
     public function datatables(Request $request)
     {
         $query = Ticket::query()
-            ->when($request->input('operador'),function($q,$operador){
+            ->when($request->input('operador_id'),function($q,$operador){
                 $q->where('operador_id',$operador);
-            })
-            ->when($request->input('status'),function($q,$status){
-                $q->byStatus($status);
             })
             ->when($request->input('proceso'),function($q,$proceso){
                 $q->byProcess($proceso);

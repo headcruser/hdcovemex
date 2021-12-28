@@ -89,6 +89,7 @@
             }
         };
 
+
         dom.filters.from.daterangepicker({
             singleDatePicker: true,
             autoUpdateInput: false,
@@ -101,16 +102,6 @@
             autoUpdateInput: false,
         });
 
-        $('.datepicker').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            dt.draw()
-        });
-
-        $('.datepicker').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-            dt.draw()
-        });
-
         var dt = dom.table.DataTable({
             processing: true,
             serverSide: true,
@@ -121,7 +112,6 @@
                 url: "{{ route('operador.tickets.datatables') }}",
                 type: "POST",
                 data: function (d) {
-                    d.status = dom.filters.status.val();
                     d.proceso = dom.filters.proceso.val();
                     d.operador = dom.filters.operador.val();
                     d.from =  dom.filters.from.val();
@@ -171,6 +161,37 @@
                 $('td', row).eq(1).css("background-color",data.color_prioridad);
             }
         });
+
+        $('.datepicker').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            dt.draw()
+        });
+
+        $('.datepicker').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            dt.draw()
+        });
+
+        var searchWait = 0;
+        var searchWaitInterval;
+
+        $('.dataTables_filter input')
+            .unbind()
+            .bind('input', function(e) {
+                var item = $(this);
+                searchWait = 0;
+                if (!searchWaitInterval) searchWaitInterval = setInterval(function() {
+                    if (searchWait >= 3) {
+                        clearInterval(searchWaitInterval);
+                        searchWaitInterval = '';
+                        searchTerm = $(item).val();
+                        dt.search(searchTerm).draw();
+                        searchWait = 0;
+                    }
+                    searchWait++;
+                }, 200);
+
+            });
 
         dom.table.on('click',"a[data-action='destroy']",function(e){
             e.preventDefault();
@@ -301,27 +322,6 @@
                 }
             })
         });
-
-        var searchWait = 0;
-        var searchWaitInterval;
-
-        $('.dataTables_filter input')
-            .unbind()
-            .bind('input', function(e) {
-                var item = $(this);
-                searchWait = 0;
-                if (!searchWaitInterval) searchWaitInterval = setInterval(function() {
-                    if (searchWait >= 3) {
-                        clearInterval(searchWaitInterval);
-                        searchWaitInterval = '';
-                        searchTerm = $(item).val();
-                        dt.search(searchTerm).draw();
-                        searchWait = 0;
-                    }
-                    searchWait++;
-                }, 200);
-
-            });
 
         $(document.body).on('change','select[data-filter="select"]',function(e){
             dt.draw();
