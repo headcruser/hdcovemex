@@ -24,7 +24,7 @@
                 <div class="row">
                     <!-- PENDIENTES -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
+                        <div class="small-box bg-warning" style="background-color:{{ $status['PEN'] }} !important;">
                             <div class="inner">
                                 <h3>{{ auth()->user()->solicitudes()->pendientes()->count() }}</h3>
                                 <p>Solicitudes pendientes</p>
@@ -37,7 +37,7 @@
 
                     <!-- EN REVISION -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-gray">
+                        <div class="small-box bg-gray" style="background-color:{{ $status['PAS'] }} !important;">
                             <div class="inner">
                                 <h3>{{ auth()->user()->solicitudes()->proceso()->count() }}</h3>
                                 <p>Solicitudes en revision</p>
@@ -51,7 +51,7 @@
                     <!-- CANCELADAS -->
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-danger">
+                        <div class="small-box bg-danger" style="background-color:{{ $status['CAN'] }} !important;">
                             <div class="inner">
                                 <h3>{{ auth()->user()->solicitudes()->canceladas()->count() }}</h3>
                                 <p>Solicitudes canceladas</p>
@@ -64,7 +64,7 @@
 
                     <!-- FINALIZADAS -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-success">
+                        <div class="small-box bg-success" style="background-color:{{ $status['END'] }} !important;">
                             <div class="inner">
                                 <h3>{{ auth()->user()->solicitudes()->finalizadas()->count() }}</h3>
 

@@ -45,15 +45,17 @@ class CreatedSolicitudeNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        # VERIFICACION DE ENVIO DE CORREO
         $mailMessage =  (new MailMessage)
-			->subject( str_replace('%1%', $this->solicitude->id ,Config::get('helpdesk.mail.request_subject')) )
-			->greeting('Nueva Solicitud')
-            ->line('Solicitud de soporte: '. $this->solicitude->id )
-            ->line("Usuario: ({$this->solicitude->empleado->usuario})  {$this->solicitude->empleado->nombre}")
-            ->line("Detalle: {$this->solicitude->incidente}")
-            ->salutation(Config::get('helpdesk.global.name'))
-            ->from(Config::get('helpdesk.global.from_user_request'), Config::get('helpdesk.global.name'));
+        ->subject( str_replace('%1%', $this->solicitude->id ,Config::get('helpdesk.mail.request_subject')) )
+        ->markdown('vendor.mail.html.operadores.solicitud',[
+            'usuario'   => $notifiable,
+            'solicitud' => $this->solicitude
+        ])->from(Config::get('helpdesk.global.from_user_request'), Config::get('helpdesk.global.name'));
+
+        if ($this->solicitude->media->exists) {
+            $data = $this->solicitude->media->getBase64Decode();
+            $mailMessage->attachData($data['content'],$data['name']);
+        }
 
         return $mailMessage;
     }

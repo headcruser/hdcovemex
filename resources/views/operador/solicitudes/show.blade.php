@@ -74,10 +74,10 @@
                             </td>
                         </tr>
 
-                        @isset($model->media)
+                        @if($model->media->exists)
                             <tr>
                                 <th>
-                                    INCIDENTE
+                                    ARCHIVO ADJUNTO
                                 </th>
                                 <td>
                                     <p>
@@ -85,19 +85,17 @@
                                     </p>
                                 </td>
                             </tr>
-                        @endisset
+                        @endif
                     </tbody>
                 </table>
             </div>
 
             <div class="card-footer">
-                <a class="btn btn-default" href="{{ route('operador.gestion-solicitudes.index') }}">
-                    <i class="fas fa-arrow-left"></i> Regresar
-                </a>
-
-                <a class="btn btn-primary float-right" href="{{ route('operador.gestion-solicitudes.edit',$model) }}">
-                    <i class="fas fa-pencil-alt"></i> Editar
-                </a>
+                @if($model->estatus_id == 1 )
+                    <a class="btn btn-primary float-right" href="{{ route('operador.gestion-solicitudes.edit',$model) }}">
+                        <i class="fas fa-pencil-alt"></i> Editar
+                    </a>
+                @endif
             </div>
         </div>
     </div>

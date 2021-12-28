@@ -181,9 +181,9 @@
                                     </div>
                                 </div>
 
-                                <!-- ESTATUS -->
+                                {{-- <!-- ESTATUS -->
                                 <div class="col-sm-6">
-                                    {{-- CAMBIAR AL ESTATUS SOLO EN FINALIZADO Y CANCELADO --}}
+
                                     <div class="form-group">
                                         <label for="estatus">Estatus</label>
                                         <select class="custom-select" name="estado">
@@ -192,7 +192,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="row">

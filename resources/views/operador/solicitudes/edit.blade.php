@@ -79,7 +79,7 @@
                                 readonly>{{ old('incidente', $model->incidente) }}</textarea>
                         </div>
 
-                        @if($model->media)
+                        @if($model->media->exists)
                         <div class="form-group">
                             <label for="input-file-archivo">Archivo Adjunto</label>
 

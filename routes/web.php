@@ -131,31 +131,35 @@ Route::group([
     'middleware'    => ['auth']],
     function () {
 
-        # TIPO DE HARDWARE
-        Route::post('tipo-hardware/select2', 'TipoHardwareController@select2')->name('tipo-hardware.select2');
-        Route::post('tipo-hardware/datatables','TipoHardwareController@datatables')->name('tipo-hardware.datatables');
+        # 👉 TIPO DE HARDWARE
+        Route::prefix('tipo-hardware')->name('tipo-hardware.')->group(function () {
+            Route::post('select2', 'TipoHardwareController@select2')->name('select2');
+            Route::post('datatables','TipoHardwareController@datatables')->name('datatables');
+        });
         Route::resource('tipo-hardware', 'TipoHardwareController')->parameters([
             'tipo-hardware'  => 'tipoHardware'
         ])->except('show');
 
-        # HARDWARE
-        Route::post('hardware/select2', 'HardwareController@select2')->name('hardware.select2');
-        Route::post('hardware/datatables','HardwareController@datatables')->name('hardware.datatables');
+        # 👉 HARDWARE
+        Route::prefix('hardware')->name('hardware.')->group(function () {
+            Route::post('select2', 'HardwareController@select2')->name('select2');
+            Route::post('datatables','HardwareController@datatables')->name('datatables');
+        });
         Route::resource('hardware', 'HardwareController')->parameters([
             'hardware'  => 'hardware'
         ])->except('show');
 
-        # EQUIPOS
-        Route::post('equipos/buscar_componente_equipo/{componenteEquipo}','EquiposController@buscar_componente_equipo')->name('equipos.buscar_componente_equipo');
-        Route::post('equipos/agregar_componente_equipo','EquiposController@agregar_componente_equipo')->name('equipos.agregar_componente_equipo');
-        Route::put('equipos/actualizar_componente_equipo/{componenteEquipo}','EquiposController@actualizar_componente_equipo')->name('equipos.actualizar_componente_equipo');
-        Route::delete('equipos/eliminar_componente_equipo/{componenteEquipo}','EquiposController@eliminar_componente_equipo')->name('equipos.eliminar_componente_equipo');
-        Route::post('equipos/datatables_componentes_equipo','EquiposController@datatables_componentes_equipo')->name('equipos.datatables_componentes_equipo');
-
-        Route::post('equipos/asignar_equipo','EquiposController@asignar_equipo')->name('equipos.asignar_equipo');
-        Route::post('equipos/datatables_asignar_equipo','EquiposController@datatables_asignar_equipo')->name('equipos.datatables_asignar_equipo');
-
-        Route::post('equipos/datatables','EquiposController@datatables')->name('equipos.datatables');
+        # 👉 EQUIPOS
+        Route::prefix('equipos')->name('equipos.')->group(function () {
+            Route::post('buscar_componente_equipo/{componenteEquipo}','EquiposController@buscar_componente_equipo')->name('buscar_componente_equipo');
+            Route::post('agregar_componente_equipo','EquiposController@agregar_componente_equipo')->name('agregar_componente_equipo');
+            Route::put('actualizar_componente_equipo/{componenteEquipo}','EquiposController@actualizar_componente_equipo')->name('actualizar_componente_equipo');
+            Route::delete('eliminar_componente_equipo/{componenteEquipo}','EquiposController@eliminar_componente_equipo')->name('eliminar_componente_equipo');
+            Route::post('datatables_componentes_equipo','EquiposController@datatables_componentes_equipo')->name('datatables_componentes_equipo');
+            Route::post('asignar_equipo','EquiposController@asignar_equipo')->name('asignar_equipo');
+            Route::post('datatables_asignar_equipo','EquiposController@datatables_asignar_equipo')->name('datatables_asignar_equipo');
+            Route::post('datatables','EquiposController@datatables')->name('datatables');
+        });
         Route::resource('equipos', 'EquiposController')->parameters([
             'equipos'  => 'equipo'
         ]);
@@ -179,48 +183,13 @@ Route::group([
             'personal'  => 'personal'
         ]);
 
-        # 👉 IMPRESIONES
-        Route::prefix('impresiones')->name('impresiones.')->group(function () {
-            Route::get('visualizar-impresiones','ImpresionesController@visualizar_impresiones')->name('visualizar-impresiones');
-            Route::post('calcular-impresiones','ImpresionesController@calcular_impresiones')->name('calcular-impresiones');
-            Route::post('generar-reportes','ImpresionesController@generar_reportes')->name('generar-reportes');
-            Route::post('datatables','ImpresionesController@datatables')->name('datatables');
-            Route::delete('{impresionDetalle}/eliminar-registro-impresiones','ImpresionesController@eliminar_registro_impresiones')->name('eliminar-registro-impresiones');
-            Route::put('{impresionDetalle}/actualizar-registro-impresiones','ImpresionesController@actualizar_registro_impresiones')->name('actualizar-registro-impresiones');
-            Route::post('{impresion}/crear-registro-impresiones','ImpresionesController@crear_registro_impresiones')->name('crear-registro-impresiones');
-            Route::post('{impresion}/importar','ImpresionesController@importar')->name('importar');
-            Route::post('{impresion}/agregar-registro-impresiones','ImpresionesController@agregar_registro_impresiones')->name('agregar-registro-impresiones');
-            Route::delete('{impresion}/eliminar-registros-impresiones','ImpresionesController@eliminar_registros_impresiones')->name('eliminar-registros-impresiones');
-        });
-        Route::resource('impresiones', 'ImpresionesController')->parameters([
-            'impresiones'  => 'impresion'
-        ]);
-
         # IMPRESORAS
         Route::post('impresoras/datatables','ImpresorasController@datatables')->name('impresoras.datatables');
         Route::resource('impresoras', 'ImpresorasController')->parameters([
             'impresoras'  => 'impresora'
         ]);
 
-
-        # REPORTE IMPRESIONES
-        Route::get('reporte-impresiones', [
-            'as'            => 'reporte-impresiones.index',
-            'uses'          => 'ReporteImpresionesController@index'
-        ]);
-
-        Route::post('reporte-impresiones', [
-            'as'            => 'reporte-impresiones.calcular',
-            'uses'          => 'ReporteImpresionesController@calcular'
-        ]);
-
-        Route::post('reporte-impresiones/enviar-reporte-anual', [
-            'as'            => 'reporte-impresiones.enviar-reporte-anual',
-            'uses'          => 'ReporteImpresionesController@enviar_reporte_anual'
-        ]);
-
-
-        # 👉 CREDENCIALE
+        # 👉 CREDENCIALES
         Route::prefix('credenciales')->name('credenciales.')->group(function () {
             Route::post('datatables', [
                 'as'            => 'datatables',
@@ -259,7 +228,6 @@ Route::group([
             'impresiones'  => 'impresion'
         ]);
 
-
         # 👉 REPORTE IMPRESIONES
         Route::get('reporte-impresiones', [
             'as'            => 'reporte-impresiones.index',
@@ -293,21 +261,48 @@ Route::group([
                 'as'            => 'archivo',
                 'uses'          => 'SolicitudesController@archivo'
             ]);
+
+            Route::post('{solicitud}/cancelar', [
+                'as'            => 'cancelar',
+                'uses'          => 'SolicitudesController@cancelar_solicitud'
+            ]);
+
+            Route::post('{solicitud}/abrir-ticket', [
+                'as'            => 'abrir-ticket',
+                'uses'          => 'SolicitudesController@abrir_ticket'
+            ]);
         });
         Route::resource('gestion-solicitudes', 'SolicitudesController')->parameters([
             'gestion-solicitudes' => 'model'
         ]);
 
-
         # TICKETS
+        Route::prefix('tickets')->name('tickets.')->group(function () {
+            Route::post('datatables', [
+                'as'            => 'datatables',
+                'uses'          => 'TicketController@datatables'
+            ]);
+
+            Route::post('comentarios/{model}',[
+                'as'            => 'storeComentario',
+                'uses'          => 'TicketController@storeComment'
+            ]);
+
+            Route::post('{ticket}/finalizar-ticket', [
+                'as'            => 'finalizar-ticket',
+                'uses'          => 'TicketController@finalizar_ticket'
+            ]);
+
+            Route::post('{ticket}/cancelar-ticket', [
+                'as'            => 'cancelar-ticket',
+                'uses'          => 'TicketController@cancelar_ticket'
+            ]);
+        });
+
         Route::resource('tickets', 'TicketController')->parameters([
             'tickets' => 'model'
         ]);
 
-        Route::post('tickets/comentarios/{model}',[
-            'as'            => 'tickets.storeComentario',
-            'uses'          => 'TicketController@storeComment'
-        ]);
     }
 );
 

@@ -7,9 +7,9 @@
             aria-expanded="false">
             <i class="fa fa-clone"></i>
         </button>
-        <div class="dropdown-menu" style="">
-            <a class="dropdown-item" data-value="{{ $usuario }}"  href="#">Inicio de sesión</a>
-            <a class="dropdown-item" data-value="{{ $contrasenia }}" href="#">Contraseña</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item clipboard" data-clipboard-text="{{ $usuario }}"  href="#">Inicio de sesión</a>
+            <a class="dropdown-item clipboard" data-clipboard-text="{{ $contrasenia }}" href="#">Contraseña</a>
         </div>
     </div>
 

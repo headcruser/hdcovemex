@@ -11,19 +11,19 @@ return [
     'tickets' => [
         'estado' => [
             'names' => [
-                'Abierto'       => 'Abierto',
+                'En Proceso'    => 'En proceso',
                 'Finalizado'    => 'Finalizado',
                 'Cancelado'     => 'Cancelado',
             ],
             'values' => [
+                'En Proceso',
+                'Finalizado',
                 'Cancelado',
-                'Abierto',
-                'Finalizado'
             ],
             'alias' => [
-                'ABT'  => 'Abierto',
-                'FIN'  => 'Finalizado',
-                'CAN'  => 'Cancelado',
+                'ABT'  => 'En Proceso', # ya lo vi y lo estoy atendiendo
+                'FIN'  => 'Finalizado', # ya lo termine
+                'CAN'  => 'Cancelado',  # lo mnade a la chingada
             ]
         ],
         'prioridad' => [
@@ -48,15 +48,20 @@ return [
         ],
         'proceso' => [
             'values' => [
-                'En proceso',
+                'En Proceso',
                 'Finalizado',
-                'En espera',
+                'Cancelada',
             ],
             'alias' => [
-                'EPS'   => 'En proceso',
-                'FIN'  => 'Finalizado',
-                'CAN'  => 'Cancelado',
-            ]
+                'EPS'   => 'En Proceso',
+                'FIN'   => 'Finalizado',
+                'CAN'   => 'Cancelada',
+            ],
+            'color' => [
+                'En Proceso'    =>  '#2888dd',
+                'Finalizado'    =>  '#28a745',
+                'Cancelada'     =>  '#dc3545',
+            ],
         ],
         'tipo' => [
             'values' => [

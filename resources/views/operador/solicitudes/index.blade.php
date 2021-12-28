@@ -163,8 +163,8 @@
             const url = $(this).attr('href');
 
             Swal.fire({
-                title: '¿Desesas eliminar este registro?',
-                text: "Una vez eliminado, no podrá recuperarse",
+                title: '¿Desesas eliminar esta solicitud?',
+                text: "Se eliminara permanentemente este registro",
                 type: 'warning',
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
@@ -183,8 +183,90 @@
                             dt.ajax.reload( function(){
                                 Toast.fire({
                                     type: 'success',
-                                    title: response.message || 'Registro eliminado correctamente',
+                                    title: response.message || 'Registro cancelado correctamete',
                                 });
+                            }, false )
+                        },
+                        error:function(error){
+                            Toast.fire({
+                                type: 'error',
+                                title: 'Ups, hubo un error en el servidor'
+                            });
+                        }
+                    });
+                }
+            })
+        });
+
+        dom.table.on('click',"a[data-action='cancelar']",function(e){
+            e.preventDefault();
+            const url = $(this).attr('href');
+
+            Swal.fire({
+                title: '¿Desesas cancelar esta solicitud?',
+                text: "La solicitud será cancelada",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                        },
+                        success: function (response){
+                            dt.ajax.reload( function(){
+                                Toast.fire({
+                                    type: 'success',
+                                    title: response.message || 'Registro cancelado correctamete',
+                                });
+                            }, false )
+                        },
+                        error:function(error){
+                            Toast.fire({
+                                type: 'error',
+                                title: 'Ups, hubo un error en el servidor'
+                            });
+                        }
+                    });
+                }
+            })
+        });
+
+        dom.table.on('click',"a[data-action='abrir-ticket']",function(e){
+            e.preventDefault();
+            const url = $(this).attr('href');
+
+            Swal.fire({
+                title: '¿Deseas atender la solicitud?',
+                text: "Se va a crear un ticket de seguimiento para atender la solicitud",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Atender',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                        },
+                        success: function (response){
+                            dt.ajax.reload( function(){
+                                if(response.data.url){
+                                    window.location.href = response.data.url;
+                                }
+
+                                // Toast.fire({
+                                //     type: 'success',
+                                //     title: response.message || 'Ticket abierto correctamente',
+                                // });
                             }, false )
                         },
                         error:function(error){

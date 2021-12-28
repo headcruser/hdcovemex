@@ -112,4 +112,23 @@ class Media extends Model
 
         return $nameFile;
     }
+
+    public function getBase64Decode():array
+    {
+        if(empty($this->file)){
+            return [
+                'content'   => '',
+                'name'      => ''
+            ];
+        }
+
+        $data = explode(',', $this->file);
+        $content = base64_decode($data[1]);
+
+        return [
+            'name'      => $this->name,
+            'content'   => $content
+        ];
+
+    }
 }

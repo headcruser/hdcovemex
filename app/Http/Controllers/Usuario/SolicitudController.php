@@ -32,21 +32,6 @@ class SolicitudController extends Controller
 
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
-        // $solicitudes = Solicitude::auth()
-        //     ->with(['status', 'empleado'])
-        //     ->search($request->input('search'))
-        //     ->from($request->input('from'))
-        //     ->to($request->input('to'))
-        //     ->byStatus($request->input('status'))
-        //     ->orderByDesc('created_at')
-        //     ->paginate();
-
-        // $solicitudes->appends([
-        //     'search'    => $request->input('search'),
-        //     'from'      => $request->input('from'),
-        //     'to'        => $request->input('to')
-        // ]);
-
         return view('usuario.solicitudes.index', [
             'statuses'      => Status::pluck('display_name', 'id')->prepend('Todos',''),
         ]);
@@ -76,7 +61,6 @@ class SolicitudController extends Controller
             ->addColumn('buttons', 'usuario.solicitudes.datatables._buttons')
             ->rawColumns(['buttons','label_status'])
             ->make(true);
-
     }
 
     /**

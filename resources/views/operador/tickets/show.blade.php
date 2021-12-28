@@ -148,7 +148,6 @@
                                 </span>
                             </td>
                         </tr>
-
                         <tr>
                             <th>
                                 COMENTARIOS
@@ -173,35 +172,31 @@
                                     @endforelse
                                 </div>
 
-                                <form id="form-comentario" class="mt-3" action="{{ route('operador.tickets.storeComentario', $model->id) }}" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="ta-comentario_texto">Deja un comentario</label>
-                                        <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
+                                @if($model->estado == config('helpdesk.tickets.estado.alias.ABT'))
+                                    <form id="form-comentario" class="mt-3" action="{{ route('operador.tickets.storeComentario', $model->id) }}" method="POST">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="ta-comentario_texto">Deja un comentario</label>
+                                            <textarea class="form-control @error('comentario_texto') is-invalid @enderror" id="ta-comentario_texto" name="comentario_texto" rows="3" required>{{ old('comentario_texto','') }}</textarea>
 
-                                        <div id="login-help" class="error invalid-feedback">
-                                            @error('comentario_texto') {{ $message }} @enderror
+                                            <div id="login-help" class="error invalid-feedback">
+                                                @error('comentario_texto') {{ $message }} @enderror
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="float-right">
-                                        <button type="submit" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Enviar</button>
-                                    </div>
-                                </form>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                        </div>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
-
-
             </div>
 
             <div class="card-footer">
-                <a class="btn btn-default" href="{{ route('operador.tickets.index') }}">
-                    <i class="fas fa-arrow-left"></i> Regresar
-                </a>
 
-                @if($model->estado === 'Abierto' || auth()->user()->hasRole('admin'))
+                @if($model->estado === config('helpdesk.tickets.estado.alias.ABT'))
                     <a class="btn btn-primary float-right" href="{{ route('operador.tickets.edit', $model) }}">
                         <i class="fas fa-pencil-alt"></i> Editar
                     </a>

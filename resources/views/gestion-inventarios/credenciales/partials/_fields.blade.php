@@ -15,7 +15,7 @@
     <div class="input-group mb-3">
         {!! Form::text('usuario',null, ['class' => 'form-control','placeholder' => 'Escribe aqui el inicio de sesion','title' => 'Inicio de sesión','autocomplete' => 'off']) !!}
         <span class="input-group-append">
-            <button id="btn-usuario-clipboard" type="button" class="btn btn-default btn-flat">
+            <button type="button" data-clipboard-target="#usuario" class="btn btn-default btn-flat clipboard">
               <i class="fa fa-clipboard"></i>
             </button>
         </span>
@@ -34,7 +34,7 @@
     <div class="input-group mb-3">
         {!! Form::input('password', 'contrasenia', old('credencial',$credencial->contrasenia) , ['id' => 'contrasenia','class' => 'form-control','autocomplete' => 'off','title' => 'Contraseña','placeholder' =>'Escribe aqui la contraseña','autocomplete' => 'new-password']); !!}
         <span class="input-group-append">
-            <button id="btn-contrasenia-clipboard" type="button" class="btn btn-default btn-flat">
+            <button type="button" data-clipboard-target="#contrasenia" class="btn btn-default btn-flat clipboard">
               <i class="fa fa-clipboard"></i>
             </button>
         </span>
@@ -69,6 +69,7 @@
     </div>
 </div>
 
+<script src="{{ asset('vendor/clipboard/dist/clipboard.min.js') }}"></script>
 <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', (event) => {
         const dom = {
@@ -93,46 +94,23 @@
             this.innerHTML = isInputTypePassword ? `<i class="fa fa-eye-slash"></i>`:`<i class="fa fa-eye"></i>`;
         });
 
-        function clipboart({input = null, clipboard = null} = {}){
-            clipboard.addEventListener('click',function(e){
-                input.focus();
-                input.select();
-                input.setSelectionRange(0, 99999);
+        var clipboard = new ClipboardJS('.clipboard');
 
-                try {
-                    navigator.clipboard.writeText(input.value);
-                    window.getSelection().removeAllRanges();
+        clipboard.on('success', function(e) {
+            Toast.fire({
+                type: 'success',
+                title: 'Copiado correctamente'
+            });
 
-                    Toast.fire({
-                        type: 'success',
-                        title: 'Copiado correctamente'
-                    });
-                } catch(err) {
-                    console.log(err)
-                }
-            })
-        }
+            e.clearSelection();
+        });
 
-        clipboart(dom.clipboard.usuario);
-        clipboart(dom.clipboard.password);
-
-        // dom.btn_clipboard.addEventListener('click',function(e){
-        //     dom.input_password.focus();
-        //     dom.input_password.select();
-
-        //     try {
-        //         let successful = document.execCommand('copy');
-        //         let msg = successful ? 'successful' : 'unsuccessful';
-        //         window.getSelection().removeAllRanges();
-
-        //         Toast.fire({
-        //             type: 'success',
-        //             title: 'Copiado correctamente'
-        //         });
-        //     } catch(err) {
-        //         console.log(err)
-        //     }
-        // })
+        clipboard.on('error', function(e) {
+            Toast.fire({
+                type: 'danger',
+                title: 'Ocurrio un error al copiar el elemento'
+            });
+        });
     });
 </script>
 

@@ -29,41 +29,40 @@ class SolicitudesController extends Controller
         abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         return view('operador.solicitudes.index', [
-            'statuses'           => Status::pluck('display_name', 'id')->prepend('Todos',''),
-            'departamentos'      => Departamento::pluck('nombre', 'id')->prepend('Todos',''),
+            'statuses'           => Status::pluck('display_name', 'id')->prepend('Todos', ''),
+            'departamentos'      => Departamento::pluck('nombre', 'id')->prepend('Todos', ''),
         ]);
     }
 
     public function datatables(Request $request)
     {
         $query = Solicitude::query()->select('solicitudes.*')
-            ->when($request->input('status'),function($q,$status){
-                $q->where('estatus_id',$status);
+            ->when($request->input('status'), function ($q, $status) {
+                $q->where('estatus_id', $status);
             })
-            ->when($request->input('departamento'),function($q,$departamento){
-                $q->whereHas('empleado',function($q) use($departamento){
-                    $q->where('departamento_id',$departamento);
+            ->when($request->input('departamento'), function ($q, $departamento) {
+                $q->whereHas('empleado', function ($q) use ($departamento) {
+                    $q->where('departamento_id', $departamento);
                 });
             })
-            ->when($request->filled(['from','to']),function($q) use($request){
+            ->when($request->filled(['from', 'to']), function ($q) use ($request) {
                 $formatFrom = Carbon::parse($request->input('from'));
                 $formatTo  = Carbon::parse($request->input('to'));
 
-                $q->whereBetween('fecha',[$formatFrom,$formatTo]);
+                $q->whereBetween('fecha', [$formatFrom, $formatTo]);
             })
-            ->with('empleado.departamento','status');
+            ->with('empleado.departamento', 'status');
 
         return DataTables::eloquent($query)
-            ->editColumn('fecha',function($model){
+            ->editColumn('fecha', function ($model) {
                 return $model->fecha->format('d/m/Y H:i a');
             })
-            ->addColumn('label_status',function($model){
+            ->addColumn('label_status', function ($model) {
                 return "<span class='badge badge-primary text-sm'style='background-color:{$model->status->color}'>{$model->status->display_name}</span>";
             })
             ->addColumn('buttons', 'operador.solicitudes.datatables._buttons')
-            ->rawColumns(['buttons','label_status'])
+            ->rawColumns(['buttons', 'label_status'])
             ->make(true);
-
     }
 
     public function edit(Solicitude $model)
@@ -82,14 +81,9 @@ class SolicitudesController extends Controller
         ]);
     }
 
-
     public function update(Request $request, Solicitude $model)
     {
         $userAuth = Auth::user();
-
-        $verifyAccess =  (Entrust::hasRole(['admin']) || $userAuth->isOperador()) && $userAuth->can('solicitude_edit');
-
-        abort_unless($verifyAccess, HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
 
         DB::beginTransaction();
 
@@ -187,5 +181,119 @@ class SolicitudesController extends Controller
         $url = $model->media->buildMediaFilePath();
 
         return response()->download($url)->deleteFileAfterSend(true);
+    }
+
+    public function abrir_ticket(Solicitude $solicitud, Request $request)
+    {
+        $userAuth = Auth::user();
+
+        DB::beginTransaction();
+        try {
+            $ticket = $solicitud->ticket()->create([
+                'fecha'         => now(),
+                'titulo'        => "Atentiendo Solicitud {$solicitud->id}",
+                'incidente'     => $solicitud->incidente,
+                'usuario_id'    => $solicitud->usuario_id,
+                'estado'        => Config::get('helpdesk.tickets.estado.alias.ABT'),
+                'asignado_a'    => $userAuth->id,
+                'privado'       => 'N',
+                'operador_id'   => $userAuth->id,
+                'contacto'      => 'email',
+                'prioridad'     => 3,
+                'proceso'       => 'En Proceso',
+                'tipo'          => 'Personal',
+                'sub_tipo'      => '',
+            ]);
+
+            $solicitud->ticket_id = $ticket->id;
+            $solicitud->estatus_id = optional(Status::proceso()->first())->id;
+            $solicitud->save();
+
+            # CREATE ASIGN MODEL
+            $ticket->sigoTicket()->create([
+                'fecha'             => now(),
+                'operador_id'       => $userAuth->id,
+                'campo_cambiado'    => 'asignado_a',
+                'valor_anterior'    => null,
+                'valor_actual'      => $userAuth->id,
+                'comentario'        => '',
+                'privado'           => 'N',
+            ]);
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Solicitud atendida correctamente',
+                    'data' =>  [
+                        'url' => route('operador.tickets.edit', $ticket),
+                    ]
+                ]);
+            }
+
+            return redirect()
+                ->route('operador.tickets.edit', $ticket)
+                ->with(['message' => 'Solicitud atendida correctamente']);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'Error al intentar abrir el ticket',
+                    'cause'     =>  $e->getMessage(),
+                ]);
+            }
+
+            return redirect()
+                ->back()
+                ->with([
+                    'message' => 'Error al intentar abrir el ticket',
+                    'cause'     =>  $e->getMessage(),
+                ]);
+        }
+    }
+
+    public function cancelar_solicitud(Solicitude $solicitud, Request $request)
+    {
+        DB::beginTransaction();
+
+
+        try {
+            $solicitud->estatus_id = optional(Status::canceladas()->first())->id;
+            $solicitud->save();
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Solicitud cancelada correctamente'
+                ]);
+            }
+
+            return redirect()
+                ->back()
+                ->with(['message' => 'Solicitud cancelada correctamente']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'Error al intentar cancelar la solicitud',
+                    'cause'     =>  $e->getMessage(),
+                ]);
+            }
+
+            return redirect()
+            ->back()
+            ->with([
+                'success' => false,
+                'message' => 'Solicitud cancelada correctamente',
+                'cause'   => $e->getMessage(),
+            ]);
+        }
     }
 }

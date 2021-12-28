@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Http\Controllers\Operador;
 
+use Carbon\Carbon;
 use Entrust;
 
 use HelpDesk\Entities\Media;
@@ -13,22 +14,16 @@ use HelpDesk\Entities\Config\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use HelpDesk\Entities\Config\Attribute;
+use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Events\CommentOperatorEvent;
 use HelpDesk\Http\Controllers\Controller;
-use HelpDesk\Http\Requests\Operador\Tickets\TicketCreateRequest;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
+use HelpDesk\Http\Requests\Operador\Tickets\TicketCreateRequest;
 
 class TicketController extends Controller
 {
-    /**
-     * List Resource
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        abort_unless(Entrust::can('ticket_access'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $userAuth = auth()->user();
 
         $defaultOperator = (optional($userAuth)->isOperador()) ? $userAuth->id : null;
@@ -36,44 +31,51 @@ class TicketController extends Controller
 
         $statusDefault = 'Abierto';
 
-        $tickets = Ticket::assingTo($userOperator)
-            ->with(['empleado', 'empleado.departamento', 'empleado.roles'])
-            ->search($request->input('search'))
-            ->from($request->input('from'))
-            ->to($request->input('to'))
-            ->byStatus($request->input('status', $statusDefault))
-            ->byProcess($request->input('proceso',''))
-            ->orderByDesc('created_at')
-            ->paginate();
-
-        $tickets->appends([
-            'status'    => $request->input('status', $statusDefault),
-            'proceso'   => $request->input('proceso',''),
-            'search'    => $request->input('search'),
-            'from'      => $request->input('from'),
-            'to'        => $request->input('to'),
-        ]);
-
         return view('operador.tickets.index', [
-            'collection'    => $tickets,
-            'statuses'      => Config::get('helpdesk.tickets.estado.names', []),
-            'procesos'      => Attribute::process()->pluck('value'),
+            'procesos'      => config('helpdesk.tickets.proceso.values',[]),
             'operators'     => User::with(['operador'])->has('operador')->pluck('nombre', 'id'),
             'userOperator'  => $userOperator,
             'statusDefault' => $statusDefault
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
+    public function datatables(Request $request)
+    {
+        $query = Ticket::query()
+            ->when($request->input('operador'),function($q,$operador){
+                $q->where('operador_id',$operador);
+            })
+            ->when($request->input('status'),function($q,$status){
+                $q->byStatus($status);
+            })
+            ->when($request->input('proceso'),function($q,$proceso){
+                $q->byProcess($proceso);
+            })
+            ->when($request->filled(['from','to']),function($q) use($request){
+                $formatFrom = Carbon::parse($request->input('from'));
+                $formatTo  = Carbon::parse($request->input('to'));
+
+                $q->whereBetween('created_at',[$formatFrom,$formatTo]);
+            })
+            ->with(['empleado', 'empleado.departamento', 'empleado.roles']);
+
+        return DataTables::eloquent($query)
+            ->addColumn('nombre_prioridad',function($model){
+                return $model->nombrePrioridad;
+            })
+            ->editColumn('fecha',function($model){
+                return $model->fecha->format('d/m/Y');
+            })
+            ->editColumn('proceso',function($model){
+                return " <span class='badge badge-primary text-sm' style='background-color:{$model->color_proceso}' >{$model->proceso}</span>";
+            })
+            ->addColumn('buttons', 'operador.tickets.datatables._buttons')
+            ->rawColumns(['buttons','proceso'])
+            ->make(true);
+    }
+
     public function show(Ticket $model)
     {
-        abort_unless(Entrust::can('ticket_show'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
-
         $model->load(['sigoTicket' => function ($query) {
             $query->where('comentario', '!=', '');
         }]);
@@ -81,11 +83,6 @@ class TicketController extends Controller
         return view('operador.tickets.show', compact('model'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         abort_unless(Entrust::can('ticket_create'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
@@ -101,12 +98,6 @@ class TicketController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \HelpDesk\Http\Requests\Operador\Tickets\TicketCreateRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(TicketCreateRequest $request)
     {
         $user = Auth::user();
@@ -117,6 +108,7 @@ class TicketController extends Controller
             'operador_id'   => $user->id,
             'contacto'      => 'web',
             'proceso'       => Config::get('helpdesk.tickets.proceso.alias.EPS'),
+            'estado'        => Config::get('helpdesk.tickets.estado.alias.ABT'),
         ];
 
         $modelData = array_merge([
@@ -124,7 +116,6 @@ class TicketController extends Controller
             'incidente'     => $request->input('incidente'),
             'archivo'       => 'nullable',
             'prioridad'     => $request->input('prioridad', '3'),
-            'estado'        => $request->input('estado'),
             'asignado_a'    => $request->input('asignado_a'),
             'contacto'      => $request->input('contacto'),
             'tipo'          => $request->input('tipo'), #ATENCION
@@ -176,12 +167,6 @@ class TicketController extends Controller
             ->withStatus("Ticket Creado correctamente");
     }
 
-     /**
-     * Display view edit for the Ticket
-     *
-     * @param  Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Ticket $model)
     {
         abort_unless(Entrust::can('ticket_edit'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
@@ -196,13 +181,6 @@ class TicketController extends Controller
         ]);
     }
 
-    /**
-     * Update resorce ticket in databaqse
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param Ticket $model
-     * @return void
-     */
     public function update(Request $request, Ticket $model)
     {
         if (!$request->has('privado')) {
@@ -334,12 +312,6 @@ class TicketController extends Controller
             ->with(['message' => 'Ticket Actualizado correctamente']);
     }
 
-    /**
-     * Delete logical resource (use mecanism soft delete)
-     *
-     * @param Ticket $model
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Ticket $model)
     {
         abort_unless(Entrust::can('ticket_delete'), HTTPMessages::HTTP_FORBIDDEN, __('Forbidden'));
@@ -349,13 +321,6 @@ class TicketController extends Controller
         return back();
     }
 
-    /**
-     * Create a comment for ticket
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param Ticket $model
-     * @return \Illuminate\Http\Response
-     */
     public function storeComment(Request $request, Ticket $model)
     {
         $request->validate([
@@ -391,5 +356,149 @@ class TicketController extends Controller
         return redirect()
             ->back()
             ->with(['message' => 'Comentario agregado correctamente']);
+    }
+
+    public function finalizar_ticket(Ticket $ticket, Request $request)
+    {
+        $originalTicketData = $ticket->getOriginal();
+        $comment = null;
+        $now = now();
+        $operador_id = auth()->id();
+
+        DB::beginTransaction();
+
+        try {
+            $ticket->update([
+                'proceso' => config('helpdesk.tickets.proceso.alias.FIN'),
+                'estado'  => config('helpdesk.tickets.estado.alias.FIN'),
+            ]);
+
+            $ticket->sigoTicket()->create([
+                'fecha'             => $now,
+                'operador_id'       => $operador_id,
+                'campo_cambiado'    => 'estado',
+                'valor_anterior'    => $originalTicketData['estado'],
+                'valor_actual'      => config('helpdesk.tickets.estado.alias.FIN'),
+                'comentario'        => '',
+                'privado'           => true,
+            ]);
+
+            $ticket->sigoTicket()->create([
+                'fecha'             => $now,
+                'operador_id'       => $operador_id,
+                'campo_cambiado'    => 'proceso',
+                'valor_anterior'    => $originalTicketData['proceso'],
+                'valor_actual'      => config('helpdesk.tickets.proceso.alias.FIN'),
+                'comentario'        => '',
+                'privado'           => true,
+            ]);
+
+            if ($request->filled('comentario')) {
+                $comment = $ticket->sigoTicket()->create([
+                    'fecha'             => $now,
+                    'operador_id'       => $operador_id,
+                    'campo_cambiado'    => 'comentario',
+                    'comentario'        => $request->input('comentario'),
+                    'visible'           => false,
+                ]);
+            }
+
+            $ticket->solicitud()->update([
+                'estatus_id' => optional(Status::finalizadas()->first())->id
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'success'   => false,
+                'mesagge'   => 'Hubo un error al finalizar el ticket',
+                'cause'     => $e->getMessage(),
+            ],422);
+
+        }
+
+        // if ($request->filled('comentario')) {
+        //     event(new CommentOperatorEvent($comment));
+        // }
+
+        return response()->json([
+            'success' => true,
+            'mesagge' => 'Ticket Finalizado corrrectamente',
+
+        ]);
+    }
+
+    public function cancelar_ticket(Ticket $ticket, Request $request)
+    {
+        $originalTicketData = $ticket->getOriginal();
+        $comment = null;
+        $now = now();
+        $operador_id = auth()->id();
+
+        DB::beginTransaction();
+
+        try {
+            $ticket->update([
+                'proceso' => config('helpdesk.tickets.proceso.alias.CAN'),
+                'estado'  => config('helpdesk.tickets.estado.alias.CAN'),
+            ]);
+
+            $ticket->sigoTicket()->create([
+                'fecha'             => $now,
+                'operador_id'       => $operador_id,
+                'campo_cambiado'    => 'estado',
+                'valor_anterior'    => $originalTicketData['estado'],
+                'valor_actual'      => config('helpdesk.tickets.estado.alias.CAN'),
+                'comentario'        => '',
+                'privado'           => true,
+            ]);
+
+            $ticket->sigoTicket()->create([
+                'fecha'             => $now,
+                'operador_id'       => $operador_id,
+                'campo_cambiado'    => 'proceso',
+                'valor_anterior'    => $originalTicketData['proceso'],
+                'valor_actual'      => config('helpdesk.tickets.proceso.alias.CAN'),
+                'comentario'        => '',
+                'privado'           => true,
+            ]);
+
+            if ($request->filled('comentario')) {
+                $comment = $ticket->sigoTicket()->create([
+                    'fecha'             => $now,
+                    'operador_id'       => $operador_id,
+                    'campo_cambiado'    => 'comentario',
+                    'comentario'        => $request->input('comentario'),
+                    'visible'           => false,
+                ]);
+            }
+
+            $ticket->solicitud()->update([
+                'estatus_id' => optional(Status::canceladas()->first())->id
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'success'   => false,
+                'mesagge'   => 'Hubo un error al cancelar el ticket',
+                'cause'     => $e->getMessage(),
+            ],422);
+
+        }
+
+        // if ($request->filled('comentario')) {
+        //     event(new CommentOperatorEvent($comment));
+        // }
+
+        return response()->json([
+            'success' => true,
+            'mesagge' => 'Ticket Cancelado correctamente',
+
+        ]);
     }
 }

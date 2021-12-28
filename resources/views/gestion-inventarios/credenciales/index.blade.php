@@ -61,6 +61,7 @@
 
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('vendor/clipboard/dist/clipboard.min.js') }}"></script>
 
     <script type="text/javascript">
         $(function() {
@@ -177,19 +178,27 @@
                 })
             });
 
-            dom.table.on('click',"a.dropdown-item",function(e){
-                e.preventDefault();
+            var clipboard = new ClipboardJS('.clipboard');
 
-                const element = e.target;
-
-                navigator.clipboard.writeText(element.dataset.value);
-
+            clipboard.on('success', function(e) {
                 Toast.fire({
                     type: 'success',
                     title: 'Copiado correctamente'
                 });
-            })
 
+                e.clearSelection();
+            });
+
+            clipboard.on('error', function(e) {
+                Toast.fire({
+                    type: 'danger',
+                    title: 'Ocurrio un error al copiar el elemento'
+                });
+            });
+
+            dom.table.on('click',"a.dropdown-item",function(e){
+                e.preventDefault();
+            });
         })
     </script>
 @endsection

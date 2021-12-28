@@ -58,6 +58,15 @@ class Ticket extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'color_prioridad',
+    ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
@@ -159,5 +168,12 @@ class Ticket extends Model
         }
 
         return $prioridades[$this->prioridad];
+    }
+
+    public function getColorProcesoAttribute($value)
+    {
+        $colores = config('helpdesk.tickets.proceso.color',[]);
+
+        return $colores[$this->proceso] ?? '#ffffff';
     }
 }
