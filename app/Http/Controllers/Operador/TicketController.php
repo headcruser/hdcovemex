@@ -140,7 +140,7 @@ class TicketController extends Controller
             # CREAR SEGUIMIENTO
             if ($request->filled('comentario')) {
                 $ticket->sigoTicket()->create([
-                    'visible'           => $request->input('privado', 'N'),
+                    'privado'           => $request->input('privado', 'N'),
                     'fecha'             => now(),
                     'operador_id'       => $user->id,
                     'comentario'        => $request->input('comentario'),
@@ -288,7 +288,7 @@ class TicketController extends Controller
                     'operador_id'       => auth()->id(),
                     'campo_cambiado'    => 'comentario',
                     'comentario'        => $request->input('comentario'),
-                    'visible'           => $request->input('privado'),
+                    'privado'           => $request->input('privado'),
                 ]);
             }
 
@@ -337,7 +337,7 @@ class TicketController extends Controller
                 'operador_id'   => $authUser,
                 'fecha'         => now(),
                 'comentario'    => $request->input('comentario_texto'),
-                'visible'       => 'S',
+                'privado'       => 'S',
             ]);
 
             DB::commit();
@@ -399,7 +399,7 @@ class TicketController extends Controller
                     'operador_id'       => $operador_id,
                     'campo_cambiado'    => 'comentario',
                     'comentario'        => $request->input('comentario'),
-                    'visible'           => false,
+                    'privado'           => 'N',
                 ]);
             }
 
@@ -452,7 +452,7 @@ class TicketController extends Controller
                 'valor_anterior'    => $originalTicketData['estado'],
                 'valor_actual'      => config('helpdesk.tickets.estado.alias.CAN'),
                 'comentario'        => '',
-                'privado'           => true,
+                'privado'           => 'N',
             ]);
 
             $ticket->sigoTicket()->create([
@@ -462,7 +462,7 @@ class TicketController extends Controller
                 'valor_anterior'    => $originalTicketData['proceso'],
                 'valor_actual'      => config('helpdesk.tickets.proceso.alias.CAN'),
                 'comentario'        => '',
-                'privado'           => true,
+                'privado'           => 'N',
             ]);
 
             if ($request->filled('comentario')) {
@@ -471,7 +471,7 @@ class TicketController extends Controller
                     'operador_id'       => $operador_id,
                     'campo_cambiado'    => 'comentario',
                     'comentario'        => $request->input('comentario'),
-                    'visible'           => false,
+                    'privado'           => 'N',
                 ]);
             }
 
