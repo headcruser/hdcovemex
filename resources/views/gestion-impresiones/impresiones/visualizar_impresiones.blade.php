@@ -25,7 +25,7 @@
                     <div class="input-group input-group-sm">
                       <div class="input-group-append">
                         <button id="btn-report" type="button" class="btn btn-primary" title="Imprimir">Imprimir Reporte</button>
-                        <a class="btn btn-default" href="{{ route('gestion-inventarios.impresiones.visualizar-impresiones') }}">Regresar</a>
+                        <a class="btn btn-default" href="{{ route('gestion-impresiones.impresiones.visualizar-impresiones') }}">Regresar</a>
                       </div>
                     </div>
                 </div>
