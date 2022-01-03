@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-12">
                         @if (!session('tb_printer'))
-                            <form class="form" action="{{ route('gestion-inventarios.impresiones.calcular-impresiones') }}" method="POST">
+                            <form class="form" action="{{ route('gestion-impresiones.impresiones.calcular-impresiones') }}" method="POST">
                                 @csrf
                                 <div class="form-group @error('info') has-error @enderror">
                                     <label>Ingresa la informacion de la impresora</label>
