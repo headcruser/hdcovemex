@@ -83,10 +83,13 @@ class ImpresionesController extends Controller
     public function store(Request $request, PrinterCanon $printer)
     {
         $request->validate([
-            'anio'          => 'required',
             'mes'           => 'required',
-            'creado_por'    => 'required',
             'fecha'         => 'required',
+        ]);
+
+        $request->merge([
+            'creado_por' => auth()->id(),
+            'anio'       => Carbon::parse($request->input('fecha'))->year,
         ]);
 
         $existe_reporte_mensual = Impresion::query()
@@ -138,6 +141,34 @@ class ImpresionesController extends Controller
                     'error' => "Error Servidor: {$e->getMessage()}",
                 ])->withInput();
         }
+    }
+
+    public function edit(Impresion $impresion)
+    {
+        return view('gestion-impresiones.impresiones.edit', [
+            'impresion'         => $impresion,
+            'impresoras'        => Impresora::query()->pluck('descripcion', 'id')->prepend('Selecciona una impresora', ''),
+            'meses'             => collect(Meses::asSelectArray())->prepend('Selecciona un mes', '')
+        ]);
+    }
+
+    public function update(Impresion $impresion,Request $request)
+    {
+        $request->validate([
+            'mes'           => 'required',
+            'fecha'         => 'required',
+            'anio'          => 'required',
+        ]);
+
+        $impresion->update([
+            'mes'   => $request->input('mes'),
+            'fecha' => $request->input('fecha'),
+            'anio'  => $request->input('anio'),
+        ]);
+
+        return redirect()
+            ->route('gestion-impresiones.impresiones.show', $impresion)
+            ->with(['message' => 'Reporte Impresion editado correctamente']);
     }
 
     public function destroy(Request $request, Impresion $impresion)

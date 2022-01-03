@@ -7,7 +7,7 @@
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
             <i class="fas fa-home"></i> Inicio </a>
         </li>
-        <li class="breadcrumb-item">Gestion Inventario </li>
+        <li class="breadcrumb-item">Gestion Impresiones </li>
         <li class="breadcrumb-item">
             <a href="{{ route('gestion-impresiones.impresiones.index') }}">Impresiones</a>
         </li>
@@ -69,11 +69,6 @@
                             </div>
                         </div>
                     </fieldset>
-
-                    <div class="form-group">
-                        {!! Form::hidden('anio', today()->format('Y')) !!}
-                        {!! Form::hidden('creado_por', auth()->id() ) !!}
-                    </div>
 
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>

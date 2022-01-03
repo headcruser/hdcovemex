@@ -2,15 +2,17 @@
 
 namespace HelpDesk\Entities;
 
-use HelpDesk\Entities\Admin\User;
+use Carbon\Carbon;
+use Collective\Html\Eloquent\FormAccessible;
 use HelpDesk\Enums\Meses;
+use HelpDesk\Entities\Admin\User;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Impresion extends Model
 {
-    use HasFactory;
+    use HasFactory,FormAccessible;
 
     /**
      * The table associated with the model.
@@ -57,4 +59,15 @@ class Impresion extends Model
 
         return Str::ucfirst(Meses::getKey((int)$this->mes));
     }
+
+     #NOTE: Form Model Accessors (Laravel Collective) https://laravelcollective.com/docs/5.4/html
+
+     public function formFechaAttribute($value)
+     {
+         if (empty($value)) {
+             return null;
+         }
+
+         return Carbon::parse($value)->format('Y-m-d');
+     }
 }
