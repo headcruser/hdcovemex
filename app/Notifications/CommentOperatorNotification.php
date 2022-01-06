@@ -45,10 +45,10 @@ class CommentOperatorNotification extends Notification
     {
         $mailMessage =  (new MailMessage)
         ->subject( str_replace('%solicitud_id%', $this->comment->ticket->solicitud->id ,Config::get('helpdesk.mail.alert_comment_subject')) )
-        ->greeting('Nuevo Comentario en la solicitud: #'. $this->comment->ticket->solicitud->id)
-        ->line("El usuario {$this->comment->ticket->operador->nombre} agrego un nuevo Comentario")
-        ->line("Detalle: {$this->comment->comentario}")
-        ->salutation(Config::get('helpdesk.global.name'))
+        ->markdown('vendor.mail.html.operadores.comentario',[
+            'usuario'   => $notifiable,
+            'comment'   => $this->comment
+        ])
         ->from(Config::get('helpdesk.global.from_user_request'), Config::get('helpdesk.global.name'));
 
         return $mailMessage;
