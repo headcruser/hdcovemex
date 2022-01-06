@@ -193,7 +193,7 @@ class TicketController extends Controller
             $model->update($request->all());
 
             if ($model->solicitud()->exists()) {
-                switch ($request->input('estado')) {
+                switch ($request->input('proceso')) {
                     case Config::get('helpdesk.tickets.proceso.alias.FIN'):
                         $model->solicitud()->update([
                             'estatus_id' => optional(Status::finalizadas()->first())->id
