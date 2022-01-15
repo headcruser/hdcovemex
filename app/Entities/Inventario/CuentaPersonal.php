@@ -25,6 +25,8 @@ class CuentaPersonal extends Model
         'id_personal',
         'titulo',
         'descripcion',
+        'usuario',
+        'contrasenia'
     ];
 
     public function personal()

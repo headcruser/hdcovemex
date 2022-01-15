@@ -111,8 +111,10 @@ class PersonalController extends Controller
     {
         $data = $request->validate([
             'titulo'        => 'required',
-            'descripcion'   => 'required',
-            'id_personal'   => 'required'
+            'usuario'       => 'nullable',
+            'contrasenia'   => 'nullable',
+            'descripcion'   => 'nullable',
+            'id_personal'   => 'required',
         ]);
 
         CuentaPersonal::create($data);
@@ -126,11 +128,14 @@ class PersonalController extends Controller
     {
         $data = $request->validate([
             'titulo'        => 'required',
-            'descripcion'   => 'required',
+            'usuario'       => 'nullable',
+            'contrasenia'   => 'nullable',
+            'descripcion'   => 'nullable',
             'id_personal'   => 'required'
         ]);
 
-        $cuenta->update($data);
+        $cuenta->fill($data);
+        $cuenta->save();
 
         return response()->json([
             'message' => 'Cuenta actualizada correctamente',

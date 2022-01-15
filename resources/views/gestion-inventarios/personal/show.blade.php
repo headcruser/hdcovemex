@@ -2,24 +2,28 @@
 
 @section('title','Pefil del personal')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/summernote/summernote-bs4.css') }}">
+@endsection
+
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item"> <a href="#">
-       Gestión de inventarios </a>
-    </li>
-    <li class="breadcrumb-item"> <a href="{{ route('gestion-inventarios.personal.index') }}">
-        Personal </a>
-     </li>
-    <li class="breadcrumb-item active">Personal</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item"> <a href="#">
+        Gestión de inventarios </a>
+        </li>
+        <li class="breadcrumb-item"> <a href="{{ route('gestion-inventarios.personal.index') }}">
+            Personal </a>
+        </li>
+        <li class="breadcrumb-item active">Personal</li>
+    </ol>
 @endsection
 
 @section('content')
   <div class="row">
-    <div class="col-4">
+    <div class="col-12 col-sm-4">
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
               <div class="text-center">
@@ -45,20 +49,7 @@
           </div>
     </div>
 
-    <div class="col-8" id="contenedor-info-personal">
-        {{-- <div class="card card-solid">
-            <div class="card-header">
-                <h3 class="card-title">Información del Personal</h3>
-                <div class="card-tools">
-
-                </div>
-            </div>
-            <div class="card-body pb-0" id="lista-info">
-
-            </div>
-        </div> --}}
-
-
+    <div class="col-12 col-sm-8" id="contenedor-info-personal">
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
               <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
@@ -113,43 +104,15 @@
     <!-- /.col -->
   </div>
 
-  <div class="modal fade" id="modal-info" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content ">
-        <div class="modal-header">
-          <h4 class="modal-title">Información</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        {!! Form::open(['id' => 'form-info', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
-        <div class="modal-body">
-            <div class="form-group">
-                {!! Form::label('titulo', 'Titulo:*') !!}
-                {!! Form::text('titulo', null, ['class' => 'form-control','autocomplete' => 'off','required' => true]) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            <div class="form-group">
-                {!! Form::label('descripcion', 'Descripcion:*') !!}
-                {!! Form::textarea('descripcion',null, ['id' => 'textarea-descripcion' ,'class' => 'form-control','rows' => 3,'required' => true]) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            {!! Form::hidden('id_personal', $personal->id) !!}
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
-        </div>
-        {!! Form::close() !!}
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
+  @include('gestion-inventarios.personal.modals._cuenta_usuario')
 @endsection
 
 
 @section('scripts')
+    <script src="{{ asset('vendor/clipboard/dist/clipboard.min.js') }}"></script>
+    <script src="{{ asset('vendor/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('vendor/summernote/lang/summernote-es-ES.min.js') }}"></script>
+
     <script type="text/javascript">
         const m_personal = (function(){
             const dom =  {
@@ -157,7 +120,19 @@
                 listar_info:$("#lista-info"),
                 modal_info: $("#modal-info"),
                 form_info:$("#form-info"),
-                btn_agregar_info:$("#btn-agregar-info")
+                btn_agregar_info:$("#btn-agregar-info"),
+
+                toogle_password: document.querySelector("#btn-toogle-password"),
+                clipboard:{
+                    password: {
+                        input:  document.querySelector("#contrasenia"),
+                        clipboard: document.querySelector("#btn-contrasenia-clipboard"),
+                    },
+                    usuario: {
+                        input:  document.querySelector("#usuario"),
+                        clipboard: document.querySelector("#btn-usuario-clipboard")
+                    },
+                },
             }
 
             const listarCuentas = function(){
@@ -171,11 +146,21 @@
                 });
             }
 
-
-
             dom.btn_agregar_info.click(function(e){
                 dom.form_info.find(`[data-help]`).html('')
                 dom.form_info.trigger('reset');
+
+                dom.form_info.find('[name="descripcion"]').summernote('destroy');
+                dom.form_info.find('[name="descripcion"]').summernote({
+                    height: 250,
+                    lang: 'es-ES',
+                    codemirror: {
+                        theme: 'monokai'
+                    },
+                    code: '',
+                });
+
+                dom.form_info.find('[name="descripcion"]').summernote('code', null);
 
                 dom.modal_info.data('url',$(this).data('url'));
                 dom.modal_info.modal('show');
@@ -234,10 +219,25 @@
 
                 const cuenta = $(this).closest('div[data-object]').data('object');
                 dom.form_info.find('[name="titulo"]').val(cuenta.titulo)
+                dom.form_info.find('[name="usuario"]').val(cuenta.usuario)
+                dom.form_info.find('[name="contrasenia"]').val(cuenta.contrasenia)
                 dom.form_info.find('[name="descripcion"]').val(cuenta.descripcion)
+
+                dom.form_info.find('[name="descripcion"]').summernote('destroy');
+                dom.form_info.find('[name="descripcion"]').summernote({
+                    height: 250,
+                    lang: 'es-ES',
+                    codemirror: {
+                        theme: 'monokai'
+                    }
+                });
 
                 dom.modal_info.data('url',$(this).data('url'));
                 dom.modal_info.modal('show');
+            });
+
+            dom.contenedor_info.on('click',"a.dropdown-item",function(e){
+                e.preventDefault();
             });
 
             dom.form_info.submit(function(e){
@@ -281,6 +281,32 @@
 
                     dom.modal_info.modal('show');
                 })
+            });
+
+            var clipboard = new ClipboardJS('.clipboard');
+
+            clipboard.on('success', function(e) {
+                Toast.fire({
+                    type: 'success',
+                    title: 'Copiado correctamente'
+                });
+
+                e.clearSelection();
+            });
+
+            clipboard.on('error', function(e) {
+                Toast.fire({
+                    type: 'danger',
+                    title: 'Ocurrio un error al copiar el elemento'
+                });
+            });
+
+            dom.toogle_password.addEventListener('click',function(e){
+                const isInputTypePassword = dom.clipboard.password.input.getAttribute('type') === 'password';
+                const type = isInputTypePassword ? 'text' : 'password';
+
+                dom.clipboard.password.input.setAttribute('type', type);
+                this.innerHTML = isInputTypePassword ? `<i class="fa fa-eye-slash"></i>`:`<i class="fa fa-eye"></i>`;
             });
 
         })();
