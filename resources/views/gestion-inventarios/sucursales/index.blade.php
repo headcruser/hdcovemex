@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Sucursales')
+@section('title','Empresas')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -12,9 +12,9 @@
         <i class="fas fa-home"></i> Inicio </a>
     </li>
     <li class="breadcrumb-item">
-        Sucursales
+        Gestion Inventarios
     </li>
-    <li class="breadcrumb-item active">Personal</li>
+    <li class="breadcrumb-item active">Empresas</li>
 </ol>
 @endsection
 
@@ -23,7 +23,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Gestión de sucurlales</h3>
+          <h3 class="card-title">Gestión de empresas</h3>
             <div class="card-tools">
                 <a href="{{ route('gestion-inventarios.sucursales.create') }}" class="btn btn-success btn-sm" title="Crear">
                     Crear <i class="fas fa-plus-circle"></i>

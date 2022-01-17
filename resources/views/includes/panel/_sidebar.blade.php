@@ -150,7 +150,7 @@
                         <li class="nav-item ">
                             <a href="{{ route('gestion-inventarios.sucursales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.sucursales.*']) }}">
                                 <i class="nav-icon far fa-building"></i>
-                                <p>Sucursales</p>
+                                <p>Empresas</p>
                             </a>
                         </li>
                         @endpermission

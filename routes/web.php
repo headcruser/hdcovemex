@@ -165,8 +165,10 @@ Route::group([
         ]);
 
         # SUCURSALES
-        Route::post('sucursales/select2',"SucursalController@select2")->name('sucursal.select2');
-        Route::post('sucursales/datatables',"SucursalController@datatables")->name('sucursales.datatables');
+        Route::prefix('sucursales')->name('sucursales.')->group(function(){
+            Route::post('datatables',"SucursalController@datatables")->name('datatables');
+            Route::post('select2',"SucursalController@select2")->name('select2');
+        });
         Route::resource('sucursales', 'SucursalController')->parameters([
             'sucursales'  => 'sucursal'
         ])->except('show');

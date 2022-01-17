@@ -8,99 +8,79 @@
 @endsection
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">
-        Gestión de inventarios
-    </li>
-    <li class="breadcrumb-item active">Personal</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">
+            Gestión de inventarios
+        </li>
+        <li class="breadcrumb-item active">Personal</li>
+    </ol>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Gestión de personal</h3>
-            <div class="card-tools">
-                <a href="{{ route('gestion-inventarios.personal.create') }}" class="btn btn-success btn-sm" title="Crear">
-                    Crear <i class="fas fa-plus-circle"></i>
-                </a>
+    <div class="row">
+        <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+            <h3 class="card-title">Gestión de personal</h3>
+                <div class="card-tools">
+                    <a href="{{ route('gestion-inventarios.personal.create') }}" class="btn btn-success btn-sm" title="Crear">
+                        Crear <i class="fas fa-plus-circle"></i>
+                    </a>
 
-                <button class="btn btn-primary btn-sm" type="button" id="btn-importar-personal">
-                    <i class="fas fa-upload" aria-hidden="true"></i>
-                    Importar Personal
-                </button>
+                    <button class="btn btn-primary btn-sm" type="button" id="btn-importar-personal">
+                        <i class="fas fa-upload" aria-hidden="true"></i>
+                        Importar Personal
+                    </button>
+                </div>
             </div>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-            <table id="tb-personal" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th># Impresión</th>
-                        <th>Nombre</th>
-                        <th>Sucursal</th>
-                        <th>Departamento</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <!-- /.card-body -->
-      </div>
-      <!-- /.card -->
-    </div>
-    <!-- /.col -->
-  </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="row pb-4">
+                    <div class="col-6">
+                        <div class="form-inline form-search">
+                            <div class="form-group">
+                                {!! Form::label('select-departamento', 'Departamento: ', []) !!}&nbsp;
+                                {!! Form::select('deparamentos', $departamentos , null, ['id' => 'select-departamento' , 'class' => 'custom-select custom-select-sm','data-filter']) !!}
+                            </div>
+                            &nbsp;&nbsp;
+                            <div class="form-group">
+                                <label class="form-label-sm">Empresa:</label>&nbsp;
+                                <div class="btn-group">
+                                    {!! Form::select('status', $sucursales , null, ['id' => 'select-sucursal' , 'class' => 'custom-select custom-select-sm','data-filter']) !!}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
 
-  <div class="onboarding-modal modal fade animated" id="modal-importar-personal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-content animated bounceInRight">
-            <div class="modal-header">
-                <h4 class="modal-title">Importar Personal</b></h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            {!! Form::open(['id' => 'form-importar-personal', 'route' => 'gestion-inventarios.personal.importar', 'method' => 'POST', 'accept-charset'=>'UTF-8','enctype'=>'multipart/form-data']) !!}
-            <div class="modal-body">
-                <p>Adjunta el archivo de importación Masiva con el siguiente formato</p>
-                <p><code>Nota:</code> Las clumnas de sucursal deben existir para poder vincularlas, en caso contrario las dejará vacias</p>
-
-                <table class="table table-bordered table-sm">
-                    <tbody>
-                        <tr class="text-center">
-                            <td>nombre</td>
-                            <td>id_impresion</td>
-                            <td>sucursal</td>
-                            <td>departamento</td>
+                <table id="tb-personal" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th># Impresión</th>
+                            <th>Nombre</th>
+                            <th>Empresa</th>
+                            <th>Departamento</th>
+                            <th>Acciones</th>
                         </tr>
+                    </thead>
+                    <tbody>
                     </tbody>
                 </table>
-
-                <div id="errores-importar-personal"></div>
-
-                <input class="dropify"
-                    type="file"
-                    name="personal"
-                    data-allowed-file-extensions="xlsx xls"
-                    data-max-file-size-preview="2M"
-                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    required>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary dim float-right" type="submit"><i class="fas fa-upload"></i> Importar</button>
-            </div>
-            {!! Form::close()!!}
+            <!-- /.card-body -->
         </div>
+        <!-- /.card -->
+        </div>
+        <!-- /.col -->
     </div>
-</div>
+
+    @include('gestion-inventarios.personal.modals._importar_usuarios')
 @endsection
 
 
@@ -137,6 +117,8 @@
                     url: "{{ route('gestion-inventarios.personal.datatables') }}",
                     type: "POST",
                     data: function (d) {
+                        d.id_departamento = $('#select-departamento').val();
+                        d.id_sucursal = $('#select-sucursal').val();
                     },
                     beforeSend: function(xhr,type) {
                     if (!type.crossDomain) {
@@ -178,6 +160,27 @@
                 },
             });
 
+            var searchWait = 0;
+            var searchWaitInterval;
+
+            $('.dataTables_filter input')
+                .unbind()
+                .bind('input', function(e) {
+                    var item = $(this);
+                    searchWait = 0;
+                    if (!searchWaitInterval) searchWaitInterval = setInterval(function() {
+                        if (searchWait >= 3) {
+                            clearInterval(searchWaitInterval);
+                            searchWaitInterval = '';
+                            searchTerm = $(item).val();
+                            dt.search(searchTerm).draw();
+                            searchWait = 0;
+                        }
+                        searchWait++;
+                    }, 200);
+
+                });
+
             dom.table.on('click',"a[data-action='destroy']",function(e){
                 e.preventDefault();
                 const url = $(this).attr('href');
@@ -215,6 +218,10 @@
                     }
                 })
             })
+
+            $('select[data-filter]').on('change',function(){
+                dt.draw();
+            });
 
             var m_importar_personal = (function(d){
                 const templates = {

@@ -30,7 +30,7 @@
     <div class="col-md-6">
         <div class="form-group @error('id_sucursal') has-error @enderror">
             {!! Form::label('input-id_sucursal', 'Sucursal: *') !!}
-            {!! Form::select('id_sucursal', [], null, ['id' => 'input-id_sucursal','class' => 'form-control','required' => true,'style' => 'width: 100%;']) !!}
+            {!! Form::select('id_sucursal', [], null, ['id' => 'input-id_sucursal','class' => 'form-control select2bs4','required' => true,'style' => 'width: 100%;']) !!}
             <div class="help-block with-errors">
                 @error('id_sucursal')
                     <span>{{ $errors->first('id_sucursal') }}</span>
@@ -42,7 +42,7 @@
     <div class="col-md-6">
         <div class="form-group @error('id_departamento') has-error @enderror">
             {!! Form::label('input-id_departamento', 'Departamento: *') !!}
-            {!! Form::select('id_departamento', [], null, ['id' => 'input-id_departamento','class' => 'form-control','required' => true,'style' => 'width: 100%;']) !!}
+            {!! Form::select('id_departamento', [], null, ['id' => 'input-id_departamento','class' => 'form-control select2bs4','required' => true,'style' => 'width: 100%;']) !!}
 
             <div class="help-block with-errors">
                 @error('id_departamento')

@@ -2,6 +2,11 @@
 
 @section('title','Crear Personal')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+@endsection
+
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
@@ -17,38 +22,35 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información del personal</h3>
-            </div>
-            <div class="card-body">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información del personal</h3>
+                </div>
+                <div class="card-body">
 
-                {!! Form::open([
-                    'route'             => 'gestion-inventarios.personal.store',
-                    'method'            => 'POST',
-                    'accept-charset'    => 'UTF-8',
-                    'enctype'           =>'multipart/form-data']) !!}
+                    {!! Form::open([
+                        'route'             => 'gestion-inventarios.personal.store',
+                        'method'            => 'POST',
+                        'accept-charset'    => 'UTF-8',
+                        'enctype'           =>'multipart/form-data']) !!}
 
-                    @include('gestion-inventarios.personal.partials._fields')
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                        @include('gestion-inventarios.personal.partials._fields')
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                {!! Form::close() !!}
+                    {!! Form::close() !!}
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
 @section('scripts')
-    <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
-
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/i18n/es.js') }}"></script>
 
@@ -114,7 +116,7 @@
                             _token: $('meta[name="csrf-token"]').attr('content')
                         }
                     },
-                    url: '{{ route("gestion-inventarios.sucursal.select2") }}',
+                    url: '{{ route("gestion-inventarios.sucursales.select2") }}',
                     dataType: 'json',
                     cache: false,
                     delay:250,

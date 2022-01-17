@@ -114,7 +114,7 @@
                             _token: $('meta[name="csrf-token"]').attr('content')
                         }
                     },
-                    url: '{{ route("gestion-inventarios.sucursal.select2") }}',
+                    url: '{{ route("gestion-inventarios.sucursales.select2") }}',
                     dataType: 'json',
                     cache: false,
                     delay:250,

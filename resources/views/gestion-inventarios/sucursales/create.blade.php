@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Crear Sucursal')
+@section('title','Crear Empresa')
 
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
@@ -9,7 +9,7 @@
         </li>
         <li class="breadcrumb-item"> Gestion Inventario </li>
         <li class="breadcrumb-item">
-            <a href="{{ route('gestion-inventarios.sucursales.index') }}">Sucursales</a>
+            <a href="{{ route('gestion-inventarios.sucursales.index') }}">Empresas</a>
         </li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
@@ -21,7 +21,7 @@
     <div class="col-md-12 mb-4">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Información de la sucursal</h3>
+                <h3 class="card-title">Información de la empresa</h3>
             </div>
             <div class="card-body">
                 {!! Form::open([

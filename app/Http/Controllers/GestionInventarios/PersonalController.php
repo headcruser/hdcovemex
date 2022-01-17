@@ -2,6 +2,7 @@
 
 namespace HelpDesk\Http\Controllers\GestionInventarios;
 
+use HelpDesk\Entities\Admin\Departamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use HelpDesk\Imports\PersonalImport;
@@ -9,6 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Http\Controllers\Controller;
 use HelpDesk\Entities\Inventario\Personal;
 use HelpDesk\Entities\Inventario\CuentaPersonal;
+use HelpDesk\Entities\Inventario\Sucursal;
 use Maatwebsite\Excel\Validators\ValidationException;
 use Symfony\Component\HttpFoundation\Response as HTTPMessages;
 
@@ -16,13 +18,22 @@ class PersonalController extends Controller
 {
     public function index()
     {
-        return view('gestion-inventarios.personal.index');
+        return view('gestion-inventarios.personal.index',[
+            'departamentos' => Departamento::pluck('nombre', 'id')->prepend('Todos', ''),
+            'sucursales'    => Sucursal::pluck('descripcion','id')->prepend('Todos','')
+        ]);
     }
 
     public function datatables(Request $request)
     {
         $query = Personal::query()
             ->select('id','id_impresion' ,'nombre', 'id_sucursal', 'id_departamento', 'id_usuario')
+            ->when($request->input('id_sucursal'),function($q,$id_sucursal){
+                $q->where('id_sucursal',$id_sucursal);
+            })
+            ->when($request->input('id_departamento'),function($q,$id_departamento){
+                $q->where('id_departamento',$id_departamento);
+            })
             ->with(['sucursal', 'departamento']);
 
         return DataTables::eloquent($query)
