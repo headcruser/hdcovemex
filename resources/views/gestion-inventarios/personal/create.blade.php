@@ -26,7 +26,7 @@
         <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Información del personal</h3>
+                    <h3 class="card-title">Información del personal <small>(*) Campos Requeridos</small></h3>
                 </div>
                 <div class="card-body">
 
@@ -37,6 +37,7 @@
                         'enctype'           =>'multipart/form-data']) !!}
 
                         @include('gestion-inventarios.personal.partials._fields')
+
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
                         </div>

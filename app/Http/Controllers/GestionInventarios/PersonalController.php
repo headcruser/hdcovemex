@@ -27,7 +27,7 @@ class PersonalController extends Controller
     public function datatables(Request $request)
     {
         $query = Personal::query()
-            ->select('id','id_impresion' ,'nombre', 'id_sucursal', 'id_departamento', 'id_usuario')
+            ->select('personal.id','personal.id_impresion' ,'personal.nombre', 'personal.id_sucursal', 'personal.id_departamento', 'personal.id_usuario')
             ->when($request->input('id_sucursal'),function($q,$id_sucursal){
                 $q->where('id_sucursal',$id_sucursal);
             })
@@ -61,6 +61,14 @@ class PersonalController extends Controller
             'id_departamento'   => 'required',
             'id_sucursal'       => 'required',
         ]);
+
+        $id_impresion = $request->input('id_impresion') ?? 0;
+
+        $request->merge([
+            'id_impresion' => $id_impresion
+        ]);
+
+        dd($request->all());
 
         Personal::create($request->except('_token'));
 

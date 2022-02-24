@@ -13,8 +13,8 @@
     </div>
     <div class="col-md-6">
         <div class="form-group @error('id_impresion') has-error @enderror">
-            {!! Form::label('id_impresion', 'ID Impresion: *') !!}
-            {!! Form::text('id_impresion',null, ['id' => 'input-id_impresion','class' => 'form-control','required' => true,'autocomplete' => 'off']) !!}
+            {!! Form::label('id_impresion', 'ID Impresion:') !!}
+            {!! Form::number('id_impresion',null, ['id' => 'input-id_impresion','min' => 0,'class' => 'form-control','autocomplete' => 'off']) !!}
 
             <div class="help-block with-errors">
                 @error('id_impresion')
