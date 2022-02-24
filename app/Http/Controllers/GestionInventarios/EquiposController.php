@@ -207,9 +207,6 @@ class EquiposController extends Controller
         ->with(['personal.departamento','equipo']);
 
         return DataTables::eloquent($query)
-            ->editColumn('fecha_entrega',function($model){
-                return $model->fecha_entrega->format('d-m-Y');
-            })
             ->editColumn('observaciones',function($model){
                 $route = route('gestion-inventarios.equipos.actualizar_asignacion_equipo');
 

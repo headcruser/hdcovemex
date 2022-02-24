@@ -240,7 +240,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content ">
         <div class="modal-header">
-          <h4 class="modal-title">Asignación de equipo</h4>
+          <h4 class="modal-title">Asignación de equipo <small>(*) Campos Obligatorios</small></h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -253,13 +253,13 @@
                 <small data-help class="form-text text-muted"></small>
             </div>
             <div class="form-group">
-                {!! Form::label('fecha_entrega', 'Fecha de entrega:*') !!}
-                {!! Form::date('fecha_entrega', null, ['class' => 'form-control','autocomplete' => 'off','required' => true,'style' => 'width:100%']) !!}
+                {!! Form::label('fecha_entrega', 'Fecha de entrega:') !!}
+                {!! Form::date('fecha_entrega', null, ['class' => 'form-control','autocomplete' => 'off','style' => 'width:100%']) !!}
                 <small data-help class="form-text text-muted"></small>
             </div>
             <div class="form-group">
-                {!! Form::label('observaciones', 'Observaciónes:*') !!}
-                {!! Form::textarea('observaciones',null, ['class' => 'form-control','rows' => 3,'required' => true, 'placeholder' => 'Motivo de entrega']) !!}
+                {!! Form::label('observaciones', 'Observaciónes:') !!}
+                {!! Form::textarea('observaciones',null, ['class' => 'form-control','rows' => 3, 'placeholder' => 'Motivo de entrega']) !!}
                 <small data-help class="form-text text-muted"></small>
             </div>
             <div id="d-errors-asignar-equipo" class="form-group"></div>
