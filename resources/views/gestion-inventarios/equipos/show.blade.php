@@ -68,12 +68,12 @@
                     <li class="list-group-item">
                         <b># Serie</b>
                          <a class="float-right editable_informacion_equipo"
-                            data-name="serie"
+                            data-name="no_serie"
                             data-type="text"
-                            data-value="{{ $equipo->serie }}"
+                            data-value="{{ $equipo->no_serie }}"
                             data-pk="{{ $equipo->id }}"
                             data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Serie"> {{ $equipo->serie }} </a>
+                            data-placeholder="Serie"> {{ $equipo->no_serie }} </a>
                     </li>
                     <li class="list-group-item">
                         <b>S.O</b>
