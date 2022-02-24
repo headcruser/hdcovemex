@@ -53,7 +53,9 @@ class Hardware extends Model
     public function tipo()
     {
         return $this->belongsTo(TipoHardware::class,'id_tipo_hardware')
-            ->withDefault();
+            ->withDefault([
+                'descripcion' => ''
+            ]);
     }
 
 

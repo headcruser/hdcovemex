@@ -21,7 +21,7 @@
     <div class="col-md-12 mb-4">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Información</h3>
+                <h3 class="card-title">Información <small>(*) Campos Obligatorios</small></h3>
             </div>
             <div class="card-body">
 
