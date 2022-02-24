@@ -393,22 +393,19 @@
                         return option.text;
                     }
 
-                    if (!option.descripcion || !option.no_serie|| !option.marca||!option.proveedor){
-                        return option.text;
-                    }
 
-                    return `${option.descripcion} || ${option.no_serie} || ${option.marca} || ${option.proveedor}`;
+                    return `${option.descripcion} || ${option.no_serie || 'Sin serie'} || ${option.marca || 'Sin Marca'} || ${option.proveedor || 'Sin Proveedor'}`;
                 },
                 templateSelection:function(option) {
                     if (option.loading) {
                         return option.text;
                     }
 
-                    if (!option.descripcion || !option.no_serie|| !option.marca||!option.proveedor){
+                    if (!option.descripcion) {
                         return option.text;
                     }
 
-                    return `${option.descripcion} || ${option.no_serie} || ${option.marca} || ${option.proveedor}`;
+                    return `${option.descripcion || ''}`;
                 }
             });
 
