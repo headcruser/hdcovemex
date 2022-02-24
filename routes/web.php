@@ -159,6 +159,8 @@ Route::group([
             Route::post('asignar_equipo','EquiposController@asignar_equipo')->name('asignar_equipo');
             Route::post('datatables_asignar_equipo','EquiposController@datatables_asignar_equipo')->name('datatables_asignar_equipo');
             Route::post('datatables','EquiposController@datatables')->name('datatables');
+            Route::post('actualizar_informacion', 'EquiposController@actualizar_informacion')->name('actualizar_informacion');
+            Route::post('actualizar_asignacion_equipo', 'EquiposController@actualizar_asignacion_equipo')->name('actualizar_asignacion_equipo');
         });
         Route::resource('equipos', 'EquiposController')->parameters([
             'equipos'  => 'equipo'

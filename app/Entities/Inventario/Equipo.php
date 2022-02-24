@@ -56,4 +56,20 @@ class Equipo extends Model
 
         return Carbon::parse($value)->format('Y-m-d');
     }
+
+    public function scopeWithLastEquipo($query)
+    {
+        $subselect = EquipoAsignado::select([
+            'personal' => Personal::select('nombre')
+                ->whereColumn('id', 'equipo_asignado.id_personal')
+                ->orderBy('created_at', 'desc')
+                ->limit(1)
+        ])->whereColumn('equipo_asignado.id_equipo', 'equipos.id')
+            ->latest()
+            ->limit(1);
+
+        $query->addSelect(['personal_equipo_asignado' => $subselect]);
+
+        return $query;
+    }
 }

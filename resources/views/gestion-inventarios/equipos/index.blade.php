@@ -37,8 +37,7 @@
                     <tr>
                         <th>#</th>
                         <th>UUID</th>
-                        <th>Descrpción</th>
-                        <th>Fecha</th>
+                        <th>Nombre</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -88,8 +87,7 @@
                 columns: [
                     {data: 'id',name: 'id'},
                     {data: 'uid',name: 'uid'},
-                    {data: 'descripcion',name: 'descripcion'},
-                    {data: 'fecha_equipo',name: 'fecha_equipo'},
+                    {data: 'personal_equipo_asignado',name: 'personal_equipo_asignado',orderable: false, searchable: false,},
                     {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
                 ],
                 order: [[ 0, "desc" ]],

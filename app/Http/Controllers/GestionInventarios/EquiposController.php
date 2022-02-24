@@ -7,10 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use HelpDesk\Entities\Inventario\Equipo;
 use HelpDesk\Entities\Inventario\EquipoAsignado;
-use HelpDesk\Entities\Inventario\Hardware;
 use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
 
 class EquiposController extends Controller
 {
@@ -19,11 +17,14 @@ class EquiposController extends Controller
         return view('gestion-inventarios.equipos.index');
     }
 
-    public function datatables()
+    public function datatables(Request $request)
     {
-        $query = Equipo::query();
 
-        return DataTables::eloquent($query)
+        $query = Equipo::query()
+            ->select('equipos.*')
+            ->WithLastEquipo();
+
+        return DataTables::of($query)
             ->addColumn('buttons', 'gestion-inventarios.equipos.datatables._buttons')
             ->editColumn('fecha_equipo',function($model){
                 return $model->fecha_equipo->format('d-m-Y');
@@ -40,32 +41,19 @@ class EquiposController extends Controller
 
     public function create()
     {
-        return view('gestion-inventarios.equipos.create');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'descripcion' => 'required',
-        ]);
-
         $equipo = new Equipo();
         $equipo->fill([
-            'descripcion'   => $request->input('descripcion'),
-            'fecha_equipo'  => Carbon::parse($request->input('fecha_equipo')),
+            'descripcion'   => '',
+            'fecha_equipo'  => now(),
             'uid'           => Str::uuid()
         ]);
+
         $equipo->save();
 
-
         return redirect()
-            ->route('gestion-inventarios.equipos.show',$equipo)
-            ->with(['message' => 'Eqiipo agregado correctamente']);
-    }
+            ->route('gestion-inventarios.equipos.show', $equipo)
+            ->with(['message' => 'Equipo agregado correctamente']);
 
-    public function edit(Equipo $equipo)
-    {
-        return view('gestion-inventarios.equipos.edit',compact('equipo'));
     }
 
     public function update(Request $request, Equipo $equipo)
@@ -222,8 +210,19 @@ class EquiposController extends Controller
             ->editColumn('fecha_entrega',function($model){
                 return $model->fecha_entrega->format('d-m-Y');
             })
-            // ->addColumn('buttons', 'gestion-inventarios.equipos.datatables._buttons_detalle_equipo')
-            // ->rawColumns(['buttons'])
+            ->editColumn('observaciones',function($model){
+                $route = route('gestion-inventarios.equipos.actualizar_asignacion_equipo');
+
+                return "<a class='editable_observaciones_equipo_asignado'
+                    data-name='observaciones'
+                    data-type='textarea'
+                    data-placement='left'
+                    data-value='{$model->observaciones}'
+                    data-pk='{$model->id}'
+                    data-url='{$route}'
+                    data-placeholder='Observaciones'> {$model->observaciones} </a>";
+            })
+            ->rawColumns(['observaciones'])
             ->make(true);
     }
 
@@ -240,6 +239,30 @@ class EquiposController extends Controller
             'success' => true,
             'data'    => $request->all(),
             'message' => 'Equipo Asignado correctamente',
+        ]);
+    }
+
+    public function actualizar_informacion(Request $request)
+    {
+        $equipo = Equipo::find($request->pk);
+        $equipo[$request->name] = $request->value;
+        $equipo->save();
+
+        return response()->json([
+            'equipo' => $equipo
+        ]);
+    }
+
+    public function actualizar_asignacion_equipo(Request $request)
+    {
+        $equipo = EquipoAsignado::find($request->pk);
+        $equipo[$request->name] = $request->value;
+        $equipo->save();
+
+        $equipo->load(['personal','equipo']);
+
+        return response()->json([
+            'equipo' => $equipo
         ]);
     }
 }

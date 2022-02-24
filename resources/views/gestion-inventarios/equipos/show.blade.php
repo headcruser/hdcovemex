@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/x-editable/css/bootstrap-editable.css') }}">
 @endsection
 
 @section('breadcrumb')
@@ -30,7 +31,15 @@
             <div class="card-body box-profile">
               <h3 class="profile-username text-center">{{ $equipo->uid }}</h3>
 
-              <p class="text-muted text-center">{{ $equipo->descripcion }}</p>
+              <p class="text-muted text-center">
+                  <a class="editable_descripcion_equipo"
+                    data-name="descripcion"
+                    data-type="textarea"
+                    data-value="{{ $equipo->descripcion }}"
+                    data-pk="{{ $equipo->id }}"
+                    data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                    data-placeholder="Descripcion"> {{ $equipo->descripcion }} </a>
+                </p>
 
               <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
@@ -40,8 +49,6 @@
                         <b>Estatus</b> <a class="float-right">{{ $equipo->status }}</a>
                     </li>
               </ul>
-
-              <a href="{{ route('gestion-inventarios.equipos.edit',$equipo) }}" class="btn btn-primary btn-block">Editar</a>
             </div>
             <!-- /.card-body -->
           </div>
@@ -96,14 +103,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($equipo->historial_asignaciones as $historial)
-                                <tr>
-                                    <td>{{ $historial->personal->nombre}}</td>
-                                    <td>{{ $historial->personal->departamento->nombre}}</td>
-                                    <td>{{ $historial->fecha_entrega->format('d-m-Y') }}</td>
-                                    <td>{{ $historial->observaciones }}</td>
-                                </tr>
-                            @endforeach --}}
                         </tbody>
                     </table>
                 </div>
@@ -193,6 +192,7 @@
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/i18n/es.js') }}"></script>
+    <script src="{{ asset('vendor/x-editable/js/x-editable.min.js') }}"></script>
 
     <script type="text/javascript">
         const m_equipos = (function(){
@@ -208,6 +208,17 @@
                 form_asignar_equipo: $("#form-asignar-equipo"),
                 tb_historial_asignacion: $("#tb-historial-asignacion"),
             }
+
+             // 👉 XEDITABLE
+            $('.editable').on('shown', function(e, editable) {
+                $('.editable-submit').html('<i class="fas fa-check fa-1x"></i>');
+                $('.editable-cancel').html('<i class="fas fa-times"></i>');
+            });
+
+            $('.editable_descripcion_equipo').editable({
+                'emptytext': 'Vacio',
+                'onblur': 'ignore'
+            });
 
             // GESTION DE COMPONENTES DEL EQUIPO
             $('#select-id_hardware').select2({
@@ -281,7 +292,6 @@
                 responsive: true,
                 columns: [
                     {data: 'id',name: 'id'},
-                    // {data: 'id_hardware',name: 'id_hardware'},
                     {data: 'hardware.descripcion',name: 'hardware.descripcion'},
                     {data: 'hardware.no_serie',name: 'hardware.no_serie'},
                     {data: 'hardware.marca',name: 'hardware.marca'},
@@ -453,6 +463,10 @@
                         }
                     },
                     complete: function() {
+                        $('.editable_observaciones_equipo_asignado').editable({
+                            'emptytext': 'Vacio',
+                            'onblur': 'ignore'
+                        });
                     },
                 },
                 pageLength: 10,
