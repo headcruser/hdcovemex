@@ -361,6 +361,8 @@
                 },
             });
 
+
+
             // GESTION DE COMPONENTES DEL EQUIPO
             $('#select-id_hardware').select2({
                 dropdownParent: dom.modal_componentes_equipo,
@@ -607,6 +609,18 @@
                         $('.editable_observaciones_equipo_asignado').editable({
                             'emptytext': 'Vacio',
                             'onblur': 'ignore'
+                        });
+
+                         $('.editable_fecha_entrega_equipo_asignado').editable({
+                            emptytext: 'Vacio',
+                            onblur: 'ignore',
+                            format: 'yyyy-mm-dd',
+                            viewformat: 'dd-mm-yyyy',
+                            datepicker: {
+                                weekStart: 1,
+                                orientation: 'bottom right',
+                                language: 'en',
+                            },
                         });
                     },
                 },

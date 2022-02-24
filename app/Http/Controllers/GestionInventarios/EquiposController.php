@@ -200,7 +200,7 @@ class EquiposController extends Controller
 
     public function datatables_asignar_equipo(Request $request)
     {
-        $query = EquipoAsignado::query()
+        $query = EquipoAsignado::query()->select('equipo_asignado.*')
         ->when($request->input('id_equipo'),function($q,$id_equipo){
             $q->where('id_equipo',$id_equipo);
         })
@@ -222,7 +222,22 @@ class EquiposController extends Controller
                     data-url='{$route}'
                     data-placeholder='Observaciones'> {$model->observaciones} </a>";
             })
-            ->rawColumns(['observaciones'])
+
+            ->editColumn('fecha_entrega', function ($model) {
+                $route = route('gestion-inventarios.equipos.actualizar_asignacion_equipo');
+                $valor = optional($model->fecha_entrega)->format('Y-m-d');
+                $text = optional($model->fecha_entrega)->format('d-m-Y');
+
+                return "<a class='editable_fecha_entrega_equipo_asignado'
+                    data-name='fecha_entrega'
+                    data-type='date'
+                    data-placement='top'
+                    data-value='{$valor}'
+                    data-pk='{$model->id}'
+                    data-url='{$route}'
+                    data-placeholder='Fecha entrega'>{$text}</a>";
+            })
+            ->rawColumns(['observaciones','fecha_entrega'])
             ->make(true);
     }
 
@@ -255,11 +270,9 @@ class EquiposController extends Controller
 
     public function actualizar_asignacion_equipo(Request $request)
     {
-        $equipo = EquipoAsignado::find($request->pk);
+        $equipo = EquipoAsignado::findOrFail($request->pk);
         $equipo[$request->name] = $request->value;
         $equipo->save();
-
-        $equipo->load(['personal','equipo']);
 
         return response()->json([
             'equipo' => $equipo
