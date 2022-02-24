@@ -23,7 +23,7 @@ class Equipo extends Model
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'fecha_equipo'];
+    protected $dates = ['created_at', 'updated_at', 'fecha_equipo','fecha_compra'];
 
     protected $attributes = [
         'status' => 'Activo' # Activo | Inactivo| Mantenimiento
@@ -38,6 +38,15 @@ class Equipo extends Model
         'uid',
         'fecha_equipo',
         'descripcion',
+        'tipo',
+        'marca',
+        'modelo',
+        'no_serie',
+        'sistema_operativo',
+        'procesador',
+        'memoria',
+        'almacenamiento',
+        'fecha_compra',
         'status',
     ];
 

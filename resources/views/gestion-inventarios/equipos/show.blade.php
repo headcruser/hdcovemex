@@ -46,6 +46,86 @@
                         <b>Fecha de creación</b> <a class="float-right">{{ $equipo->fecha_equipo->format('d-m-Y') }}</a>
                     </li>
                     <li class="list-group-item">
+                        <b>Tipo</b>
+                        <a class="float-right editable_tipo_equipo"
+                            data-name="tipo"
+                            data-type="select"
+                            data-value="{{ $equipo->tipo }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Tipo"> {{ $equipo->tipo }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Marca</b>
+                         <a class="float-right editable_informacion_equipo"
+                            data-name="marca"
+                            data-type="text"
+                            data-value="{{ $equipo->marca }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Marca"> {{ $equipo->marca }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b># Serie</b>
+                         <a class="float-right editable_informacion_equipo"
+                            data-name="serie"
+                            data-type="text"
+                            data-value="{{ $equipo->serie }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Serie"> {{ $equipo->serie }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>S.O</b>
+                         <a class="float-right editable_informacion_equipo"
+                            data-name="sistema_operativo"
+                            data-type="text"
+                            data-value="{{ $equipo->sistema_operativo }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="S.O"> {{ $equipo->sistema_operativo }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Procesador</b>
+                         <a class="float-right editable_informacion_equipo"
+                            data-name="procesador"
+                            data-type="text"
+                            data-value="{{ $equipo->procesador }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Procesador"> {{ $equipo->procesador }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Memoria</b>
+                         <a class="float-right editable_informacion_equipo"
+                            data-name="memoria"
+                            data-type="text"
+                            data-value="{{ $equipo->memoria }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Memoria"> {{ $equipo->memoria }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Almacenamiento</b>
+                        <a class="float-right editable_informacion_equipo"
+                            data-name="almacenamiento"
+                            data-type="text"
+                            data-value="{{ $equipo->almacenamiento }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Memoria"> {{ $equipo->almacenamiento }} </a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Fecha Compra</b>
+                         <a class="float-right editable_fecha_compra_equipo"
+                            data-name="fecha_compra"
+                            data-type="date"
+                            data-value="{{ optional($equipo->fecha_compra)->format('Y-m-d') }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Fecha Compra"> {{ optional($equipo->fecha_compra)->format('d-m-Y') }} </a>
+                    </li>
+                    <li class="list-group-item">
                         <b>Estatus</b> <a class="float-right">{{ $equipo->status }}</a>
                     </li>
               </ul>
@@ -195,6 +275,29 @@
     <script src="{{ asset('vendor/x-editable/js/x-editable.min.js') }}"></script>
 
     <script type="text/javascript">
+        // 👉 CONFIGURACION DE PLUGINGS
+        $(function() {
+            $.fn.size = function() {
+                return this.length;
+            }
+
+            const CONFIG_DATEPICKER = {
+               	days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+                daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                today: "Hoy",
+                monthsTitle: "Meses",
+                clear: "Borrar",
+                weekStart: 1,
+            }
+
+            $.fn.bdatepicker.dates['en'] = CONFIG_DATEPICKER;
+        });
+
+
+
         const m_equipos = (function(){
             const dom =  {
                 contenedor_info:$("#contenedor-info-personal"),
@@ -218,6 +321,33 @@
             $('.editable_descripcion_equipo').editable({
                 'emptytext': 'Vacio',
                 'onblur': 'ignore'
+            });
+
+            $('.editable_informacion_equipo').editable({
+                'emptytext': 'Vacio',
+                'onblur': 'ignore'
+            });
+
+             $('.editable_tipo_equipo').editable({
+                emptytext: 'Vacio',
+                onblur: 'ignore',
+                 source: [
+                    {value: 'Escritorio', text: 'Escritorio'},
+                    {value: 'Laptop', text: 'Laptop'},
+                    {value: 'Servidor', text: 'Servidor'}
+                ],
+            });
+
+            $('.editable_fecha_compra_equipo').editable({
+                emptytext: 'Vacio',
+                onblur: 'ignore',
+                format: 'yyyy-mm-dd',
+                viewformat: 'dd-mm-yyyy',
+                datepicker: {
+                    weekStart: 1,
+                    orientation: 'bottom right',
+                    language: 'en',
+                },
             });
 
             // GESTION DE COMPONENTES DEL EQUIPO
