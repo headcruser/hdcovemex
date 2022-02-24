@@ -88,7 +88,7 @@
                             @foreach ($personal->equipos_asignados as $equipo)
                                 <tr>
                                     <td>{{ $equipo->equipo->uid }}</td>
-                                    <td>{{ $equipo->fecha_entrega->format('d-m-Y') }}</td>
+                                    <td>{{ optional($equipo->fecha_entrega)->format('d-m-Y') }}</td>
                                     <td>{{ $equipo->carta_responsiva }}</td>
                                     <td></td>
                                 </tr>

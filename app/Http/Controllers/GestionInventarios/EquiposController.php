@@ -26,9 +26,6 @@ class EquiposController extends Controller
 
         return DataTables::of($query)
             ->addColumn('buttons', 'gestion-inventarios.equipos.datatables._buttons')
-            ->editColumn('fecha_equipo',function($model){
-                return $model->fecha_equipo->format('d-m-Y');
-            })
             ->rawColumns(['buttons'])
             ->make(true);
     }
