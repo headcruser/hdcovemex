@@ -65,6 +65,17 @@
                             data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
                             data-placeholder="Marca"> {{ $equipo->marca }} </a>
                     </li>
+
+                     <li class="list-group-item">
+                        <b>Modelo</b>
+                         <a class="float-right editable_informacion_equipo"
+                            data-name="modelo"
+                            data-type="text"
+                            data-value="{{ $equipo->modelo }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Modelo"> {{ $equipo->modelo }} </a>
+                    </li>
                     <li class="list-group-item">
                         <b># Serie</b>
                          <a class="float-right editable_informacion_equipo"
