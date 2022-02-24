@@ -67,7 +67,7 @@ class CredencialesController extends Controller
         $credencial->save();
 
         return redirect()
-            ->route('gestion-inventarios.credenciales.index')
+            ->back()
             ->with(['message' => 'Credencial editada correctamente']);
     }
 
