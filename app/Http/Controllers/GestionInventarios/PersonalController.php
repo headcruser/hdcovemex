@@ -62,7 +62,7 @@ class PersonalController extends Controller
             'id_sucursal'       => 'required',
         ]);
 
-        $id_impresion = $request->input('id_impresion') ?? 0;
+        $id_impresion = $request->input('id_impresion') ?? null;
 
         $request->merge([
             'id_impresion' => $id_impresion
@@ -87,6 +87,13 @@ class PersonalController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
+        ]);
+
+        $id_impresion = $request->input('id_impresion') ?? null;
+
+
+        $request->merge([
+            'id_impresion' => $id_impresion
         ]);
 
         $personal->update($request->except('_token'));
