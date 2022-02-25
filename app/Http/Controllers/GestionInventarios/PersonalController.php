@@ -68,7 +68,6 @@ class PersonalController extends Controller
             'id_impresion' => $id_impresion
         ]);
 
-        dd($request->all());
 
         Personal::create($request->except('_token'));
 
