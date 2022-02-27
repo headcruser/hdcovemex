@@ -89,7 +89,7 @@
                     {data: 'id',name: 'id'},
                     {data: 'uid',name: 'uid'},
                     {data: 'descripcion',name: 'descripcion'},
-                    {data: 'personal_equipo_asignado',name: 'personal_equipo_asignado',orderable: false, searchable: false,},
+                    {data: 'personal_equipo_asignado',name: 'personal_equipo_asignado',orderable: false},
                     {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
                 ],
                 order: [[ 0, "desc" ]],
@@ -113,6 +113,27 @@
                     $("[data-toggle='tooltip']").tooltip();
                 },
             });
+
+            var searchWait = 0;
+            var searchWaitInterval;
+
+            $('.dataTables_filter input')
+                .unbind()
+                .bind('input', function(e) {
+                    var item = $(this);
+                    searchWait = 0;
+                    if (!searchWaitInterval) searchWaitInterval = setInterval(function() {
+                        if (searchWait >= 3) {
+                            clearInterval(searchWaitInterval);
+                            searchWaitInterval = '';
+                            searchTerm = $(item).val();
+                            dt.search(searchTerm).draw();
+                            searchWait = 0;
+                        }
+                        searchWait++;
+                    }, 200);
+
+                });
 
             dom.table.on('click',"a[data-action='destroy']",function(e){
                 e.preventDefault();

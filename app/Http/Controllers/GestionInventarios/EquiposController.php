@@ -2,13 +2,14 @@
 
 namespace HelpDesk\Http\Controllers\GestionInventarios;
 
-use HelpDesk\Entities\Inventario\ComponenteEquipo;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use HelpDesk\Entities\Inventario\Equipo;
-use HelpDesk\Entities\Inventario\EquipoAsignado;
 use Yajra\DataTables\Facades\DataTables;
 use HelpDesk\Http\Controllers\Controller;
+use HelpDesk\Entities\Inventario\EquipoAsignado;
+use HelpDesk\Entities\Inventario\ComponenteEquipo;
 
 class EquiposController extends Controller
 {
@@ -19,10 +20,11 @@ class EquiposController extends Controller
 
     public function datatables(Request $request)
     {
+        $sub =Equipo::query()
+        ->select(['id','uid','descripcion'])
+        ->WithLastEquipo();
 
-        $query = Equipo::query()
-            ->select('equipos.*')
-            ->WithLastEquipo();
+        $query = DB::table( DB::raw("({$sub->toSql()}) as sub") );
 
         return DataTables::of($query)
             ->addColumn('buttons', 'gestion-inventarios.equipos.datatables._buttons')
