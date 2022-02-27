@@ -21,7 +21,8 @@ class EquipoAsignado extends Model
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'fecha_entrega','fecha_mantenimiento'];
+    protected $dates = ['created_at', 'updated_at', 'fecha_entrega', 'fecha_mantenimiento'];
+
 
     /**
      * The attributes that are mass assignable.
@@ -37,13 +38,37 @@ class EquipoAsignado extends Model
         'observaciones',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'format_fecha_entrega',
+    ];
+
     public function personal()
     {
-        return $this->belongsTo(Personal::class,'id_personal')->withDefault();
+        return $this->belongsTo(Personal::class, 'id_personal')->withDefault();
     }
 
     public function equipo()
     {
-        return $this->belongsTo(Equipo::class,'id_equipo')->withDefault();
+        return $this->belongsTo(Equipo::class, 'id_equipo')->withDefault();
+    }
+
+    /**
+     * Get the
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFormatFechaEntregaAttribute()
+    {
+        if (empty($this->fecha_entrega)) {
+            return '';
+        }
+
+        return optional($this->fecha_entrega)->format('Y-m-d');
     }
 }

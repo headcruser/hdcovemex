@@ -156,10 +156,13 @@ Route::group([
             Route::put('actualizar_componente_equipo/{componenteEquipo}','EquiposController@actualizar_componente_equipo')->name('actualizar_componente_equipo');
             Route::delete('eliminar_componente_equipo/{componenteEquipo}','EquiposController@eliminar_componente_equipo')->name('eliminar_componente_equipo');
             Route::post('datatables_componentes_equipo','EquiposController@datatables_componentes_equipo')->name('datatables_componentes_equipo');
-            Route::post('asignar_equipo','EquiposController@asignar_equipo')->name('asignar_equipo');
             Route::post('datatables_asignar_equipo','EquiposController@datatables_asignar_equipo')->name('datatables_asignar_equipo');
             Route::post('datatables','EquiposController@datatables')->name('datatables');
             Route::post('actualizar_informacion', 'EquiposController@actualizar_informacion')->name('actualizar_informacion');
+
+            Route::post('asignar_equipo', 'EquiposController@asignar_equipo')->name('asignar_equipo');
+            Route::put('editar_asignar_equipo/{equipoAsignado}', 'EquiposController@editar_asignar_equipo')->name('editar_asignar_equipo');
+            Route::delete('eliminar_asignar_equipo/{equipoAsignado}', 'EquiposController@eliminar_asignar_equipo')->name('eliminar_asignar_equipo');
             Route::post('actualizar_asignacion_equipo', 'EquiposController@actualizar_asignacion_equipo')->name('actualizar_asignacion_equipo');
         });
         Route::resource('equipos', 'EquiposController')->parameters([

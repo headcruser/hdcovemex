@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/x-editable/css/bootstrap-editable.css') }}">
+    <link rel="stylesheet" href="{{asset('vendor/dropify/dist/css/dropify.min.css') }}"  >
 @endsection
 
 @section('breadcrumb')
@@ -191,6 +192,7 @@
                                 <th>Departamento</th>
                                 <th>Fecha de asignacion</th>
                                 <th>Observaciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -262,6 +264,12 @@
                 {!! Form::textarea('observaciones',null, ['class' => 'form-control','rows' => 3, 'placeholder' => 'Motivo de entrega']) !!}
                 <small data-help class="form-text text-muted"></small>
             </div>
+            <div class="form-group">
+                {!! Form::label('input-carta-responsiva', 'Carta Responsiva:') !!}
+                <input type="file" id="input-carta-responsiva" class="dropify-carta-respnsiva" name="carta_responsiva" accept="image/*,.pdf"/>
+                <small id="ver-link-archivo" class="form-text"> <a href="#" class="btn-link" target="_blank" rel="noopener noreferrer">Ver archivo</a></small>
+            </div>
+
             <div id="d-errors-asignar-equipo" class="form-group"></div>
             {!! Form::hidden('id_equipo', $equipo->id) !!}
         </div>
@@ -284,6 +292,7 @@
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/i18n/es.js') }}"></script>
     <script src="{{ asset('vendor/x-editable/js/x-editable.min.js') }}"></script>
+    <script src="{{asset('vendor/dropify/dist/js/dropify.min.js') }}"></script>
 
     <script type="text/javascript">
         // 👉 CONFIGURACION DE PLUGINGS
@@ -585,7 +594,16 @@
                 })
             });
 
-            // ASIGNACION DE EQUIPO
+            // 👉 ASIGNACION DE EQUIPO
+            var droppy = $('.dropify-carta-respnsiva').dropify({
+                messages: {
+                    default: 'Arrastre o pulse para seleccionar imagen',
+                    replace: 'Arrastre o pulse para reemplazar imagen',
+                    remove: 'Quitar',
+                    error: 'Ups, ha ocurrido un error inesperado'
+                }
+            });
+
             var dt_historial_asignacion = dom.tb_historial_asignacion.DataTable({
                 processing: true,
                 serverSide: true,
@@ -608,7 +626,12 @@
                             'onblur': 'ignore'
                         });
 
-                         $('.editable_fecha_entrega_equipo_asignado').editable({
+                        $('.editable_observaciones_equipo_asignado').on('save', function(e, params) {
+                            const $btn_editar = $(this).closest('tr').find('[data-action="editar-asignacion"]');
+                            $btn_editar.attr('data-object',JSON.stringify(params.response.equipo || {}));
+                        });
+
+                        $('.editable_fecha_entrega_equipo_asignado').editable({
                             emptytext: 'Vacio',
                             onblur: 'ignore',
                             format: 'yyyy-mm-dd',
@@ -619,6 +642,11 @@
                                 language: 'en',
                             },
                         });
+
+                        $('.editable_fecha_entrega_equipo_asignado').on('save', function(e, params) {
+                            const $btn_editar = $(this).closest('tr').find('[data-action="editar-asignacion"]');
+                            $btn_editar.attr('data-object',JSON.stringify(params.response.equipo || {}));
+                        });
                     },
                 },
                 pageLength: 10,
@@ -628,7 +656,7 @@
                     {data: 'personal.departamento.nombre',name: 'personal.departamento.nombre'},
                     {data: 'fecha_entrega',name: 'fecha_entrega'},
                     {data: 'observaciones',name: 'observaciones'},
-                    // {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
+                    {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
                 ],
                 order: [[ 0, "desc" ]],
                 language: {
@@ -652,6 +680,139 @@
                 },
             });
 
+            dom.btn_asignar_equipo.click(function(e){
+                dom.form_asignar_equipo[0].reset();
+                $('#select-id_personal').empty().trigger('change');
+                $("#ver-link-archivo").hide();
+                $("#ver-link-archivo").find('.btn-link').attr('href','#');
+
+                $(".dropify-clear").trigger("click");
+
+                dom.form_asignar_equipo.attr('method','POST')
+                dom.form_asignar_equipo.attr('action',"{{ route('gestion-inventarios.equipos.asignar_equipo') }}")
+                dom.modal_asignar_equipo.modal('show');
+            });
+
+            dom.tb_historial_asignacion.on('click','[data-action="editar-asignacion"]',function(e){
+                e.preventDefault();
+                const data = JSON.parse($(this).attr('data-object'));
+
+                dom.form_asignar_equipo[0].reset();
+                dom.form_asignar_equipo.find("[name='observaciones']").val(data.observaciones);
+                dom.form_asignar_equipo.find("[name='fecha_entrega']").val(data.format_fecha_entrega);
+                dom.form_asignar_equipo.attr('method','PUT')
+                dom.form_asignar_equipo.attr('action',$(this).attr('href'));
+
+                if(data.id_personal){
+                    var newOption = new Option(data.personal.nombre, data.id_personal, false, false);
+                    $('#select-id_personal').empty().append(newOption).trigger('change');
+                }
+
+                drEvent = droppy.data('dropify');
+                drEvent.resetPreview();
+                drEvent.clearElement();
+
+
+
+                if (data.carta_responsiva) {
+                    const url = "{{ asset(Storage::url('_url')) }}".replace('_url',data.carta_responsiva);
+                    drEvent.settings.defaultFile = url
+
+                    $("#ver-link-archivo").show();
+                    $("#ver-link-archivo").find('.btn-link').attr('href',url);
+                }else{
+                    $("#ver-link-archivo").hide();
+                    $("#ver-link-archivo").find('.btn-link').attr('href','#');
+                }
+
+                drEvent.destroy();
+                drEvent.init();
+
+
+                dom.modal_asignar_equipo.modal('show');
+            })
+
+            dom.form_asignar_equipo.submit(function(e){
+                e.preventDefault();
+
+                dom.modal_asignar_equipo.modal('hide');
+
+                var formData = new FormData(this);
+
+                const url = $(this).attr('action');
+                const isOtherMethod = ($(this).attr('method') != 'POST');
+                const method = 'POST';
+
+                if(isOtherMethod){
+                    formData.append('_method',$(this).attr('method'));
+                }
+
+                $.ajax({
+                    method: method,
+                    url: url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json'
+                })
+                .done(function(response) {
+                    dt_historial_asignacion.ajax.reload( function(){
+                        Toast.fire({
+                            type: 'success',
+                            title: response.message || 'Equipo asignado correctamente',
+                        });
+                    }, false );
+                }).fail(function(error) {
+                    const errors = error.responseJSON.errors || {}
+
+                    for (const key in errors) {
+                        if (Object.hasOwnProperty.call(errors, key)) {
+                            dom.form_asignar_equipo.find(`[name=${key}]`).next().html(errors[key])
+                        }
+                    }
+                    dom.modal_asignar_equipo.modal('show');
+                });
+            });
+
+            dom.tb_historial_asignacion.on('click','[data-action="eliminar-asignacion"]',function(e){
+                e.preventDefault();
+
+                const url = $(this).attr('href');
+
+                Swal.fire({
+                    title: '¿Desesas eliminar este registro?',
+                    text: "Una vez eliminado, no podrá recuperarse",
+                    type: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Eliminar',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            data: {},
+                            success: function (response){
+                                dt_historial_asignacion.ajax.reload( function(){
+                                    Toast.fire({
+                                        type: 'success',
+                                        title: response.message || 'Registro eliminado correctamente',
+                                    });
+                                }, false )
+                            },
+                            error:function(error){
+                                Toast.fire({
+                                    type: 'error',
+                                    title: 'Ups, hubo un error en el servidor'
+                                });
+                            }
+                        });
+                    }
+                })
+            })
+
             $('#select-id_personal').select2({
                 dropdownParent: dom.modal_asignar_equipo,
                 languaje: "es",
@@ -661,7 +822,7 @@
                     data:
                     function (params) {
                         return {
-                            search: params.term,
+                            term: params.term,
                             page: params.page || 1,
                             _token: $('meta[name="csrf-token"]').attr('content')
                         }
@@ -691,45 +852,8 @@
                     return option.nombre||option.text;
                 }
             });
-
-            dom.btn_asignar_equipo.click(function(e){
-                dom.modal_asignar_equipo.modal('show');
-            });
-
-            dom.form_asignar_equipo.submit(function(e){
-                e.preventDefault();
-
-                dom.modal_asignar_equipo.modal('hide');
-
-                var formData = new FormData(this);
-
-                $.ajax({
-                    method: 'POST',
-                    url: "{{ route('gestion-inventarios.equipos.asignar_equipo') }}",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json'
-                })
-                .done(function(response) {
-                    dt_historial_asignacion.ajax.reload( function(){
-                        Toast.fire({
-                            type: 'success',
-                            title: response.message || 'Equipo asignado correctamente',
-                        });
-                    }, false );
-                }).fail(function(error) {
-                    const errors = error.responseJSON.errors || {}
-
-                    for (const key in errors) {
-                        if (Object.hasOwnProperty.call(errors, key)) {
-                            dom.form_asignar_equipo.find(`[name=${key}]`).next().html(errors[key])
-                        }
-                    }
-                    dom.modal_asignar_equipo.modal('show');
-                });
-            });
         })();
+
     </script>
 @endsection
 

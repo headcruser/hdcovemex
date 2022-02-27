@@ -75,26 +75,45 @@
                 </div>
                 <div class="tab-pane fade" id="tab-pane-equipos" role="tabpanel" aria-labelledby="equipo-tab">
                     <h4>Asignacion de equipo</h4>
-                   <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Serial Equipo</th>
-                                <th>Fecha entrega</th>
-                                <th>Carta Responsiva</th>
-                                <th>Detalle</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($personal->equipos_asignados as $equipo)
-                                <tr>
-                                    <td>{{ $equipo->equipo->uid }}</td>
-                                    <td>{{ optional($equipo->fecha_entrega)->format('d-m-Y') }}</td>
-                                    <td>{{ $equipo->carta_responsiva }}</td>
-                                    <td></td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                   </table>
+                   <div class="row">
+                       @foreach ($personal->equipos_asignados as $equipo)
+                            <div class="col-12 d-flex align-items-stretch flex-column">
+                                    <div class="card bg-light d-flex flex-fill">
+                                        <div class="card-header text-muted border-bottom-0">
+                                            {{ $equipo->equipo->descripcion }}
+                                        </div>
+
+                                        <div class="card-body pt-0">
+                                            <div class="row">
+                                                    <div class="col-7">
+                                                        <h2 class="lead"><b> {{ $equipo->equipo->tipo }}</b></h2>
+                                                        <p class="text-muted text-sm"><b>Marca: </b> {{ $equipo->equipo->marca }} </p>
+                                                        <p class="text-muted text-sm"><b>S.O: </b> {{ $equipo->equipo->sistema_operativo }} </p>
+                                                        <p class="text-muted text-sm"><b>Procesador: </b> {{ $equipo->equipo->procesador }} </p>
+                                                        <p class="text-muted text-sm"><b>memoria: </b> {{ $equipo->equipo->memoria }} </p>
+                                                        @if($equipo->carta_responsiva)
+                                                            <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-link"></i></span> <a href="{{ asset(Storage::url($equipo->carta_responsiva)) }}" target="_blank" class="btn-link">Carta Responsiva</a></li>
+                                                            </ul>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-5 text-center">
+
+                                                    </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer">
+                                            <div class="text-right">
+                                                <a href="{{ route('gestion-inventarios.equipos.show',$equipo->id_equipo) }}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-search"></i> Ver Equipo
+                                                </a>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                       @endforeach
+                   </div>
                 </div>
               </div>
             </div>
