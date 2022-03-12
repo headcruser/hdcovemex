@@ -76,7 +76,7 @@
                 <div class="tab-pane fade" id="tab-pane-equipos" role="tabpanel" aria-labelledby="equipo-tab">
                     <h4>Asignacion de equipo</h4>
                    <div class="row">
-                       @foreach ($personal->equipos_asignados as $equipo)
+                       @foreach ($equipos_asignados as $equipo)
                             <div class="col-12 d-flex align-items-stretch flex-column">
                                     <div class="card bg-light d-flex flex-fill">
                                         <div class="card-header text-muted border-bottom-0">

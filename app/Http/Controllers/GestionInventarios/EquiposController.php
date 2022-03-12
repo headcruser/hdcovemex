@@ -36,6 +36,8 @@ class EquiposController extends Controller
     public function show(Equipo $equipo)
     {
         $equipo->load(['historial_asignaciones']);
+
+
         return view('gestion-inventarios.equipos.show', compact('equipo'));
     }
 
@@ -237,8 +239,20 @@ class EquiposController extends Controller
                     data-url='{$route}'
                     data-placeholder='Fecha entrega'>{$text}</a>";
             })
+            ->editColumn('status', function ($model) {
+                $route = route('gestion-inventarios.equipos.actualizar_asignacion_equipo');
+
+                return "<a class='editable_status_equipo_asignado'
+                    data-name='status'
+                    data-type='select'
+                    data-placement='left'
+                    data-value='{$model->status}'
+                    data-pk='{$model->id}'
+                    data-url='{$route}'
+                    data-placeholder='Status'> {$model->status} </a>";
+            })
             ->addColumn('buttons', 'gestion-inventarios.equipos.datatables._buttons_asignacion_equipo')
-            ->rawColumns(['personal.nombre','observaciones', 'fecha_entrega', 'buttons'])
+            ->rawColumns(['personal.nombre','observaciones', 'fecha_entrega','status', 'buttons'])
             ->make(true);
     }
 

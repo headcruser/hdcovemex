@@ -45,7 +45,12 @@ class PersonalController extends Controller
     public function show(Personal $personal)
     {
         $personal->load(['sucursal', 'departamento']);
-        return view('gestion-inventarios.personal.show', compact('personal'));
+
+        $equipos_asignados = $personal->equipos_asignados->filter(function($asignacion){
+            return $asignacion->status == 'Asignado' && $asignacion->equipo->status == 'Activo';
+        });
+
+        return view('gestion-inventarios.personal.show', compact('personal','equipos_asignados'));
     }
 
     public function create(Request $request)

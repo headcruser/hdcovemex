@@ -138,7 +138,14 @@
                             data-placeholder="Fecha Compra"> {{ optional($equipo->fecha_compra)->format('d-m-Y') }} </a>
                     </li>
                     <li class="list-group-item">
-                        <b>Estatus</b> <a class="float-right">{{ $equipo->status }}</a>
+                        <b>Estatus</b>
+                        <a class="float-right editable_status_equipo"
+                            data-name="status"
+                            data-type="select"
+                            data-value="{{ $equipo->status }}"
+                            data-pk="{{ $equipo->id }}"
+                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                            data-placeholder="Status"> {{ $equipo->status }} </a>
                     </li>
               </ul>
             </div>
@@ -192,6 +199,7 @@
                                 <th>Departamento</th>
                                 <th>Fecha de asignacion</th>
                                 <th>Observaciones</th>
+                                <th>Status</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -348,13 +356,23 @@
                 'onblur': 'ignore'
             });
 
-             $('.editable_tipo_equipo').editable({
+            $('.editable_tipo_equipo').editable({
                 emptytext: 'Vacio',
                 onblur: 'ignore',
                  source: [
                     {value: 'Escritorio', text: 'Escritorio'},
                     {value: 'Laptop', text: 'Laptop'},
                     {value: 'Servidor', text: 'Servidor'}
+                ],
+            });
+
+            $('.editable_status_equipo').editable({
+                emptytext: 'Vacio',
+                onblur: 'ignore',
+                source: [
+                    {value: 'Activo', text: 'Activo'},
+                    {value: 'Inactivo', text: 'Inactivo'},
+                    {value: 'Desechado', text: 'Desechado'}
                 ],
             });
 
@@ -369,8 +387,6 @@
                     language: 'en',
                 },
             });
-
-
 
             // GESTION DE COMPONENTES DEL EQUIPO
             $('#select-id_hardware').select2({
@@ -647,6 +663,15 @@
                             const $btn_editar = $(this).closest('tr').find('[data-action="editar-asignacion"]');
                             $btn_editar.attr('data-object',JSON.stringify(params.response.equipo || {}));
                         });
+
+                        $('.editable_status_equipo_asignado').editable({
+                            emptytext: 'Vacio',
+                            onblur: 'ignore',
+                            source: [
+                                {value: 'Asignado', text: 'Asignado'},
+                                {value: 'Inactivo', text: 'Inactivo'},
+                            ],
+                        });
                     },
                 },
                 pageLength: 10,
@@ -656,6 +681,7 @@
                     {data: 'personal.departamento.nombre',name: 'personal.departamento.nombre'},
                     {data: 'fecha_entrega',name: 'fecha_entrega'},
                     {data: 'observaciones',name: 'observaciones'},
+                    {data: 'status',name: 'status'},
                     {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
                 ],
                 order: [[ 0, "desc" ]],
