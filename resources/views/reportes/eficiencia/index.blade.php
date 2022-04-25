@@ -45,7 +45,9 @@
                 </div>
             </div>
 
-           @include('reportes.eficiencia.partials._table')
+            <div class="table-responsive">
+                @include('reportes.eficiencia.partials._table')
+            </div>
         </div>
     </div>
 </div>

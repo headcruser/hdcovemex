@@ -32,7 +32,6 @@
             </div>
 
             <div class="card-body">
-                {{-- @include('admin.statuses.partials._table') --}}
                 <table id="tb-estatus" class=" table table-bordered table-striped table-hover datatable datatable-User">
                     <thead>
                         <tr>
@@ -63,12 +62,14 @@
             table: $('#tb-estatus'),
         };
 
+        $.fn.DataTable.ext.pager.numbers_length = 5;
+
         var dt = dom.table.DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             pageLength: 10,
-            dom: "<'row'<'col-6 d-flex align-items-center'l><'col-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-7'i><'col-5 align-self-end d-flex justify-content-end'p>>",
+            dom: "<'row'<'col-xs-12 col-sm-6 d-flex align-items-center justify-content-center justify-content-sm-start'l><'col-xs-12 col-sm-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-xs-12 col-sm-7'i><'col-xs-12 col-sm-5 align-self-end d-flex justify-content-center justify-content-sm-end'p>>",
             ajax: {
                 url: "{{ route('admin.estatus.datatables') }}",
                 type: "POST",
@@ -87,8 +88,8 @@
             columns: [
                 {data: 'id',name: 'id'},
                 {data: 'name',name: 'name'},
-                {data: 'display_name',name: 'display_name'},
-                {data: 'color',name: 'color'},
+                {data: 'display_name',name: 'display_name',className:'text-nowrap text-center'},
+                {data: 'color',name: 'color',className:'text-center text-nowrap'},
                 {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
             ],
             order: [[ 0, "desc" ]],
@@ -102,8 +103,8 @@
                 "paginate": {
                     "first": "Primera",
                     "last": "Última",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
+                    "next": "<i class='fa fa-chevron-right'></i>",
+                    "previous": "<i class='fa fa-chevron-left'></i>"
                 },
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",

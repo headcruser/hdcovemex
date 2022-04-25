@@ -61,12 +61,14 @@
                 table: $('#tb-roles'),
             };
 
+            $.fn.DataTable.ext.pager.numbers_length = 5;
+
             var dt = dom.table.DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 pageLength: 10,
-                dom: "<'row'<'col-6 d-flex align-items-center'l><'col-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-7'i><'col-5 align-self-end d-flex justify-content-end'p>>",
+                dom: "<'row'<'col-xs-12 col-sm-6 d-flex align-items-center justify-content-center justify-content-sm-start'l><'col-xs-12 col-sm-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-xs-12 col-sm-7'i><'col-xs-12 col-sm-5 align-self-end d-flex justify-content-center justify-content-sm-end'p>>",
                 ajax: {
                     url: "{{ route('admin.roles.datatables') }}",
                     type: "POST",
@@ -92,15 +94,15 @@
                 language: {
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",
                     "zeroRecords": "No se encontro ningún registro",
-                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
+                    "info": "_TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
                     "infoEmpty": "No hay registros disponibles",
                     "infoFiltered": "(Filtrado de un total de _MAX_ registros)",
                     "search": "Buscar:",
                     "paginate": {
                         "first": "Primera",
                         "last": "Última",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
+                        "next": "<i class='fa fa-chevron-right'></i>",
+                        "previous": "<i class='fa fa-chevron-left'></i>"
                     },
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
