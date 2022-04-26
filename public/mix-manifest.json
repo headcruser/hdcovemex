@@ -1,6 +1,10 @@
 {
-    "/js/app.js": "/js/app.js?id=7f148fbcab9871bb568f",
+    "/js/app.js": "/js/app.js?id=3153969c97324c3afe89",
     "/css/app.css": "/css/app.css?id=691996c04766e0e9a2f8",
     "/js/vendor.js": "/js/vendor.js?id=9c1791c84dac6f3549f7",
-    "/js/vendor/table-html/table-html.js": "/js/vendor/table-html/table-html.js?id=c03da1d4e826ddfb5147"
+    "/js/vendor/table-html/table-html.js": "/js/vendor/table-html/table-html.js?id=c03da1d4e826ddfb5147",
+    "/vendor/pivottable/pivot_lib.min.css": "/vendor/pivottable/pivot_lib.min.css?id=fda895d1d3b69f2a3379",
+    "/vendor/pivottable/pivot_lib.min.js": "/vendor/pivottable/pivot_lib.min.js?id=db17a09d1d78acea2499",
+    "/vendor/pivottable/pivot.min.css": "/vendor/pivottable/pivot.min.css?id=c416acddc4b4d42fee8b",
+    "/vendor/pivottable/pivot.min.js": "/vendor/pivottable/pivot.min.js?id=ebc7121d9c24074dc84f"
 }

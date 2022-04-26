@@ -356,6 +356,11 @@ Route::group([
         'as'    => 'eficiencia',
         'uses'  => 'EficienciaReportController@eficiencia'
     ]);
+
+    Route::get('reporte-dinamico', [
+        'as'    => 'reporte-dinamico',
+        'uses'  => 'ReporteDinamicoController@index'
+    ]);
 });
 
 

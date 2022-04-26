@@ -332,6 +332,11 @@ return [
             'display_name'  => 'Acceso reporte anual impresiones',
             'description'   => 'Permite visualizar el reporte de impresiones'
         ],
+        [
+            'name'          => 'reporte_dinamico',
+            'display_name'  => 'Reporte dinámico',
+            'description'   => 'Permite visualizar el reporte dinamico'
+        ],
 
         # 👉CREDENCIALES
         [
