@@ -2,12 +2,18 @@
 
 namespace HelpDesk\Http\Controllers\Reportes;
 
+use Config;
 use HelpDesk\Entities\Ticket;
 use HelpDesk\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ReporteDinamicoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:reporte_dinamico');
+    }
+
     public function index(Request $request)
     {
         $tickets = Ticket::query()
@@ -26,6 +32,9 @@ class ReporteDinamicoController extends Controller
                 $q->whereDate('fecha', '<=', now()->endOfMonth()->toDateString());
             });
         })
+        ->when($request->input('estado'), function ($q, $estado) {
+            $q->where('estado', $estado);
+        })
         ->with(['operador','empleado'])
         ->get()
         ->map(function($ticket){
@@ -41,6 +50,8 @@ class ReporteDinamicoController extends Controller
             ];
         });
 
-        return view('reportes.dinamico.index',compact('tickets'));
+        $estados = ['' => 'Todos'] + Config::get('helpdesk.tickets.estado.names', []);
+
+        return view('reportes.dinamico.index',compact('tickets','estados'));
     }
 }

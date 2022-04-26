@@ -361,6 +361,11 @@ Route::group([
         'as'    => 'reporte-dinamico',
         'uses'  => 'ReporteDinamicoController@index'
     ]);
+
+    Route::get('por-departamento', [
+        'as'    => 'por-departamento',
+        'uses'  => 'PorDepartamentoController@index'
+    ]);
 });
 
 

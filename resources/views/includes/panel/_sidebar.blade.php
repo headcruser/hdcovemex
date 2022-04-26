@@ -288,14 +288,22 @@
                             @endpermission
 
                             @permission('reporte_dinamico')
-                            <li class="nav-item ">
-                                <a href="{{ route('reporte.reporte-dinamico') }}" class="nav-link {{ routeIs(['reporte.reporte-dinamico']) }}">
-                                    <i class="nav-icon fas fa-clock"></i>
-                                    <p>Dinamico</p>
-                                </a>
-                            </li>
+                                <li class="nav-item ">
+                                    <a href="{{ route('reporte.reporte-dinamico') }}" class="nav-link {{ routeIs(['reporte.reporte-dinamico']) }}">
+                                        <i class="nav-icon fas fa-clock"></i>
+                                        <p>Dinámico</p>
+                                    </a>
+                                </li>
                             @endpermission
 
+                            @permission('reporte_por_departamento')
+                                <li class="nav-item ">
+                                    <a href="{{ route('reporte.por-departamento') }}" class="nav-link {{ routeIs(['reporte.por-departamento']) }}">
+                                        <i class="nav-icon fas fa-clock"></i>
+                                        <p>Por Departamento</p>
+                                    </a>
+                                </li>
+                            @endpermission
                         </ul>
                     </li>
                 @endpermission

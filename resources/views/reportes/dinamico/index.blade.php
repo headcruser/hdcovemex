@@ -35,7 +35,11 @@
                             <button class='btn btn-sm btn-outline-secondary' id="btn-excel">
                                 Excel <i class="fas fa-table"></i>
                             </button>
+
                         </div>
+                        <label>
+                            {!! Form::select('estado', $estados, request('estado'), ['class' => 'custom-select custom-select-sm','form' => 'form-filter-efficiencia']) !!}
+                        </label>
                     </div>
 
                     <div class="col align-self-end ">

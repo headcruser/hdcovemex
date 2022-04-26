@@ -337,6 +337,11 @@ return [
             'display_name'  => 'Reporte dinámico',
             'description'   => 'Permite visualizar el reporte dinamico'
         ],
+        [
+            'name'          => 'reporte_por_departamento',
+            'display_name'  => 'Reporte por departamento',
+            'description'   => 'Permite visualizar el reporte por departamento'
+        ],
 
         # 👉CREDENCIALES
         [
