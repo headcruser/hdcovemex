@@ -36,10 +36,13 @@
 
               <ul class="list-group list-group-unbordered mb-3">
                 <li class="list-group-item">
+                  <b>Puesto</b> <a class="float-right">{{ $personal->puesto }}</a>
+                </li>
+                <li class="list-group-item">
                   <b>Sucursal</b> <a class="float-right">{{ $personal->sucursal->descripcion }}</a>
                 </li>
                 <li class="list-group-item">
-                    <b>ID Impresion</b> <a class="float-right">{{ $personal->id_impresion }}</a>
+                    <b>ID Impresión</b> <a class="float-right">{{ $personal->id_impresion }}</a>
                   </li>
               </ul>
 
@@ -126,7 +129,7 @@
   </div>
 
   @include('gestion-inventarios.personal.modals._cuenta_usuario')
-  @include('gestion-inventarios.personal.modals._generar-firma');
+  @include('gestion-inventarios.personal.modals._generar-firma')
 @endsection
 
 
@@ -353,12 +356,11 @@
                 $("#form-generar-firma").find('input[name="correo"]').val(correo.info.usuario || '');
                 $("#form-generar-firma").find('input[name="extension"]').val(ext.info.usuario || '');
 
-
                 generar_firma({
                     nombre: $("#form-generar-firma").find('input[name="nombre"]').val(),
+                    puesto: $("#form-generar-firma").find('input[name="puesto"]').val() ,
                     correo: correo.info.usuario || '',
                     extension:ext.info.usuario || '',
-                    puesto: '' ,
                 })
 
 

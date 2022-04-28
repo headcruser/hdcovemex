@@ -74,10 +74,10 @@ class PersonalController extends Controller
         ]);
 
 
-        Personal::create($request->except('_token'));
+        $personal = Personal::create($request->except('_token'));
 
         return redirect()
-            ->route('gestion-inventarios.personal.index')
+            ->route('gestion-inventarios.personal.show',$personal)
             ->with(['message' => 'Personal creado correctamente']);
     }
 
@@ -104,7 +104,7 @@ class PersonalController extends Controller
         $personal->update($request->except('_token'));
 
         return redirect()
-            ->route('gestion-inventarios.personal.index')
+            ->route('gestion-inventarios.personal.show',$personal)
             ->with(['message' => 'Personal editado correctamente']);
     }
 

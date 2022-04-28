@@ -2,9 +2,9 @@
 
 return [
     'fonts' => [
-        'nombre'    => realpath(public_path('vendor/firma-electronica/fonts/Constantia.TTF')),
-        'puesto'    => realpath(public_path('vendor/firma-electronica/fonts/Gabriola.ttf')),
-        'contacto'  => realpath(public_path('vendor/firma-electronica/fonts/Arial.ttf')),
+        'constantia' => realpath(public_path('vendor/firma-electronica/fonts/Constantia.TTF')),
+        'gabriola'  => realpath(public_path('vendor/firma-electronica/fonts/Gabriola.ttf')),
+        'arial'     => realpath(public_path('vendor/firma-electronica/fonts/Arial.ttf')),
     ],
     'template'  => realpath(public_path('vendor/firma-electronica/img/template.png')),
     'sitio-web' => 'www.covemex.com',

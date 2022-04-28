@@ -5,15 +5,19 @@ if (!function_exists('generar_firma')) {
     /**
      * Genera la firma electronica del usuario
      *
-     * @param
-     * @return
+     * @param string $nombre
+     * @param string $puesto
+     * @param string $correo
+     * @param string $extension
+     *
+     * @return array|false Matriz de valores de la imagen
      */
     function generar_firma(string $nombre, string $puesto, string $correo, string $extension)
     {
         # FUENTES
-        $fontNombre = config('firma-electronica.fonts.nombre');
-        $fontPuesto = config('firma-electronica.fonts.puesto');
-        $fontContacto = config('firma-electronica.fonts.puesto');
+        $fontNombre = config('firma-electronica.fonts.constantia');
+        $fontPuesto = config('firma-electronica.fonts.gabriola');
+        $fontContacto = config('firma-electronica.fonts.arial');
 
         # INFORMACION IMAGEN
         $nombreImagen = config('firma-electronica.template');
@@ -24,30 +28,32 @@ if (!function_exists('generar_firma')) {
         # GENERACION IMAGEN
         $firma = imagecreatefrompng($nombreImagen);
         $color = imagecolorallocate($firma, 255, 255, 255);
+        $colorSitio = imagecolorallocate($firma, 255, 218, 147);
 
-        $sizeNombre = 13;
+        # POSICIONAMIENTO
+        $sizeNombre = 14.5;
         $sizePuesto = 16;
-        $sizeContacto = 11;
+        $sizeContacto = 10.5;
         $angulo = 0;
         $espacio = 10;
-        $x = 87;
+        $x = 85;
         $y = 35;
-        $x2 = 87;
+        $x2 = 85;
         $y2 = $y + $espacio + $sizeNombre + 1;
-        $lineContacto = $y + $espacio + $sizeNombre + $sizePuesto + 15;
-        $lineTelefono = $y + $espacio + $sizeNombre + $sizePuesto + $sizeContacto + 20;
-        $lineSitioweb = $y + $espacio + $sizeNombre + $sizePuesto + $sizeContacto + 45;
+        $lineContacto = $y + $espacio + $sizeNombre + $sizePuesto + 22;
+        $lineTelefono = $y + $espacio + $sizeNombre + $sizePuesto + $sizeContacto + 30;
+        $lineSitioweb = $y + $espacio + $sizeNombre + $sizePuesto + $sizeContacto + 47;
 
-        /* NOMBRE */
+        # NOMBRE
         imagettftext($firma, $sizeNombre, $angulo, $x, $y, $color, $fontNombre, $nombre);
-        /* PUESTO */
+        # PUESTO
         imagettftext($firma, $sizePuesto, $angulo, $x2, $y2, $color, $fontPuesto, $puesto);
-        /* CORREO */
+        # CORREO
         imagettftext($firma, $sizeContacto, $angulo, $x2, $lineContacto, $color, $fontContacto, $Correo);
-        /* TELEFONO */
+        # TELEFONO
         imagettftext($firma, $sizeContacto, $angulo, $x2, $lineTelefono, $color, $fontContacto, $Telefono);
-        /* WEB */
-        imagettftext($firma, $sizeContacto, $angulo, $x2, $lineSitioweb, $color, $fontContacto, $Sitioweb);
+        # WEB
+        imagettftext($firma, $sizeContacto, $angulo, $x2, $lineSitioweb, $colorSitio, $fontContacto, $Sitioweb);
 
         return $firma;
     }

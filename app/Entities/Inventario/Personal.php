@@ -25,6 +25,7 @@ class Personal extends Model
      */
     protected $fillable = [
         'nombre',
+        'puesto',
         'id_sucursal',
         'id_usuario',
         'id_departamento',

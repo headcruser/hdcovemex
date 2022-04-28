@@ -26,6 +26,17 @@
     </div>
 </div>
 
+<div class="form-group @error('puesto') has-error @enderror">
+    {!! Form::label('puesto', 'Puesto:') !!}
+    {!! Form::text('puesto',null, ['class' => 'form-control','autocomplete' => 'off','placeholder' => 'Escribe aqui el puesto']) !!}
+
+    <div class="help-block with-errors">
+        @error('puesto')
+            <span>{{ $errors->first('puesto') }}</span>
+        @enderror
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-6">
         <div class="form-group @error('id_sucursal') has-error @enderror">

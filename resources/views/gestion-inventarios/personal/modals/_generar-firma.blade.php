@@ -20,7 +20,7 @@
                 <div class="col-12 col-sm-6">
                     <div class="form-group ">
                         {!! Form::label('puesto', 'Puesto:*') !!}
-                        {!! Form::text('puesto', null, ['class' => 'form-control','autocomplete' => 'off','placeholder' => 'Escribe aqui el puesto','required' => true]) !!}
+                        {!! Form::text('puesto', $personal->puesto, ['class' => 'form-control','autocomplete' => 'off','placeholder' => 'Escribe aqui el puesto','required' => true]) !!}
                         <small data-help class="form-text text-muted"></small>
                     </div>
                 </div>
