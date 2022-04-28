@@ -3,7 +3,7 @@
 return [
     'fonts' => [
         'nombre'    => realpath(public_path('vendor/firma-electronica/fonts/Constantia.ttf')),
-        'puesto'    => realpath(public_path('vendor/firma-electronica/fonts/Gabriola.ttf')),
+        'puesto'    => realpath(public_path('vendor/firma-electronica/fonts/Gabriola.TTF')),
         'contacto'  => realpath(public_path('vendor/firma-electronica/fonts/Arial.ttf')),
     ],
     'template'  => realpath(public_path('vendor/firma-electronica/img/template.png')),
