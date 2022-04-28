@@ -44,6 +44,7 @@
               </ul>
 
               <a href="{{ route('gestion-inventarios.personal.edit',$personal) }}" class="btn btn-primary btn-block"><b>Editar</b></a>
+              <button id="btn-generar-firma" class="btn btn-info btn-block">Generar Firma</button>
             </div>
             <!-- /.card-body -->
           </div>
@@ -73,6 +74,7 @@
                         @include('gestion-inventarios.personal.partials._cuentas')
                     </div>
                 </div>
+
                 <div class="tab-pane fade" id="tab-pane-equipos" role="tabpanel" aria-labelledby="equipo-tab">
                     <h4>Asignacion de equipo</h4>
                    <div class="row">
@@ -124,6 +126,7 @@
   </div>
 
   @include('gestion-inventarios.personal.modals._cuenta_usuario')
+  @include('gestion-inventarios.personal.modals._generar-firma');
 @endsection
 
 
@@ -328,6 +331,59 @@
                 this.innerHTML = isInputTypePassword ? `<i class="fa fa-eye-slash"></i>`:`<i class="fa fa-eye"></i>`;
             });
 
+            // GENERAR FIRMA
+            $("#btn-generar-firma").click(function(e){
+                $("#form-generar-firma").trigger('reset');
+
+                const info  = Array.from(dom.contenedor_info.find('[data-title]')).map(item => {
+                    return {
+                        title: $(item).data('title'),
+                        info: $(item).closest('div[data-object]').data('object')
+                    }
+                });
+
+                const correo = info.find(item => item.title  === 'correo') || {title: '', info:{}};
+
+                const ext = info.find(item => {
+                    const title = (item.title || '').toLowerCase();
+                    return title.includes('ext.')
+                } ) || {title: '', info:{}};
+
+
+                $("#form-generar-firma").find('input[name="correo"]').val(correo.info.usuario || '');
+                $("#form-generar-firma").find('input[name="extension"]').val(ext.info.usuario || '');
+
+
+                generar_firma({
+                    nombre: $("#form-generar-firma").find('input[name="nombre"]').val(),
+                    correo: correo.info.usuario || '',
+                    extension:ext.info.usuario || '',
+                    puesto: '' ,
+                })
+
+
+
+                $('#modal-generar-firma').modal('show');
+            })
+
+            $("#form-generar-firma").submit(function(e){
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData)
+
+                delete data._token;
+
+                generar_firma(data);
+            });
+
+            function generar_firma({ nombre = '',correo ='',puesto='',extension=''})
+            {
+                const params = $.param({nombre,correo,puesto,extension});
+                const route = "{{ route('gestion-inventarios.personal.generar-firma') }}" +'?' + params;
+
+                $("#contenido-firma").html(`<iframe scrolling='auto' type='text/html' scroll='auto' src='${route}' width='100%' height='156px' align='center'></iframe>`);
+            }
         })();
     </script>
 @endsection

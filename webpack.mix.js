@@ -51,11 +51,9 @@ mix.styles([
     'resources/vendor/pivottable_lib/jquery.ui.touch-punch.min.js'
 ], 'public/vendor/pivottable/pivot_lib.min.js');
 
-
 mix.styles([
     'node_modules/pivottable/dist/pivot.min.css',
 ], 'public/vendor/pivottable/pivot.min.css')
-
 .scripts([
     'node_modules/pivottable/dist/pivot.js',
     'node_modules/pivottable/dist/pivot.es.min.js',
@@ -63,7 +61,12 @@ mix.styles([
     'node_modules/pivottable/dist/c3_renderers.js',
     'node_modules/pivottable/dist/export_renderers.js',
 
-], 'public/vendor/pivottable/pivot.min.js')
-.version();
+], 'public/vendor/pivottable/pivot.min.js');
+
+// RECURSOS FIRMA ELECTRONICA
+mix.copy('resources/vendor/firma-electronica/fonts', 'public/vendor/firma-electronica/fonts');
+mix.copy('resources/vendor/firma-electronica/img', 'public/vendor/firma-electronica/img');
+
+mix.version();
 
 mix.browserSync(process.env.APP_URL)

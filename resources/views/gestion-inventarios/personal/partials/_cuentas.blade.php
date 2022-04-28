@@ -2,7 +2,7 @@
     @foreach ($personal->cuentas as $cuenta)
         <div class="col" data-object="{{ $cuenta }}">
             <div class="card bg-light">
-            <div class="card-header text-muted border-bottom-0">
+            <div class="card-header text-muted border-bottom-0" data-title="{{ Str::lower($cuenta->titulo) }}">
                 {{ $cuenta->titulo }}
             </div>
             <div class="card-body pt-0">

@@ -123,7 +123,6 @@ class PersonalController extends Controller
             ->with(['message' => 'Personal elimnado correctamente']);
     }
 
-
     public function listar_cuentas(Request $request)
     {
         $personal = Personal::findOrFail($request->input('id_personal'));
@@ -241,5 +240,19 @@ class PersonalController extends Controller
                 'details'   => optional($failures[0])->errors()
             ],HTTPMessages::HTTP_UNPROCESSABLE_ENTITY);
         }
+    }
+
+    public function generar_firma(Request $request)
+    {
+        $img = generar_firma(
+            $request->input('nombre')?? '',
+            $request->input('puesto') ?? '',
+            $request->input('correo') ?? '',
+            $request->input('extension') ?? '',
+        );
+
+        header('Content-Type: image/png');
+        imagepng($img);
+        imagedestroy($img);
     }
 }

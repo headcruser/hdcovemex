@@ -186,6 +186,8 @@ Route::group([
         Route::post('personal/agregar_cuenta',"PersonalController@agregar_cuenta")->name('personal.agregar_cuenta');
         Route::post('personal/select2',"PersonalController@select2")->name('personal.select2');
         Route::post('personal/datatables',"PersonalController@datatables")->name('personal.datatables');
+        Route::get('personal/generar-firma', "PersonalController@generar_firma")->name('personal.generar-firma');
+
         Route::resource('personal', 'PersonalController')->parameters([
             'personal'  => 'personal'
         ]);
