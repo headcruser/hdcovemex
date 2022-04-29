@@ -5,6 +5,7 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/dropify/dist/css/dropify.min.css') }}">
+    @parent
 @endsection
 
 @section('breadcrumb')
@@ -58,7 +59,7 @@
                 </div>
 
 
-                <table id="tb-personal" class="table table-bordered table-hover">
+                <table id="tb-personal" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -83,8 +84,7 @@
     @include('gestion-inventarios.personal.modals._importar_usuarios')
 @endsection
 
-
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/dropify/dist/js/dropify.min.js') }}"></script>
@@ -340,5 +340,4 @@
             })(dom.importar_personal);
         });
     </script>
-@endsection
-
+@endpush

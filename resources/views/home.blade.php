@@ -30,7 +30,7 @@
 </section>
 @endsection
 
-@section('scripts')
-<script type="text/javascript">
-</script>
-@endsection
+@push('scripts')
+    <script type="text/javascript">
+    </script>
+@endpush

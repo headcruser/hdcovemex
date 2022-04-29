@@ -3,59 +3,58 @@
 @section('title','Equipos')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">
-        Gestión Inventarios
-    </li>
-    <li class="breadcrumb-item active">Equipos</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">
+            Gestión Inventarios
+        </li>
+        <li class="breadcrumb-item active">Equipos</li>
+    </ol>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Gestion de Equipos</h3>
-            <div class="card-tools">
-                <a href="{{ route('gestion-inventarios.equipos.create') }}" class="btn btn-success btn-sm" title="Crear">
-                    Crear <i class="fas fa-plus-circle"></i>
-                </a>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                <h3 class="card-title">Gestion de Equipos</h3>
+                    <div class="card-tools">
+                        <a href="{{ route('gestion-inventarios.equipos.create') }}" class="btn btn-success btn-sm" title="Crear">
+                            Crear <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="tb-equipos" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>UUID</th>
+                                <th>HOST</th>
+                                <th>NOMBRE</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
             </div>
+            <!-- /.card -->
         </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-            <table id="tb-equipos" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>UUID</th>
-                        <th>HOST</th>
-                        <th>NOMBRE</th>
-                        <th>ACCIONES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <!-- /.card-body -->
-      </div>
-      <!-- /.card -->
     </div>
-    <!-- /.col -->
-  </div>
 @endsection
 
-
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
@@ -178,5 +177,4 @@
 
         })
     </script>
-@endsection
-
+@endpush

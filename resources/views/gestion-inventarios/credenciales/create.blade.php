@@ -3,6 +3,7 @@
 @section('title','Crear Credencial')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/summernote/summernote-bs4.css') }}">
 @endsection
 
@@ -17,39 +18,38 @@
         </li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
-
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información de la credencial</h3>
-            </div>
-            <div class="card-body">
-                {!! Form::open([
-                    'route'             => 'gestion-inventarios.credenciales.store',
-                    'method'            => 'POST',
-                    'accept-charset'    => 'UTF-8',
-                    'enctype'           => 'multipart/form-data']) !!}
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información de la credencial</h3>
+                </div>
+                <div class="card-body">
+                    {!! Form::open([
+                        'route'             => 'gestion-inventarios.credenciales.store',
+                        'method'            => 'POST',
+                        'accept-charset'    => 'UTF-8',
+                        'enctype'           => 'multipart/form-data']) !!}
 
-                    @include('gestion-inventarios.credenciales.partials._fields')
+                        @include('gestion-inventarios.credenciales.partials._fields')
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                {!! Form::close() !!}
+                    {!! Form::close() !!}
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('vendor/summernote/lang/summernote-es-ES.min.js') }}"></script>
 
@@ -77,5 +77,4 @@
             });
         });
     </script>
-@endsection
-
+@endpush

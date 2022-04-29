@@ -3,59 +3,60 @@
 @section('title','Administrar Operadores')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item"> Administración </li>
-    <li class="breadcrumb-item active">Operadores</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item"> Administración </li>
+        <li class="breadcrumb-item active">Operadores</li>
+    </ol>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Lista de operadores</h3>
-                <div class="card-tools">
-                    <a href="{{ route('admin.operadores.create') }}"
-                        class="btn btn-success btn-sm"
-                        title="Crear">
-                        Crear <i class="fas fa-plus-circle"></i>
-                    </a>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Lista de operadores</h3>
+                    <div class="card-tools">
+                        <a href="{{ route('admin.operadores.create') }}"
+                            class="btn btn-success btn-sm"
+                            title="Crear">
+                            Crear <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <table id="tb-operadores" class="table table-bordered table-striped table-hover datatable datatable-User">
+                        <thead>
+                            <tr>
+                                <th>ID </th>
+                                <th>NOMBRE</th>
+                                <th>USUARIO</th>
+                                <th>EMAIL</th>
+                                <th>ROLES</th>
+                                <th>SOLICITUD</th>
+                                <th>ASIGNACION</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="card-body">
-                <table id="tb-operadores" class="table table-bordered table-striped table-hover datatable datatable-User">
-                    <thead>
-                        <tr>
-                            <th>ID </th>
-                            <th>NOMBRE</th>
-                            <th>USUARIO</th>
-                            <th>EMAIL</th>
-                            <th>ROLES</th>
-                            <th>SOLICITUD</th>
-                            <th>ASIGNACION</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
@@ -160,5 +161,5 @@
 
         })
     </script>
-@endsection
+@endpush
 

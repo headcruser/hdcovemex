@@ -73,6 +73,6 @@
     </section>
 @endsection
 
-@section('scripts')
-@endsection
+@push('scripts')
+@endpush
 

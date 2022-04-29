@@ -3,298 +3,303 @@
 @section('title','Detalle del equipo')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/x-editable/css/bootstrap-editable.css') }}">
     <link rel="stylesheet" href="{{asset('vendor/dropify/dist/css/dropify.min.css') }}"  >
+    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <style>
+        /* SOLUCION PARA VISUALIZAR LOS ICONOS DEL CALENDARIO SELECT2 */
+        .icon-arrow-left:before {content: "\2190 ";}
+        .icon-arrow-right:before {content: "\2192 ";}
+    </style>
+    @parent
 @endsection
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item"> <a href="#">
-       Gestión de inventarios </a>
-    </li>
-    <li class="breadcrumb-item"> <a href="{{ route('gestion-inventarios.equipos.index') }}">
-        Equipo </a>
-     </li>
-    <li class="breadcrumb-item active">Detalle equipo</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item"> <a href="#">
+        Gestión de inventarios </a>
+        </li>
+        <li class="breadcrumb-item"> <a href="{{ route('gestion-inventarios.equipos.index') }}">
+            Equipo </a>
+        </li>
+        <li class="breadcrumb-item active">Detalle equipo</li>
+    </ol>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-4">
-        <div class="card card-primary card-outline">
-            <div class="card-body box-profile">
-              <h3 class="profile-username text-center">{{ $equipo->uid }}</h3>
+    <div class="row">
+        <div class="col-12 col-sm-4">
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                <h3 class="profile-username text-center">{{ $equipo->uid }}</h3>
 
-              <p class="text-muted text-center">
-                  <a class="editable_descripcion_equipo"
-                    data-name="descripcion"
-                    data-type="textarea"
-                    data-value="{{ $equipo->descripcion }}"
-                    data-pk="{{ $equipo->id }}"
-                    data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                    data-placeholder="Descripcion"> {{ $equipo->descripcion }} </a>
-                </p>
+                <p class="text-muted text-center">
+                    <a class="editable_descripcion_equipo"
+                        data-name="descripcion"
+                        data-type="textarea"
+                        data-value="{{ $equipo->descripcion }}"
+                        data-pk="{{ $equipo->id }}"
+                        data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                        data-placeholder="Descripcion"> {{ $equipo->descripcion }} </a>
+                    </p>
 
-              <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                        <b>Fecha de creación</b> <a class="float-right">{{ $equipo->fecha_equipo->format('d-m-Y') }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Tipo</b>
-                        <a class="float-right editable_tipo_equipo"
-                            data-name="tipo"
-                            data-type="select"
-                            data-value="{{ $equipo->tipo }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Tipo"> {{ $equipo->tipo }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Marca</b>
-                         <a class="float-right editable_informacion_equipo"
-                            data-name="marca"
-                            data-type="text"
-                            data-value="{{ $equipo->marca }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Marca"> {{ $equipo->marca }} </a>
-                    </li>
+                <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                            <b>Fecha de creación</b> <a class="float-right">{{ $equipo->fecha_equipo->format('d-m-Y') }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Tipo</b>
+                            <a class="float-right editable_tipo_equipo"
+                                data-name="tipo"
+                                data-type="select"
+                                data-value="{{ $equipo->tipo }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Tipo"> {{ $equipo->tipo }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Marca</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="marca"
+                                data-type="text"
+                                data-value="{{ $equipo->marca }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Marca"> {{ $equipo->marca }} </a>
+                        </li>
 
-                     <li class="list-group-item">
-                        <b>Modelo</b>
-                         <a class="float-right editable_informacion_equipo"
-                            data-name="modelo"
-                            data-type="text"
-                            data-value="{{ $equipo->modelo }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Modelo"> {{ $equipo->modelo }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b># Serie</b>
-                         <a class="float-right editable_informacion_equipo"
-                            data-name="no_serie"
-                            data-type="text"
-                            data-value="{{ $equipo->no_serie }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Serie"> {{ $equipo->no_serie }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>S.O</b>
-                         <a class="float-right editable_informacion_equipo"
-                            data-name="sistema_operativo"
-                            data-type="text"
-                            data-value="{{ $equipo->sistema_operativo }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="S.O"> {{ $equipo->sistema_operativo }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Procesador</b>
-                         <a class="float-right editable_informacion_equipo"
-                            data-name="procesador"
-                            data-type="text"
-                            data-value="{{ $equipo->procesador }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Procesador"> {{ $equipo->procesador }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Memoria</b>
-                         <a class="float-right editable_informacion_equipo"
-                            data-name="memoria"
-                            data-type="text"
-                            data-value="{{ $equipo->memoria }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Memoria"> {{ $equipo->memoria }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Almacenamiento</b>
-                        <a class="float-right editable_informacion_equipo"
-                            data-name="almacenamiento"
-                            data-type="text"
-                            data-value="{{ $equipo->almacenamiento }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Memoria"> {{ $equipo->almacenamiento }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Fecha Compra</b>
-                         <a class="float-right editable_fecha_compra_equipo"
-                            data-name="fecha_compra"
-                            data-type="date"
-                            data-value="{{ optional($equipo->fecha_compra)->format('Y-m-d') }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Fecha Compra"> {{ optional($equipo->fecha_compra)->format('d-m-Y') }} </a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Estatus</b>
-                        <a class="float-right editable_status_equipo"
-                            data-name="status"
-                            data-type="select"
-                            data-value="{{ $equipo->status }}"
-                            data-pk="{{ $equipo->id }}"
-                            data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
-                            data-placeholder="Status"> {{ $equipo->status }} </a>
-                    </li>
-              </ul>
-            </div>
-            <!-- /.card-body -->
-          </div>
-    </div>
-
-    <div class="col-8" id="contenedor-info-personal">
-        <div class="card card-solid">
-            <div class="card-header">
-                <h3 class="card-title">Componentes del equipo</h3>
-                <div class="card-tools">
-                    <button class="btn btn-primary" id="btn-agregar-compoentes-equipo">Agregar componente</button>
+                        <li class="list-group-item">
+                            <b>Modelo</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="modelo"
+                                data-type="text"
+                                data-value="{{ $equipo->modelo }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Modelo"> {{ $equipo->modelo }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b># Serie</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="no_serie"
+                                data-type="text"
+                                data-value="{{ $equipo->no_serie }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Serie"> {{ $equipo->no_serie }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>S.O</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="sistema_operativo"
+                                data-type="text"
+                                data-value="{{ $equipo->sistema_operativo }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="S.O"> {{ $equipo->sistema_operativo }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Procesador</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="procesador"
+                                data-type="text"
+                                data-value="{{ $equipo->procesador }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Procesador"> {{ $equipo->procesador }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Memoria</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="memoria"
+                                data-type="text"
+                                data-value="{{ $equipo->memoria }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Memoria"> {{ $equipo->memoria }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Almacenamiento</b>
+                            <a class="float-right editable_informacion_equipo"
+                                data-name="almacenamiento"
+                                data-type="text"
+                                data-value="{{ $equipo->almacenamiento }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Memoria"> {{ $equipo->almacenamiento }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Fecha Compra</b>
+                            <a class="float-right editable_fecha_compra_equipo"
+                                data-name="fecha_compra"
+                                data-type="date"
+                                data-value="{{ optional($equipo->fecha_compra)->format('Y-m-d') }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Fecha Compra"> {{ optional($equipo->fecha_compra)->format('d-m-Y') }} </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Estatus</b>
+                            <a class="float-right editable_status_equipo"
+                                data-name="status"
+                                data-type="select"
+                                data-value="{{ $equipo->status }}"
+                                data-pk="{{ $equipo->id }}"
+                                data-url="{{ route('gestion-inventarios.equipos.actualizar_informacion') }}"
+                                data-placeholder="Status"> {{ $equipo->status }} </a>
+                        </li>
+                </ul>
                 </div>
-            </div>
-            <div class="card-body" id="lista-info">
-                <table class="table table-bordered" id="tb-componentes-equipo">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <td>Hardware</td>
-                            <td># Serie</td>
-                            <td>Marca</td>
-                            <td>Observacion</td>
-                            <td>Acciones</td>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <!-- /.card-body -->
             </div>
         </div>
 
-    </div>
-    <!-- /.col -->
-  </div>
-
-   <div class="row">
-       <div class="col-md-12">
+        <div class="col-12 col-sm-8" id="contenedor-info-personal">
             <div class="card card-solid">
                 <div class="card-header">
-                    <h3 class="card-title">Historial de asignación</h3>
+                    <h3 class="card-title">Componentes del equipo</h3>
                     <div class="card-tools">
-                        <button id="btn-asignar-equipo" class="btn btn-secondary">Asignar equipo</button>
+                        <button class="btn btn-primary" id="btn-agregar-compoentes-equipo">Agregar componente</button>
                     </div>
                 </div>
-                <div class="card-body" id="lista-historial-asignacion">
-                    <table class="table table-bordered" id="tb-historial-asignacion">
+                <div class="card-body" id="lista-info">
+                    <table class="table table-bordered" id="tb-componentes-equipo">
                         <thead>
                             <tr>
-                                <th>Personal</th>
-                                <th>Departamento</th>
-                                <th>Fecha de asignacion</th>
-                                <th>Observaciones</th>
-                                <th>Status</th>
-                                <th>Acciones</th>
+                                <th>#</th>
+                                <td>Hardware</td>
+                                <td># Serie</td>
+                                <td>Marca</td>
+                                <td>Observacion</td>
+                                <td>Acciones</td>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
-       </div>
-   </div>
 
-  <div class="modal fade" id="modal-componentes-equipo" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content ">
-        <div class="modal-header">
-          <h4 class="modal-title">Componente del equipo</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
         </div>
-        {!! Form::open(['id' => 'form-componentes-equipo', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
-        <div class="modal-body">
-            <div class="form-group">
-                {!! Form::label('id_hardware', 'Hardware:*') !!}
-                {!! Form::select('id_hardware',[], null, ['id' => 'select-id_hardware', 'class' => 'form-control','autocomplete' => 'off','required' => true,'style' => 'width:100%']) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            <div class="form-group">
-                {!! Form::label('observacion', 'Observación:*') !!}
-                {!! Form::textarea('observacion',null, ['id' => 'ta-observacion' ,'class' => 'form-control','rows' => 3]) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            <div id="d-errors-componentes-equipo" class="form-group"></div>
-            {!! Form::hidden('id_equipo', $equipo->id) !!}
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
-        </div>
-        {!! Form::close() !!}
-      </div>
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
-  </div>
 
-  <div class="modal fade" id="modal-asignar-equipo" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content ">
-        <div class="modal-header">
-          <h4 class="modal-title">Asignación de equipo <small>(*) Campos Obligatorios</small></h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+    <div class="row">
+        <div class="col-md-12">
+                <div class="card card-solid">
+                    <div class="card-header">
+                        <h3 class="card-title">Historial de asignación</h3>
+                        <div class="card-tools">
+                            <button id="btn-asignar-equipo" class="btn btn-secondary">Asignar equipo</button>
+                        </div>
+                    </div>
+                    <div class="card-body" id="lista-historial-asignacion">
+                        <table class="table table-bordered" id="tb-historial-asignacion">
+                            <thead>
+                                <tr>
+                                    <th>Personal</th>
+                                    <th>Departamento</th>
+                                    <th>Fecha de asignacion</th>
+                                    <th>Observaciones</th>
+                                    <th>Status</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
         </div>
-        {!! Form::open(['id' => 'form-asignar-equipo', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
-        <div class="modal-body">
-            <div class="form-group">
-                {!! Form::label('id_personal', 'Usuario:*') !!}
-                {!! Form::select('id_personal',[], null, ['id' => 'select-id_personal', 'class' => 'form-control','autocomplete' => 'off','required' => true,'style' => 'width:100%']) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            <div class="form-group">
-                {!! Form::label('fecha_entrega', 'Fecha de entrega:') !!}
-                {!! Form::date('fecha_entrega', null, ['class' => 'form-control','autocomplete' => 'off','style' => 'width:100%']) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            <div class="form-group">
-                {!! Form::label('observaciones', 'Observaciónes:') !!}
-                {!! Form::textarea('observaciones',null, ['class' => 'form-control','rows' => 3, 'placeholder' => 'Motivo de entrega']) !!}
-                <small data-help class="form-text text-muted"></small>
-            </div>
-            <div class="form-group">
-                {!! Form::label('input-carta-responsiva', 'Carta Responsiva:') !!}
-                <input type="file" id="input-carta-responsiva" class="dropify-carta-respnsiva" name="carta_responsiva" accept="image/*,.pdf"/>
-                <small id="ver-link-archivo" class="form-text"> <a href="#" class="btn-link" target="_blank" rel="noopener noreferrer">Ver archivo</a></small>
-            </div>
-
-            <div id="d-errors-asignar-equipo" class="form-group"></div>
-            {!! Form::hidden('id_equipo', $equipo->id) !!}
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
-        </div>
-        {!! Form::close() !!}
-      </div>
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
-  </div>
+
+    <div class="modal fade" id="modal-componentes-equipo" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header">
+            <h4 class="modal-title">Componente del equipo</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            </div>
+            {!! Form::open(['id' => 'form-componentes-equipo', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
+            <div class="modal-body">
+                <div class="form-group">
+                    {!! Form::label('id_hardware', 'Hardware:*') !!}
+                    {!! Form::select('id_hardware',[], null, ['id' => 'select-id_hardware', 'class' => 'form-control','autocomplete' => 'off','required' => true,'style' => 'width:100%']) !!}
+                    <small data-help class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    {!! Form::label('observacion', 'Observación:*') !!}
+                    {!! Form::textarea('observacion',null, ['id' => 'ta-observacion' ,'class' => 'form-control','rows' => 3]) !!}
+                    <small data-help class="form-text text-muted"></small>
+                </div>
+                <div id="d-errors-componentes-equipo" class="form-group"></div>
+                {!! Form::hidden('id_equipo', $equipo->id) !!}
+            </div>
+            <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="modal-asignar-equipo" data-keyboard="false"  data-backdrop="static" aria-hidden="true" tabindex='-1'>
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header">
+            <h4 class="modal-title">Asignación de equipo <small>(*) Campos Obligatorios</small></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            </div>
+            {!! Form::open(['id' => 'form-asignar-equipo', 'accept-charset' => 'UTF-8', 'enctype' =>'multipart/form-data']) !!}
+            <div class="modal-body">
+                <div class="form-group">
+                    {!! Form::label('id_personal', 'Usuario:*') !!}
+                    {!! Form::select('id_personal',[], null, ['id' => 'select-id_personal', 'class' => 'form-control','autocomplete' => 'off','required' => true,'style' => 'width:100%']) !!}
+                    <small data-help class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    {!! Form::label('fecha_entrega', 'Fecha de entrega:') !!}
+                    {!! Form::date('fecha_entrega', null, ['class' => 'form-control','autocomplete' => 'off','style' => 'width:100%']) !!}
+                    <small data-help class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    {!! Form::label('observaciones', 'Observaciónes:') !!}
+                    {!! Form::textarea('observaciones',null, ['class' => 'form-control','rows' => 3, 'placeholder' => 'Motivo de entrega']) !!}
+                    <small data-help class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    {!! Form::label('input-carta-responsiva', 'Carta Responsiva:') !!}
+                    <input type="file" id="input-carta-responsiva" class="dropify-carta-respnsiva" name="carta_responsiva" accept="image/*,.pdf"/>
+                    <small id="ver-link-archivo" class="form-text"> <a href="#" class="btn-link" target="_blank" rel="noopener noreferrer">Ver archivo</a></small>
+                </div>
+
+                <div id="d-errors-asignar-equipo" class="form-group"></div>
+                {!! Form::hidden('id_equipo', $equipo->id) !!}
+            </div>
+            <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection
 
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
@@ -324,8 +329,6 @@
             $.fn.bdatepicker.dates['en'] = CONFIG_DATEPICKER;
         });
 
-
-
         const m_equipos = (function(){
             const dom =  {
                 contenedor_info:$("#contenedor-info-personal"),
@@ -340,7 +343,7 @@
                 tb_historial_asignacion: $("#tb-historial-asignacion"),
             }
 
-             // 👉 XEDITABLE
+            // 👉 XEDITABLE
             $('.editable').on('shown', function(e, editable) {
                 $('.editable-submit').html('<i class="fas fa-check fa-1x"></i>');
                 $('.editable-cancel').html('<i class="fas fa-times"></i>');
@@ -412,7 +415,6 @@
                     }
                 },
                 escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 3,
                 templateResult: function(option){
                     if (option.loading) {
                         return option.text;
@@ -439,6 +441,7 @@
                 serverSide: true,
                 autoWidth: false,
                 pageLength: 10,
+                dom: "<'row'<'col-xs-12 col-sm-6 d-flex align-items-center justify-content-center justify-content-sm-start'l><'col-xs-12 col-sm-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-xs-12 col-sm-7'i><'col-xs-12 col-sm-5 align-self-end d-flex justify-content-center justify-content-sm-end'p>>",
                 ajax: {
                     url: "{{ route('gestion-inventarios.equipos.datatables_componentes_equipo') }}",
                     type: "POST",
@@ -453,7 +456,6 @@
                     complete: function() {
                     },
                 },
-                pageLength: 10,
                 responsive: true,
                 columns: [
                     {data: 'id',name: 'id'},
@@ -467,15 +469,15 @@
                 language: {
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",
                     "zeroRecords": "No se encontro ningún registro",
-                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
+                    "info": "_TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
                     "infoEmpty": "No hay registros disponibles",
                     "infoFiltered": "(Filtrado de un total de _MAX_ registros)",
                     "search": "Buscar:",
                     "paginate": {
                         "first": "Primera",
                         "last": "Última",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
+                        "next": "<i class='fa fa-chevron-right'></i>",
+                        "previous": "<i class='fa fa-chevron-left'></i>"
                     },
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
@@ -625,6 +627,7 @@
                 serverSide: true,
                 autoWidth: false,
                 pageLength: 10,
+                dom: "<'row'<'col-xs-12 col-sm-6 d-flex align-items-center justify-content-center justify-content-sm-start'l><'col-xs-12 col-sm-6'f>><'row'<'col-12 table-responsive p-0'tr>><'row'<'col-xs-12 col-sm-7'i><'col-xs-12 col-sm-5 align-self-end d-flex justify-content-center justify-content-sm-end'p>>",
                 ajax: {
                     url: "{{ route('gestion-inventarios.equipos.datatables_asignar_equipo') }}",
                     type: "POST",
@@ -688,15 +691,15 @@
                 language: {
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",
                     "zeroRecords": "No se encontro ningún registro",
-                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
+                    "info": "_TOTAL_ registros. (Página _PAGE_ de _PAGES_)",
                     "infoEmpty": "No hay registros disponibles",
                     "infoFiltered": "(Filtrado de un total de _MAX_ registros)",
                     "search": "Buscar:",
                     "paginate": {
                         "first": "Primera",
                         "last": "Última",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
+                        "next": "<i class='fa fa-chevron-right'></i>",
+                        "previous": "<i class='fa fa-chevron-left'></i>"
                     },
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
@@ -862,7 +865,6 @@
                     }
                 },
                 escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 3,
                 templateResult: function(option){
                     if (option.loading) {
                         return option.text;
@@ -881,5 +883,5 @@
         })();
 
     </script>
-@endsection
+@endpush
 

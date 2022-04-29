@@ -13,39 +13,37 @@
         </li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
-
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información del personal</h3>
-            </div>
-            <div class="card-body">
-                {!! Form::open([
-                    'route'             => 'gestion-inventarios.equipos.store',
-                    'method'            => 'POST',
-                    'accept-charset'    => 'UTF-8',
-                    'enctype'           =>'multipart/form-data']) !!}
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información del personal</h3>
+                </div>
+                <div class="card-body">
+                    {!! Form::open([
+                        'route'             => 'gestion-inventarios.equipos.store',
+                        'method'            => 'POST',
+                        'accept-charset'    => 'UTF-8',
+                        'enctype'           =>'multipart/form-data']) !!}
 
-                    @include('gestion-inventarios.equipos.partials._fields')
+                        @include('gestion-inventarios.equipos.partials._fields')
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                {!! Form::close() !!}
+                    {!! Form::close() !!}
 
+                </div>
             </div>
         </div>
     </div>
-
-</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
 
@@ -72,5 +70,4 @@
         });
 
     </script>
-@endsection
-
+@endpush

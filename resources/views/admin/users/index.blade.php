@@ -3,18 +3,19 @@
 @section('title','Administrar Usuarios')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/dropify/dist/css/dropify.min.css') }}">
 @endsection
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item"> Administración </li>
-    <li class="breadcrumb-item active">Usuarios</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item"> Administración </li>
+        <li class="breadcrumb-item active">Usuarios</li>
+    </ol>
 @endsection
 
 @section('content')
@@ -38,7 +39,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table id="tb-usuarios" class="table table-bordered table-hover">
+                    <table id="tb-usuarios" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>ID </th>
@@ -101,7 +102,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/dropify/dist/js/dropify.min.js') }}"></script>
@@ -349,5 +350,5 @@
             })(dom.importar_usuarios);
         })
     </script>
-@endsection
+@endpush
 

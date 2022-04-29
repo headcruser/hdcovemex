@@ -3,6 +3,7 @@
 @section('title','Pefil del personal')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/summernote/summernote-bs4.css') }}">
 @endsection
 
@@ -132,8 +133,7 @@
   @include('gestion-inventarios.personal.modals._generar-firma')
 @endsection
 
-
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/clipboard/dist/clipboard.min.js') }}"></script>
     <script src="{{ asset('vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('vendor/summernote/lang/summernote-es-ES.min.js') }}"></script>
@@ -388,5 +388,4 @@
             }
         })();
     </script>
-@endsection
-
+@endpush

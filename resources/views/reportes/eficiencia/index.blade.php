@@ -3,57 +3,54 @@
 @section('title','Eficiencia')
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">Reportes</li>
-    <li class="breadcrumb-item active">Eficiencia</li>
-</ol>
-@endsection
-
-@section('styles')
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">Reportes</li>
+        <li class="breadcrumb-item active">Eficiencia</li>
+    </ol>
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Reporte mensual</h3>
-        </div>
-        <div class="card-body">
-            <div class="row pb-3">
-                <div class="col-6">
-                    <form id="form-report-excel" method="GET" action="{{ route('reporte.eficiencia.export') }}">
-                        <button type="submit" class="btn btn-outline-secondary btn-flat"> <i class="far fa-file-excel"></i> Exportar Excel</button>
-                    </form>
-                </div>
-                <div class="col-6 float-left text-right">
-                    <form id="form-filter-efficiencia" method="GET" action="{{ route('reporte.eficiencia') }}">
-                        <div class="form-inline form-dates">
-                            <label for="from" class="form-label-sm">Fecha</label>&nbsp;
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" name="from" id="from" placeholder="Desde" autocomplete="off">
-                            </div>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" name="to" id="to" placeholder="Hasta" autocomplete="off">
-                            </div>
-                            &nbsp;
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Reporte mensual</h3>
             </div>
+            <div class="card-body">
+                <div class="row pb-3">
+                    <div class="col-6">
+                        <form id="form-report-excel" method="GET" action="{{ route('reporte.eficiencia.export') }}">
+                            <button type="submit" class="btn btn-outline-secondary btn-flat"> <i class="far fa-file-excel"></i> Exportar Excel</button>
+                        </form>
+                    </div>
+                    <div class="col-6 float-left text-right">
+                        <form id="form-filter-efficiencia" method="GET" action="{{ route('reporte.eficiencia') }}">
+                            <div class="form-inline form-dates">
+                                <label for="from" class="form-label-sm">Fecha</label>&nbsp;
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" name="from" id="from" placeholder="Desde" autocomplete="off">
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" name="to" id="to" placeholder="Hasta" autocomplete="off">
+                                </div>
+                                &nbsp;
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-            <div class="table-responsive">
-                @include('reportes.eficiencia.partials._table')
+                <div class="table-responsive">
+                    @include('reportes.eficiencia.partials._table')
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script type="text/javascript">
         const locale = {
             "format": "DD/MM/YYYY",
@@ -139,6 +136,4 @@
             }
         });
     </script>
-@endsection
-
-
+@endpush

@@ -2,6 +2,12 @@
 
 @section('title','Crear hardware')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+    @parent
+@endsection
+
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
@@ -13,42 +19,38 @@
         </li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
-
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información <small>(*) Campos Obligatorios</small></h3>
-            </div>
-            <div class="card-body">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información <small>(*) Campos Obligatorios</small></h3>
+                </div>
+                <div class="card-body">
 
-                {!! Form::open([
-                    'route'             => 'gestion-inventarios.hardware.store',
-                    'method'            => 'POST',
-                    'accept-charset'    => 'UTF-8',
-                    'enctype'           =>'multipart/form-data']) !!}
+                    {!! Form::open([
+                        'route'             => 'gestion-inventarios.hardware.store',
+                        'method'            => 'POST',
+                        'accept-charset'    => 'UTF-8',
+                        'enctype'           =>'multipart/form-data']) !!}
 
-                    @include('gestion-inventarios.hardware.partials._fields')
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                        @include('gestion-inventarios.hardware.partials._fields')
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                {!! Form::close() !!}
+                    {!! Form::close() !!}
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
-    <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
-
+@push('scripts')
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/i18n/es.js') }}"></script>
 
@@ -92,7 +94,6 @@
                     }
                 },
                 escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 3,
                 templateResult: function(option){
                     return option.descripcion||option.text;
                 },
@@ -103,5 +104,4 @@
         });
 
     </script>
-@endsection
-
+@endpush

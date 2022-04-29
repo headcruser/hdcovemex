@@ -12,9 +12,6 @@
     </ol>
 @endsection
 
-@section('styles')
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <div class="card">
@@ -75,7 +72,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{asset('highcharts/code/highcharts.js')}}"></script>
     <script src="{{asset('highcharts/code/modules/exporting.js')}}"></script>
     <script src="{{asset('highcharts/code/modules/export-data.js')}}"></script>
@@ -144,6 +141,4 @@
             });
         })
     </script>
-@endsection
-
-
+@endpush

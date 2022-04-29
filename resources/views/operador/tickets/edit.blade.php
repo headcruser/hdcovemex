@@ -3,18 +3,15 @@
 @section('title','Editar Ticket')
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">
-        <a href="{{ route('operador.tickets.index') }}">Tickets</a>
-    </li>
-    <li class="breadcrumb-item active">Editar</li>
-</ol>
-@endsection
-
-@section('styles')
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('operador.tickets.index') }}">Tickets</a>
+        </li>
+        <li class="breadcrumb-item active">Editar</li>
+    </ol>
 @endsection
 
 @section('content')
@@ -220,11 +217,9 @@
             </form>
         </div>
     </div>
-
-
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script type="text/javascript">
         const selectElement = (function(element){
 
@@ -337,5 +332,4 @@
 
         })()
     </script>
-@endsection
-
+@endpush

@@ -14,9 +14,6 @@
     </ol>
 @endsection
 
-@section('styles')
-@endsection
-
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -195,11 +192,9 @@
             </form>
         </div>
     </div>
-
-
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         const uploadFile = (function(){
 
@@ -381,5 +376,5 @@
             });
         })();
     </script>
-@endsection
+@endpush
 

@@ -13,6 +13,8 @@
 @endsection
 
 @section('styles')
+    @parent
+
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/pivottable/pivot.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/pivottable/pivot_lib.min.css') }}">
 @endsection
@@ -65,7 +67,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/pivottable/pivot_lib.min.js') }}"></script>
     <script src="{{ asset('vendor/pivottable/pivot.min.js') }}"></script>
     <script src="{{ mix('js/vendor/table-html/table-html.js') }}"></script>
@@ -130,6 +132,4 @@
             });
         })
     </script>
-@endsection
-
-
+@endpush

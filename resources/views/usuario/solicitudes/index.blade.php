@@ -3,42 +3,43 @@
 @section('title','Solicitudes')
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item active">Solicitudes</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item active">Solicitudes</li>
+    </ol>
 @endsection
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Mis Solicitudes</h3>
-            <div class="card-tools">
-                <a href="{{ route('solicitudes.create') }}"
-                    class="btn btn-success btn-sm"
-                    title="Crear">
-                    Crear <i class="fas fa-plus-circle"></i>
-                </a>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Mis Solicitudes</h3>
+                <div class="card-tools">
+                    <a href="{{ route('solicitudes.create') }}"
+                        class="btn btn-success btn-sm"
+                        title="Crear">
+                        Crear <i class="fas fa-plus-circle"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+
+                @include('usuario.solicitudes.partials._filters')
+                @include('usuario.solicitudes.partials._table')
+
             </div>
         </div>
-        <div class="card-body">
-
-            @include('usuario.solicitudes.partials._filters')
-            @include('usuario.solicitudes.partials._table')
-
-        </div>
     </div>
-</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script type="text/javascript">
@@ -234,5 +235,4 @@
             dt.draw();
         });
     </script>
-@endsection
-
+@endpush

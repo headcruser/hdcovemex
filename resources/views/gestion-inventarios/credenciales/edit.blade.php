@@ -3,6 +3,7 @@
 @section('title','Editar Credencial')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/summernote/summernote-bs4.css') }}">
 @endsection
 
@@ -17,34 +18,33 @@
         </li>
         <li class="breadcrumb-item active">Editar credencial</li>
     </ol>
-
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información de la credencial</h3>
-            </div>
-            <div class="card-body">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información de la credencial</h3>
+                </div>
+                <div class="card-body">
 
-                {!! Form::model($credencial, ['route' => ['gestion-inventarios.credenciales.update', $credencial], 'method' => 'PUT', 'accept-charset' => 'UTF-8', 'enctype' => 'multipart/form-data']) !!}
-                    @include('gestion-inventarios.credenciales.partials._fields')
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                    {!! Form::model($credencial, ['route' => ['gestion-inventarios.credenciales.update', $credencial], 'method' => 'PUT', 'accept-charset' => 'UTF-8', 'enctype' => 'multipart/form-data']) !!}
+                        @include('gestion-inventarios.credenciales.partials._fields')
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                </form>
+                    </form>
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('vendor/summernote/lang/summernote-es-ES.min.js') }}"></script>
     <script type="text/javascript">
@@ -73,5 +73,4 @@
         });
 
     </script>
-@endsection
-
+@endpush

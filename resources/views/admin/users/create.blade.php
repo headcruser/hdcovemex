@@ -17,34 +17,34 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información del usuario</h3>
-            </div>
-            <div class="card-body">
-                <form id="form-crear-usuario" action="{{ route("admin.usuarios.store") }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información del usuario</h3>
+                </div>
+                <div class="card-body">
+                    <form id="form-crear-usuario" action="{{ route("admin.usuarios.store") }}" method="POST" enctype="multipart/form-data">
+                        @csrf
 
-                    @include('admin.users.partials._fields')
-                    <div>
-                        <a class="btn btn-default" href="{{ route('admin.usuarios.index') }}">
-                            <i class="fas fa-arrow-left"></i> Regresar
-                        </a>
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                        @include('admin.users.partials._fields')
+                        <div>
+                            <a class="btn btn-default" href="{{ route('admin.usuarios.index') }}">
+                                <i class="fas fa-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                </form>
+                    </form>
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script type="text/javascript">
 
         $(document).ready(function() {
@@ -65,5 +65,5 @@
         });
 
     </script>
-@endsection
+@endpush
 

@@ -3,14 +3,14 @@
 @section('title','Ver usuario')
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">Administración</li>
-    <li class="breadcrumb-item"><a href="{{ route('admin.usuarios.index') }}">Usuarios</a></li>
-    <li class="breadcrumb-item active">usuario #{{ $model->id }}</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">Administración</li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.usuarios.index') }}">Usuarios</a></li>
+        <li class="breadcrumb-item active">usuario #{{ $model->id }}</li>
+    </ol>
 @endsection
 
 @section('content')
@@ -133,7 +133,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script type="text/javascript">
         $(function(){
             const dom = {
@@ -197,5 +197,5 @@
 
         })
     </script>
-@endsection
+@endpush
 

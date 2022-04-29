@@ -17,36 +17,36 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información</h3>
-            </div>
-            <div class="card-body">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información</h3>
+                </div>
+                <div class="card-body">
 
-                {!! Form::open([
-                    'route'             => 'gestion-inventarios.tipo-hardware.store',
-                    'method'            => 'POST',
-                    'accept-charset'    => 'UTF-8',
-                    'onsubmit'          =>'wait.modal("show")',
-                    'enctype'           =>'multipart/form-data']) !!}
+                    {!! Form::open([
+                        'route'             => 'gestion-inventarios.tipo-hardware.store',
+                        'method'            => 'POST',
+                        'accept-charset'    => 'UTF-8',
+                        'onsubmit'          =>'wait.modal("show")',
+                        'enctype'           =>'multipart/form-data']) !!}
 
-                    @include('gestion-inventarios.tipo-hardware.partials._fields')
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                        @include('gestion-inventarios.tipo-hardware.partials._fields')
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                {!! Form::close() !!}
+                    {!! Form::close() !!}
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script type="text/javascript">
 
         $(document).ready(function() {
@@ -65,5 +65,5 @@
         });
 
     </script>
-@endsection
+@endpush
 

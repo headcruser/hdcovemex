@@ -2,6 +2,12 @@
 
 @section('title','Panel de impresiones')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('vendor/dropify/dist/css/dropify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+@endsection
+
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
@@ -11,11 +17,6 @@
         <li class="breadcrumb-item"><a href="{{ route('gestion-impresiones.impresiones.index') }}">Impresiones</a></li>
         <li class="breadcrumb-item active">Ver #{{ $impresion->nombre_mes }}</li>
     </ol>
-@endsection
-
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('vendor/dropify/dist/css/dropify.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('content')
@@ -407,7 +408,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/dropify/dist/js/dropify.min.js') }}"></script>
@@ -669,5 +670,5 @@
             })(dom.impresiones,dom.actualizar_impresiones)
         });
     </script>
-@endsection
+@endpush
 

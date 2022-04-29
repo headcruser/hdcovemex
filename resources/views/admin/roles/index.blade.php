@@ -3,55 +3,56 @@
 @section('title','Administrar Roles')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item"> Administración </li>
-    <li class="breadcrumb-item active">Roles</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item"> Administración </li>
+        <li class="breadcrumb-item active">Roles</li>
+    </ol>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Lista de roles</h3>
-                <div class="card-tools">
-                    <a href="{{ route('admin.roles.create') }}"
-                        class="btn btn-success btn-sm"
-                        title="Crear">
-                        Crear <i class="fas fa-plus-circle"></i>
-                    </a>
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Lista de roles</h3>
+                    <div class="card-tools">
+                        <a href="{{ route('admin.roles.create') }}"
+                            class="btn btn-success btn-sm"
+                            title="Crear">
+                            Crear <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped table-hover" id="tb-roles">
+                        <thead>
+                            <tr>
+                                <th>ID </th>
+                                <th>ROL</th>
+                                <th>NOMBRE</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="card-body">
-                <table class="table table-bordered table-striped table-hover" id="tb-roles">
-                    <thead>
-                        <tr>
-                            <th>ID </th>
-                            <th>ROL</th>
-                            <th>NOMBRE</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
@@ -152,5 +153,5 @@
 
         })
     </script>
-@endsection
+@endpush
 

@@ -13,38 +13,38 @@
         </li>
         <li class="breadcrumb-item active">Editar</li>
     </ol>
+@endsection
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+    @parent
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información</h3>
-            </div>
-            <div class="card-body">
-                {!! Form::model($hardware, ['route' => ['gestion-inventarios.hardware.update', $hardware], 'method' => 'PUT', 'accept-charset' => 'UTF-8', 'enctype' => 'multipart/form-data']) !!}
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información</h3>
+                </div>
+                <div class="card-body">
+                    {!! Form::model($hardware, ['route' => ['gestion-inventarios.hardware.update', $hardware], 'method' => 'PUT', 'accept-charset' => 'UTF-8', 'enctype' => 'multipart/form-data']) !!}
 
-                    @include('gestion-inventarios.hardware.partials._fields')
+                        @include('gestion-inventarios.hardware.partials._fields')
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
-                {!! Form::close() !!}
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    {!! Form::close() !!}
 
+                </div>
             </div>
         </div>
     </div>
-
-</div>
 @endsection
 
-@section('scripts')
-
-    <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
-
+@push('scripts')
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/i18n/es.js') }}"></script>
 
@@ -64,10 +64,9 @@
                 })
             });
 
-
             $('#input-id_tipo_hardware').select2({
                 languaje: "es",
-                placeholder: "Selecciona una sucursal",
+                placeholder: "Selecciona un tipo de hardware",
                 ajax: {
                     method: 'POST',
                     data:
@@ -87,7 +86,6 @@
                     }
                 },
                 escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 3,
                 templateResult: function(option){
                     return option.descripcion||option.text;
                 },
@@ -103,5 +101,5 @@
         });
 
     </script>
-@endsection
+@endpush
 

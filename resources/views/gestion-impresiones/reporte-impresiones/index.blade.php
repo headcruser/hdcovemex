@@ -3,12 +3,12 @@
 @section('title','Reporte Impresoras '.$anio)
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Herramientas </a>
-    </li>
-    <li class="breadcrumb-item active">Impresoras</li>
-</ol>
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Herramientas </a>
+        </li>
+        <li class="breadcrumb-item active">Impresoras</li>
+    </ol>
 @endsection
 
 @section('content')
@@ -116,7 +116,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
 
     <script src="{{asset('highcharts/code/highcharts.js')}}"></script>
     <script src="{{asset('highcharts/code/modules/exporting.js')}}"></script>
@@ -332,5 +332,5 @@
             });
         })
     </script>
-@endsection
+@endpush
 

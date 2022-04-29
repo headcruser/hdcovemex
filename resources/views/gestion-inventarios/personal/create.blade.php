@@ -5,6 +5,7 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    @parent
 @endsection
 
 @section('breadcrumb')
@@ -51,7 +52,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/i18n/es.js') }}"></script>
 
@@ -95,7 +96,6 @@
                     }
                 },
                 escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 3,
                 templateResult: function(option){
                     return option.nombre||option.text;
                 },
@@ -126,7 +126,6 @@
                     }
                 },
                 escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 3,
                 templateResult: function(option){
                     return option.descripcion||option.text;
                 },
@@ -138,5 +137,5 @@
         });
 
     </script>
-@endsection
+@endpush
 

@@ -3,19 +3,16 @@
 @section('title','Editar Solicitud')
 
 @section('breadcrumb')
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"> <a href="{{ route('home') }}">
-        <i class="fas fa-home"></i> Inicio </a>
-    </li>
-    <li class="breadcrumb-item">Administración</li>
-    <li class="breadcrumb-item">
-        <a href="{{ route('operador.gestion-solicitudes.index') }}">Solicitudes</a>
-    </li>
-    <li class="breadcrumb-item active">Editar</li>
-</ol>
-@endsection
-
-@section('styles')
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"> <a href="{{ route('home') }}">
+            <i class="fas fa-home"></i> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">Administración</li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('operador.gestion-solicitudes.index') }}">Solicitudes</a>
+        </li>
+        <li class="breadcrumb-item active">Editar</li>
+    </ol>
 @endsection
 
 @section('content')
@@ -141,86 +138,86 @@
     </div>
 @endsection
 
-@section('scripts')
-<script>
+@push('scripts')
+    <script>
 
-    const solicitudModule = (function () {
+        const solicitudModule = (function () {
 
-        const form = document.getElementById('form-solicitud'),
-              submitList = form.querySelectorAll('input[type="submit"]');
+            const form = document.getElementById('form-solicitud'),
+                submitList = form.querySelectorAll('input[type="submit"]');
 
-        const messages = {
-            solicitud: {
-                'title' : '¿Deseas cancelar la solicitud?',
-                'html'  : 'La solicitud será <b>cancelada</b>',
-                'confirm': 'Si, Cancelar solicitud'
-            },
-            ticket:{
-                'title' : '¿Deseas abrir un ticket?',
-                'html'  : 'La solicitud sera asignada a un <b>ticket</b>,',
-                'confirm': 'Si, Abrir Ticket!'
-            }
-        };
-
-        function bindSubmitHandler(e) {
-            this.form.submitValue = this.value;
-            this.form.actionEvent = this.dataset.action;
-            this.form.inputName = this.name;
-        }
-
-        function assignEvents() {
-            for (let i = 0; i < submitList.length; i++) {
-                el = submitList[i];
-
-                if (el.type === 'submit') {
-                    el.onclick = bindSubmitHandler;
+            const messages = {
+                solicitud: {
+                    'title' : '¿Deseas cancelar la solicitud?',
+                    'html'  : 'La solicitud será <b>cancelada</b>',
+                    'confirm': 'Si, Cancelar solicitud'
+                },
+                ticket:{
+                    'title' : '¿Deseas abrir un ticket?',
+                    'html'  : 'La solicitud sera asignada a un <b>ticket</b>,',
+                    'confirm': 'Si, Abrir Ticket!'
                 }
+            };
+
+            function bindSubmitHandler(e) {
+                this.form.submitValue = this.value;
+                this.form.actionEvent = this.dataset.action;
+                this.form.inputName = this.name;
             }
 
-            form.onsubmit = onsubmitHandler;
-        }
+            function assignEvents() {
+                for (let i = 0; i < submitList.length; i++) {
+                    el = submitList[i];
 
-        async function onsubmitHandler(e) {
-            e.preventDefault();
-            let submitValue = this.submitValue,
-                message = messages[this.actionEvent],
-                form = this;
+                    if (el.type === 'submit') {
+                        el.onclick = bindSubmitHandler;
+                    }
+                }
 
-
-            const { value: result } = await Swal.fire({
-                type:'question',
-                title: message.title,
-                html: message.html,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: message.confirm,
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-            });
-
-            if(!result){
-                return false;
+                form.onsubmit = onsubmitHandler;
             }
 
-            var input = createInputHidden(this.inputName,submitValue)
-            form.appendChild(input);
-            form.submit()
-        }
-
-        function createInputHidden(name,value) {
-            let input = document.createElement("input");
-
-            input.setAttribute("type", "hidden");
-            input.setAttribute("name", name);
-            input.setAttribute("value", value );
-
-            return input;
-        }
+            async function onsubmitHandler(e) {
+                e.preventDefault();
+                let submitValue = this.submitValue,
+                    message = messages[this.actionEvent],
+                    form = this;
 
 
+                const { value: result } = await Swal.fire({
+                    type:'question',
+                    title: message.title,
+                    html: message.html,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: message.confirm,
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                });
 
-        assignEvents();
-    }());
-</script>
-@endsection
+                if(!result){
+                    return false;
+                }
+
+                var input = createInputHidden(this.inputName,submitValue)
+                form.appendChild(input);
+                form.submit()
+            }
+
+            function createInputHidden(name,value) {
+                let input = document.createElement("input");
+
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", name);
+                input.setAttribute("value", value );
+
+                return input;
+            }
+
+
+
+            assignEvents();
+        }());
+    </script>
+@endpush
 

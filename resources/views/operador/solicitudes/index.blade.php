@@ -3,6 +3,7 @@
 @section('title','Solicitudes')
 
 @section('styles')
+    @parent
     <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
@@ -32,9 +33,10 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+
     <script type="text/javascript">
         const locale = {
             "format": "YYYY-MM-DD",
@@ -320,5 +322,4 @@
             dt.draw();
         });
     </script>
-@endsection
-
+@endpush

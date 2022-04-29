@@ -17,30 +17,30 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Información de la Empresa</h3>
-            </div>
-            <div class="card-body">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Información de la Empresa</h3>
+                </div>
+                <div class="card-body">
 
-                {!! Form::model($sucursal, ['route' => ['gestion-inventarios.sucursales.update', $sucursal], 'method' => 'PUT', 'accept-charset' => 'UTF-8', 'enctype' => 'multipart/form-data']) !!}
-                    @include('gestion-inventarios.sucursales.partials._fields')
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
+                    {!! Form::model($sucursal, ['route' => ['gestion-inventarios.sucursales.update', $sucursal], 'method' => 'PUT', 'accept-charset' => 'UTF-8', 'enctype' => 'multipart/form-data']) !!}
+                        @include('gestion-inventarios.sucursales.partials._fields')
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
 
-                </form>
+                    </form>
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script type="text/javascript">
 
         $(document).ready(function() {
@@ -59,5 +59,5 @@
         });
 
     </script>
-@endsection
+@endpush
 
