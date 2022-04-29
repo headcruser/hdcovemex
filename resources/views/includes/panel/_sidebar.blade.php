@@ -140,8 +140,8 @@
                             @permission('credenciales_access')
                                 <li class="nav-item ">
                                     <a href="{{ route('gestion-inventarios.credenciales.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.credenciales.*']) }}" >
-                                        <i class="nav-icon fas fa-key"></i>
-                                        <p>Credenciales</p>
+                                        <i class="nav-icon fas fa-lock-open"></i>
+                                        <p>Contraseñas</p>
                                     </a>
                                 </li>
                             @endpermission

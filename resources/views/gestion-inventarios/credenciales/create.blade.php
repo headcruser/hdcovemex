@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Crear Credencial')
+@section('title','Crear Contraseña')
 
 @section('styles')
     @parent
@@ -12,9 +12,9 @@
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
             <i class="fas fa-home"></i> Inicio </a>
         </li>
-        <li class="breadcrumb-item"> Gestion Inventario </li>
+        <li class="breadcrumb-item"> Gestion de inventarios </li>
         <li class="breadcrumb-item">
-            <a href="{{ route('gestion-inventarios.credenciales.index') }}">Credenciales</a>
+            <a href="{{ route('gestion-inventarios.credenciales.index') }}">Contraseñas</a>
         </li>
         <li class="breadcrumb-item active">Crear</li>
     </ol>
@@ -25,24 +25,22 @@
         <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Información de la credencial</h3>
+                    <h3 class="card-title">Información de la contraseña</h3>
                 </div>
-                <div class="card-body">
-                    {!! Form::open([
-                        'route'             => 'gestion-inventarios.credenciales.store',
-                        'method'            => 'POST',
-                        'accept-charset'    => 'UTF-8',
-                        'enctype'           => 'multipart/form-data']) !!}
+                {!! Form::open([
+                    'route'             => 'gestion-inventarios.credenciales.store',
+                    'method'            => 'POST',
+                    'accept-charset'    => 'UTF-8',
+                    'enctype'           => 'multipart/form-data']) !!}
 
+                    <div class="card-body">
                         @include('gestion-inventarios.credenciales.partials._fields')
+                    </div>
 
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                        </div>
-
-                    {!! Form::close() !!}
-
-                </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                    </div>
+                {!! Form::close() !!}
             </div>
         </div>
 

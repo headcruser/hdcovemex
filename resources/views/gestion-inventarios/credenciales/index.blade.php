@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title','Credenciales')
+@section('title','Contraseñas')
 
 @section('styles')
     @parent
@@ -13,9 +13,9 @@
             <i class="fas fa-home"></i> Inicio </a>
         </li>
         <li class="breadcrumb-item">
-            Credenciales
+            Gestion de inventarios
         </li>
-        <li class="breadcrumb-item active">Personal</li>
+        <li class="breadcrumb-item active">Contraseñas</li>
     </ol>
 @endsection
 
@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                <h3 class="card-title">Gestión de credenciales</h3>
+                <h3 class="card-title">Listado de contraseñas</h3>
                     <div class="card-tools">
                         @permission('credenciales_create')
                         <a href="{{ route('gestion-inventarios.credenciales.create') }}" class="btn btn-success btn-sm" title="Crear">
