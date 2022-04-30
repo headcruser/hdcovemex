@@ -16,20 +16,36 @@ class EquiposController extends Controller
 {
     public function index()
     {
-        return view('gestion-inventarios.equipos.index');
+        return view('gestion-inventarios.equipos.index',[
+            'estatus'   => ['' => 'Todos'] + config('gestion-inventarios.equipos.status.values', []),
+            'tipo'      => ['' => 'Todos'] + config('gestion-inventarios.equipos.tipo.values', []),
+        ]);
     }
 
     public function datatables(Request $request)
     {
         $sub = Equipo::query()
-            ->select(['id', 'uid', 'descripcion'])
+            ->select(['id', 'uid', 'descripcion','status','tipo'])
             ->WithLastEquipo();
 
-        $query = DB::table(DB::raw("({$sub->toSql()}) as sub"));
+        $query = DB::table(DB::raw("({$sub->toSql()}) as sub"))
+            ->when($request->input('status'), function ($q, $status) {
+                $q->where('status', $status);
+            })
+            ->when($request->input('tipo'), function ($q, $status) {
+                $q->where('tipo', $status);
+            });
+
+        $estatus = config('gestion-inventarios.equipos.status.class', []);
 
         return DataTables::of($query)
+            ->editColumn('status',function($model)use($estatus){
+                $class = $estatus[trim($model->status)] ?? 'badge bg-default';
+
+                return "<span class='{$class}'>{$model->status}</span>";
+            })
             ->addColumn('buttons', 'gestion-inventarios.equipos.datatables._buttons')
-            ->rawColumns(['buttons'])
+            ->rawColumns(['status','buttons'])
             ->make(true);
     }
 
@@ -37,8 +53,10 @@ class EquiposController extends Controller
     {
         $equipo->load(['historial_asignaciones']);
 
+        $estatus = config('gestion-inventarios.equipos.status.values', []);
+        $tipo =  config('gestion-inventarios.equipos.tipo.values', []);
 
-        return view('gestion-inventarios.equipos.show', compact('equipo'));
+        return view('gestion-inventarios.equipos.show', compact('equipo','estatus','tipo'));
     }
 
     public function create()

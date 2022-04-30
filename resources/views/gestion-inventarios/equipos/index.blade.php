@@ -33,6 +33,23 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
+                     <div class="row pb-4">
+                        <div class="col-12">
+                            <div class="form-inline form-search">
+                                <div class="form-group">
+                                    {!! Form::label('status', 'Estatus: ') !!}&nbsp;
+                                    {!! Form::select('status', $estatus , null, ['class' => 'custom-select custom-select-sm','data-filter']) !!}
+                                </div>
+                                &nbsp;&nbsp;
+                                <div class="form-group">
+                                    {!! Form::label('tipo', 'Tipo: ') !!}&nbsp;
+                                    {!! Form::select('tipo', $tipo , null, ['class' => 'custom-select custom-select-sm','data-filter']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <table id="tb-equipos" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
@@ -40,6 +57,8 @@
                                 <th>UUID</th>
                                 <th>HOST</th>
                                 <th>NOMBRE</th>
+                                <th>TIPO</th>
+                                <th>ESTATUS</th>
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
@@ -75,6 +94,8 @@
                     url: "{{ route('gestion-inventarios.equipos.datatables') }}",
                     type: "POST",
                     data: function (d) {
+                        d.status = $('#status').val();
+                        d.tipo = $('#tipo').val();
                     },
                     beforeSend: function(xhr,type) {
                     if (!type.crossDomain) {
@@ -92,6 +113,8 @@
                     {data: 'uid',name: 'uid'},
                     {data: 'descripcion',name: 'descripcion'},
                     {data: 'personal_equipo_asignado',name: 'personal_equipo_asignado',orderable: false},
+                    {data: 'tipo',name: 'tipo'},
+                    {data: 'status',name: 'status',className:'text-center'},
                     {data: 'buttons', name: 'buttons', orderable: false, searchable: false,className:'text-center'}
                 ],
                 order: [[ 0, "desc" ]],
@@ -175,6 +198,9 @@
                 })
             })
 
+            $('select[data-filter]').on('change',function(){
+                dt.draw();
+            });
         })
     </script>
 @endpush

@@ -363,9 +363,9 @@
                 emptytext: 'Vacio',
                 onblur: 'ignore',
                  source: [
-                    {value: 'Escritorio', text: 'Escritorio'},
-                    {value: 'Laptop', text: 'Laptop'},
-                    {value: 'Servidor', text: 'Servidor'}
+                    @foreach ($tipo as $tipo)
+                        {value: '{{ $tipo }}', text: '{{ $tipo }}'},
+                    @endforeach
                 ],
             });
 
@@ -373,9 +373,9 @@
                 emptytext: 'Vacio',
                 onblur: 'ignore',
                 source: [
-                    {value: 'Activo', text: 'Activo'},
-                    {value: 'Inactivo', text: 'Inactivo'},
-                    {value: 'Desechado', text: 'Desechado'}
+                    @foreach ($estatus as  $item)
+                        {value: '{{ $item }}', text: '{{ $item }}'},
+                    @endforeach
                 ],
             });
 
