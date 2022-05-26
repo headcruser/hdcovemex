@@ -364,5 +364,50 @@ return [
             'display_name'  => 'Eliminar credencial',
             'description'   => 'Permite eliminar una credencial'
         ],
+
+
+        # 👉CATEGORIAS FAQ
+        [
+            'name'          => 'faq_categorias_access',
+            'display_name'  => 'Ver categorias FAQ',
+            'description'   => 'Permite visualizar las categorias'
+        ],
+        [
+            'name'          => 'faq_categorias_create',
+            'display_name'  => 'Crear una categoria FAQ',
+            'description'   => 'Permite crear una credencial'
+        ],
+        [
+            'name'          => 'faq_categorias_edit',
+            'display_name'  => 'Editat categoria FAQ',
+            'description'   => 'Permite editar una categoria FAQ'
+        ],
+        [
+            'name'          => 'faq_categorias_delete',
+            'display_name'  => 'Eliminar categoria FAQ',
+            'description'   => 'Permite eliminar una categoria Faq'
+        ],
+
+        # 👉FAQs
+        [
+            'name'          => 'faq_access',
+            'display_name'  => 'Ver FAQ',
+            'description'   => 'Permite visualizar las categorias'
+        ],
+        [
+            'name'          => 'faq_create',
+            'display_name'  => 'Crear FAQ',
+            'description'   => 'Permite crear una credencial'
+        ],
+        [
+            'name'          => 'faq_edit',
+            'display_name'  => 'Editat FAQ',
+            'description'   => 'Permite editar una categoria FAQ'
+        ],
+        [
+            'name'          => 'faq_delete',
+            'display_name'  => 'Eliminar FAQ',
+            'description'   => 'Permite eliminar una categoria Faq'
+        ],
     ],
 ];

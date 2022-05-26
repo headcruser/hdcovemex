@@ -120,6 +120,29 @@ Route::group([
         Route::resource('estatus', 'StatusesController')->parameters([
             'estatus' => 'model'
         ]);
+
+        # FAQS
+        Route::prefix('faqs')->name('faqs.')->namespace('Faqs')->group(function () {
+            # CATEGORIAS
+            Route::prefix('categorias')->name('categorias.')->group(function () {
+                Route::post('datatables', 'CategoriasController@datatables')->name('datatables');
+                Route::post('select2', 'CategoriasController@select2')->name('select2');
+            });
+            Route::resource('categorias', 'CategoriasController')->parameters([
+                'categorias' => 'categoria'
+            ])->except('show');
+
+            # FAQ
+            Route::prefix('faq')->name('faq.')->group(function () {
+                Route::post('datatables', 'FAQController@datatables')->name('datatables');
+                Route::post('select2', 'FAQController@select2')->name('select2');
+                Route::get('orden', 'OrderController@index')->name('orden');
+                Route::post('actualizar-orden', 'OrderController@actualizar_orden')->name('actualizar-orden');
+            });
+            Route::resource('faq', 'FAQController')->parameters([
+                'faq' => 'faq'
+            ]);
+        });
     }
 );
 
@@ -390,3 +413,16 @@ Route::group([
         ]);
     }
 );
+
+# FAQS
+Route::group([
+    'middleware'    => ['auth']],
+    function () {
+
+        Route::get('faq', [
+        'as'            => 'faq.index',
+        'uses'          => 'FAQController@index'
+    ]);
+
+    Route::post('pregunta/{faq}/{type?}', 'FAQController@incrementClick')->name('faq.increment');
+});

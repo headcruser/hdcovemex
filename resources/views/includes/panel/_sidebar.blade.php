@@ -119,6 +119,37 @@
                                     </a>
                                 </li>
                             @endpermission
+
+                            @permission(['faq_categorias_access','faq_access'])
+                                <li class="nav-item has-treeview {{ routeIs(['admin.faqs.*'],'menu-open') }}">
+                                    <a class="nav-link {{ routeIs(['admin.faqs.*']) }}" href="#">
+                                        <i class="nav-icon fas fa-fw fa-question-circle"></i>
+                                        <p>FAQs<i class="right fas fa-angle-left"></i></p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        @permission('faq_categorias_access')
+                                            <li class="nav-item  ">
+                                                <a class="nav-link {{ routeIs(['admin.faqs.categorias.index']) }}" href="{{ route('admin.faqs.categorias.index') }}">
+                                                    <i class="nav-icon fas fa-fw fa-cubes"></i>
+                                                    <p>Categorias</p>
+                                                </a>
+                                            </li>
+                                        @endpermission
+
+                                        @permission('faq_access')
+                                            <li class="nav-item ">
+                                                <a class="nav-link {{ routeIs(['admin.faqs.faq.index']) }}" href="{{ route('admin.faqs.faq.index') }}">
+                                                    <i class="nav-icon fas fa-fw fa-question"></i>
+                                                    <p>
+                                                        FAQs
+                                                    </p>
+                                                </a>
+                                            </li>
+                                        @endpermission
+                                    </ul>
+                                </li>
+                            @endpermission
                         </ul>
                     </li>
                 @endpermission
@@ -307,6 +338,14 @@
                         </ul>
                     </li>
                 @endpermission
+
+                <li class="nav-header">Otras opciones</li>
+                <li class="nav-item">
+                    <a  href="{{ route('faq.index') }}" class="nav-link {{ routeIs(['faq.index']) }}">
+                        <i class="nav-icon fas fa-fw fa-question-circle"></i>
+                        <p>FAQ</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- END SIDEBAR MENU -->
