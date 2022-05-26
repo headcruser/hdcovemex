@@ -232,6 +232,23 @@
                             </li>
                             @endpermission
 
+
+                            <li class="nav-item has-treeview {{ routeIs(['gestion-inventarios.reportes.*'],'menu-open') }}">
+                                <a class="nav-link {{ routeIs(['gestion-inventarios.reportes.*']) }}" href="#">
+                                    <i class="nav-icon fas fa-fw fa-chart-area"></i>
+                                    <p>Reportes <i class="right fas fa-angle-left"></i></p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item  ">
+                                        <a class="nav-link {{ routeIs(['gestion-inventarios.reportes.extensiones-telefonicas.index']) }}"
+                                            href="{{ route('gestion-inventarios.reportes.extensiones-telefonicas.index') }}">
+                                            <i class="nav-icon fas fa-fw fa-phone"></i>
+                                            <p>Ext. Telefonicas</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
 

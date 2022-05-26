@@ -201,16 +201,17 @@ Route::group([
             'sucursales'  => 'sucursal'
         ])->except('show');
 
-        # PERSONAL
-        Route::post('personal/importar',"PersonalController@importar")->name('personal.importar');
-        Route::post('personal/actualizar_cuenta/{cuenta}',"PersonalController@actualizar_cuenta")->name('personal.actualizar_cuenta');
-        Route::post('personal/eliminar_cuenta/{cuenta}',"PersonalController@eliminar_cuenta")->name('personal.eliminar_cuenta');
-        Route::post('personal/listar_cuentas',"PersonalController@listar_cuentas")->name('personal.listar_cuentas');
-        Route::post('personal/agregar_cuenta',"PersonalController@agregar_cuenta")->name('personal.agregar_cuenta');
-        Route::post('personal/select2',"PersonalController@select2")->name('personal.select2');
-        Route::post('personal/datatables',"PersonalController@datatables")->name('personal.datatables');
-        Route::get('personal/generar-firma', "PersonalController@generar_firma")->name('personal.generar-firma');
-
+        # RUTAS PERSONAL
+        Route::prefix('personal')->name('personal.')->group(function(){
+            Route::post('importar',"PersonalController@importar")->name('importar');
+            Route::post('actualizar_cuenta/{cuenta}',"PersonalController@actualizar_cuenta")->name('actualizar_cuenta');
+            Route::post('eliminar_cuenta/{cuenta}',"PersonalController@eliminar_cuenta")->name('eliminar_cuenta');
+            Route::post('listar_cuentas',"PersonalController@listar_cuentas")->name('listar_cuentas');
+            Route::post('agregar_cuenta',"PersonalController@agregar_cuenta")->name('agregar_cuenta');
+            Route::post('select2',"PersonalController@select2")->name('select2');
+            Route::post('datatables',"PersonalController@datatables")->name('datatables');
+            Route::get('generar-firma', "PersonalController@generar_firma")->name('generar-firma');
+        });
         Route::resource('personal', 'PersonalController')->parameters([
             'personal'  => 'personal'
         ]);
@@ -232,6 +233,19 @@ Route::group([
         Route::resource('credenciales', 'CredencialesController')->parameters([
             'credenciales'  => 'credencial'
         ])->middleware('permission:credenciales_access');
+
+
+        # REPORTES
+        Route::group([
+            'prefix'        => 'reportes',
+            'as'            => 'reportes.',
+            'namespace'     => 'Reportes',
+        ], function () {
+            Route::get('extensiones-telefonicas', [
+                'as'    => 'extensiones-telefonicas.index',
+                'uses'  => 'ExtensionesTelefonicasController@index'
+            ]);
+        });
     }
 );
 
