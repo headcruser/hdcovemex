@@ -67,7 +67,7 @@
             });
 
             $('#nota').summernote({
-                height: 250,
+                height: 350,
                 lang: 'es-ES',
                 codemirror: {
                     theme: 'monokai'

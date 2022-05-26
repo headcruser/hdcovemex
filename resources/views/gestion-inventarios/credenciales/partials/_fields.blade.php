@@ -16,7 +16,7 @@
         {!! Form::text('usuario',null, ['class' => 'form-control','placeholder' => 'Escribe aqui el inicio de sesion','title' => 'Inicio de sesión','autocomplete' => 'off']) !!}
         <span class="input-group-append">
             <button type="button" data-clipboard-target="#usuario" class="btn btn-default btn-flat clipboard">
-              <i class="fa fa-clipboard"></i>
+                <i class="fa fa-clipboard"></i>
             </button>
         </span>
     </div>
@@ -31,15 +31,14 @@
 <div class="form-group @error('contrasenia') has-error @enderror">
 
     <label for="contrasenia">Contraseña: <span id="btn-toogle-password"><i class="fa fa-eye"></i></span></label>
-    <div class="input-group mb-3">
+    <div class="input-group">
         {!! Form::input('password', 'contrasenia', old('credencial',$credencial->contrasenia) , ['id' => 'contrasenia','class' => 'form-control','autocomplete' => 'off','title' => 'Contraseña','placeholder' =>'Escribe aqui la contraseña','autocomplete' => 'new-password']); !!}
         <span class="input-group-append">
             <button type="button" data-clipboard-target="#contrasenia" class="btn btn-default btn-flat clipboard">
-              <i class="fa fa-clipboard"></i>
+                <i class="fa fa-clipboard"></i>
             </button>
         </span>
     </div>
-
     <div class="help-block with-errors">
         @error('contrasenia')
             <span class="text-danger">{{ $errors->first('contrasenia') }}</span>
@@ -97,10 +96,19 @@
         var clipboard = new ClipboardJS('.clipboard');
 
         clipboard.on('success', function(e) {
-            Toast.fire({
-                type: 'success',
-                title: 'Copiado correctamente'
-            });
+            navigator.clipboard.writeText(e.text)
+            .then(() => {
+                Toast.fire({
+                    type: 'success',
+                    title: 'Copiado correctamente'
+                });
+             })
+            .catch((error) => {
+                Toast.fire({
+                    type: 'danger',
+                    title: 'Ocurrio un error al copiar el elemento'
+                });
+             })
 
             e.clearSelection();
         });
