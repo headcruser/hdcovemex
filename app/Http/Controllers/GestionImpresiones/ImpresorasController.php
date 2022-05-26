@@ -1,6 +1,6 @@
 <?php
 
-namespace HelpDesk\Http\Controllers\GestionInventarios;
+namespace HelpDesk\Http\Controllers\GestionImpresiones;
 
 use Illuminate\Http\Request;
 use HelpDesk\Entities\Impresora;
@@ -10,10 +10,9 @@ use HelpDesk\Http\Controllers\Controller;
 
 class ImpresorasController extends Controller
 {
-
     public function index()
     {
-        return view('gestion-inventarios.impresoras.index');
+        return view('gestion-impresiones.impresoras.index');
     }
 
     public function datatables()
@@ -24,19 +23,19 @@ class ImpresorasController extends Controller
             ->editColumn('ip',function($model){
                 return "<a href='{$model->ip}' target='_blank' class='btn-link'>{$model->ip}</a>";
             })
-            ->addColumn('buttons', 'gestion-inventarios.impresoras.datatables._buttons')
+            ->addColumn('buttons', 'gestion-impresiones.impresoras.datatables._buttons')
             ->rawColumns(['ip','buttons' ])
             ->make(true);
     }
 
     public function show(Impresora $impresora)
     {
-        return view('gestion-inventarios.impresoras.show', ['impresora' => $impresora]);
+        return view('gestion-impresiones.impresoras.show', ['impresora' => $impresora]);
     }
 
     public function create()
     {
-        return view('gestion-inventarios.impresoras.create', [
+        return view('gestion-impresiones.impresoras.create', [
             'model' => new Impresora(),
         ]);
     }
@@ -58,7 +57,7 @@ class ImpresorasController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('gestion-inventarios.impresoras.index')
+                ->route('gestion-impresiones.impresoras.index')
                 ->with(['message' => 'Impresora creada Correctamente']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -72,7 +71,7 @@ class ImpresorasController extends Controller
 
     public function edit(Impresora $impresora)
     {
-        return view('gestion-inventarios.impresoras.edit', [
+        return view('gestion-impresiones.impresoras.edit', [
             'impresora' => $impresora,
         ]);
     }
@@ -95,7 +94,7 @@ class ImpresorasController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('gestion-inventarios.impresoras.index')
+                ->route('gestion-impresiones.impresoras.index')
                 ->with(['message' => 'Estatus actualizado correctamente']);
         } catch (\Exception $e) {
             DB::rollback();

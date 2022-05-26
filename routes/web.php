@@ -216,12 +216,6 @@ Route::group([
             'personal'  => 'personal'
         ]);
 
-        # IMPRESORAS
-        Route::post('impresoras/datatables','ImpresorasController@datatables')->name('impresoras.datatables');
-        Route::resource('impresoras', 'ImpresorasController')->parameters([
-            'impresoras'  => 'impresora'
-        ]);
-
         # 👉 CREDENCIALES
         Route::prefix('credenciales')->name('credenciales.')->group(function () {
             Route::post('datatables', [
@@ -257,6 +251,15 @@ Route::group([
     'namespace'     => 'GestionImpresiones',
     'middleware'    => ['auth']],
     function () {
+
+        # 👉 RUTAS IMPRESORAS
+        Route::prefix('impresoras')->name('impresoras.')->group(function(){
+            Route::post('datatables', 'ImpresorasController@datatables')->name('datatables');
+        });
+        Route::resource('impresoras', 'ImpresorasController')->parameters([
+            'impresoras'  => 'impresora'
+        ]);
+
         # 👉 IMPRESIONES
         Route::prefix('impresiones')->name('impresiones.')->group(function () {
             Route::get('visualizar-impresiones','ImpresionesController@visualizar_impresiones')->name('visualizar-impresiones');

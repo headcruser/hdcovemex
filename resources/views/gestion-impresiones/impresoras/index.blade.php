@@ -13,7 +13,7 @@
             <i class="fas fa-home"></i> Inicio </a>
         </li>
         <li class="breadcrumb-item">
-            Gestión Inventarios
+            Gestión Impresiones
         </li>
         <li class="breadcrumb-item active">Impresoras</li>
     </ol>
@@ -26,7 +26,7 @@
                 <div class="card-header">
                 <h3 class="card-title">Gestion de impresoras</h3>
                     <div class="card-tools">
-                        <a href="{{ route('gestion-inventarios.impresoras.create') }}" class="btn btn-success btn-sm" title="Crear">
+                        <a href="{{ route('gestion-impresiones.impresoras.create') }}" class="btn btn-success btn-sm" title="Crear">
                             Crear <i class="fas fa-plus-circle"></i>
                         </a>
                     </div>
@@ -70,7 +70,7 @@
                 autoWidth: false,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('gestion-inventarios.impresoras.datatables') }}",
+                    url: "{{ route('gestion-impresiones.impresoras.datatables') }}",
                     type: "POST",
                     data: function (d) {
                     },

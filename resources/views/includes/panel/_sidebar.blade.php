@@ -97,11 +97,6 @@
                             </li>
                             @endpermission
 
-                            {{-- <!-- CONFIGURACION-->
-                            @permission('user_config_access')
-                                <li class="nav-header">Configuración</li> --}}
-                            {{-- @endpermission --}}
-
                             @permission('attribute_access')
                                 <li class="nav-item" >
                                     <a href="{{ route('admin.atributos.index') }}" class="nav-link {{ routeIs(['admin.atributos.index','admin.atributos.*']) }}">
@@ -223,15 +218,6 @@
                             </li>
                             @endpermission
 
-                            @permission('impresoras_access')
-                            <li class="nav-item ">
-                                <a href="{{ route('gestion-inventarios.impresoras.index') }}" class="nav-link {{ routeIs(['gestion-inventarios.impresoras.index','gestion-inventarios.impresoras.*']) }}">
-                                    <i class="nav-icon fas fa-table"></i>
-                                    <p>Impresoras</p>
-                                </a>
-                            </li>
-                            @endpermission
-
 
                             <li class="nav-item has-treeview {{ routeIs(['gestion-inventarios.reportes.*'],'menu-open') }}">
                                 <a class="nav-link {{ routeIs(['gestion-inventarios.reportes.*']) }}" href="#">
@@ -262,6 +248,16 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
+                            @permission('impresoras_access')
+                                <li class="nav-item">
+                                    <a href="{{ route('gestion-impresiones.impresoras.index') }}" class="nav-link {{ routeIs(['gestion-impresiones.impresoras.index','gestion-impresiones.impresoras.*']) }}">
+                                        <i class="nav-icon fas fa-table"></i>
+                                        <p>Impresoras</p>
+                                    </a>
+                                </li>
+                            @endpermission
+
                             @permission('impresiones_access')
                                 <li class="nav-item ">
                                     <a href="{{ route('gestion-impresiones.impresiones.index') }}" class="nav-link {{ routeIs(['gestion-impresiones.impresiones.*']) }}">

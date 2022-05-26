@@ -7,8 +7,8 @@
         <li class="breadcrumb-item"> <a href="{{ route('home') }}">
             <i class="fas fa-home"></i> Inicio </a>
         </li>
-        <li class="breadcrumb-item">Gestion Inventarios</li>
-        <li class="breadcrumb-item"><a href="{{ route('gestion-inventarios.impresoras.index') }}">Impresoras</a></li>
+        <li class="breadcrumb-item">Gestion Impresiones</li>
+        <li class="breadcrumb-item"><a href="{{ route('gestion-impresiones.impresoras.index') }}">Impresoras</a></li>
         <li class="breadcrumb-item active">Panel Impresora #{{ $impresora->descripcion }}</li>
     </ol>
 @endsection
@@ -20,7 +20,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Detalle Impresora</h3>
                     <div class="card-tools">
-                        <a href="{{ route('gestion-inventarios.impresoras.edit',$impresora) }}" class="btn btn-primary btn-sm" title="Editar">
+                        <a href="{{ route('gestion-impresiones.impresoras.edit',$impresora) }}" class="btn btn-primary btn-sm" title="Editar">
                             Editar <i class="fas fa-pencil-alt"></i>
                         </a>
                     </div>
