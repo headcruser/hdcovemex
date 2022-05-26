@@ -25,7 +25,11 @@ class CredencialesController extends Controller
                     return '';
                 }
 
-                return "<a class='btn-link' target='_blank' href='{$model->url}' title='Enlace'>{$model->url}</a>";
+                if (filter_var($model->url, FILTER_VALIDATE_URL) !== false) {
+                    return "<a class='btn-link' target='_blank' href='{$model->url}' title='Enlace'>{$model->url}</a>";
+                }
+
+                return $model->url;
             })
             ->addColumn('buttons', 'gestion-inventarios.credenciales.datatables._buttons')
             ->rawColumns(['buttons','url'])
