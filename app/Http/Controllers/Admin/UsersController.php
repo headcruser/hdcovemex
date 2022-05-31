@@ -61,9 +61,11 @@ class UsersController extends Controller
     public function store(CreateUserRequest $request)
     {
         DB::beginTransaction();
+
         try {
             $user = User::create($request->all());
             $user->roles()->sync($request->input('roles', []));
+
             DB::commit();
 
             if ($request->filled('enviar_datos')) {

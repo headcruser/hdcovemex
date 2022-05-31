@@ -3,7 +3,7 @@
     <input type="text" id="input-nombre" name="nombre" class="form-control" value="{{ old('nombre', $model->nombre) }}"
         placeholder="Nombre del empleado"
         autocomplete="off" required>
-    <div class="help-block with-errors">
+    <div class="help-block with-errors text-danger">
         @error('nombre')
         <span>{{ $errors->first('nombre') }}</span>
         @enderror
@@ -15,7 +15,7 @@
     <input type="text" id="input-usuario" name="usuario" class="form-control" value="{{ old('usuario', $model->usuario) }}"
         placeholder="Cuenta de usuario"
         autocomplete="off" required>
-    <div class="help-block with-errors">
+    <div class="help-block with-errors text-danger">
         @error('usuario')
         <span>{{ $errors->first('usuario') }}</span>
         @enderror
@@ -27,7 +27,7 @@
     <input type="email" id="input-email" name="email" class="form-control" value="{{ old('email', $model->email) }}"
         placeholder="Correo electrónico"
         autocomplete="off" required>
-    <div class="help-block with-errors">
+    <div class="help-block with-errors text-danger">
         @error('email')
         <span>{{ $errors->first('email') }}</span>
         @enderror
@@ -44,7 +44,7 @@
         autocomplete="off"
         placeholder="Escribe una contraseña para el usuario"
         @if($view_name == 'create')required @endif >
-    <div class="help-block with-errors">
+    <div class="help-block with-errors text-danger">
         @error('password')
         <span>{{ $errors->first('password') }}</span>
         @enderror
@@ -85,7 +85,7 @@
             <option value="{{ $id }}" {{ ( $model->departamento ? $model->departamento->id : old('departamento_id')) == $id ? 'selected' : '' }}>{{ $departamento }}</option>
         @endforeach
     </select>
-    <div class="help-block with-errors">
+    <div class="help-block with-errors text-danger">
         @error('departamento_id')
             <span>{{ $errors->first('departamento_id') }}</span>
         @enderror
