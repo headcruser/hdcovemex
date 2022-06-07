@@ -20,10 +20,29 @@
                 <h3 class="card-title">Extensiones Registradas en <mark>Personal</mark></h3>
             </div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col align-self-start">
+                        <label>
+                            {!! Form::select('sucursal',$sucursales, request('sucursal'), ['class' => 'custom-select custom-select-sm','form' => 'form-filter-sucursales','placeholder' => 'Todas las sucursales']) !!}
+                        </label>
+                    </div>
+
+                    <div class="col align-self-end ">
+                        <form id="form-filter-sucursales" class="mb-1" method="GET" action="{{ route('gestion-inventarios.reportes.extensiones-telefonicas.index') }}">
+                            <div class="form-inline form-dates">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>Departamento</th>
+                            <th>Sucursal</th>
                             <th>Ext. Telefonica</th>
                         </tr>
                     </thead>
@@ -31,6 +50,8 @@
                         @foreach ($extensiones as $extension)
                             <tr>
                                 <td> <a class="btn-link" href="{{ route('gestion-inventarios.personal.show',$extension->id_personal) }}">{{ $extension->nombre }}</a> </td>
+                                <td>{{ $extension->departamento }}</td>
+                                <td>{{ $extension->sucursal }}</td>
                                 <td>{{ $extension->extension }}</td>
                             </tr>
                         @endforeach
